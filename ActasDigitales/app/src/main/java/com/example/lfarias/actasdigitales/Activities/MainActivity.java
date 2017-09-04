@@ -50,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        DatabaseReadObject readObjectAsyncTask = new DatabaseReadObject(this);
-        //readObjectAsyncTask.execute();
     }
 
 }

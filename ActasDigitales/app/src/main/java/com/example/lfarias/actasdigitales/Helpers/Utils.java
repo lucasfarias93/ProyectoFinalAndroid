@@ -3,14 +3,18 @@ package com.example.lfarias.actasdigitales.Helpers;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Build;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.example.lfarias.actasdigitales.R;
 
-import org.json.JSONObject;
-
-import java.net.URLEncoder;
-import java.util.Iterator;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
 
 /**
  * Created by lfarias on 9/1/17.
@@ -18,29 +22,8 @@ import java.util.Iterator;
 
 public class Utils {
 
-    public static String getPostDataString(JSONObject params) throws Exception {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        Iterator<String> itr = params.keys();
-
-        while(itr.hasNext()){
-
-            String key= itr.next();
-            Object value = params.get(key);
-
-            if(first) {
-                first = false;
-            } else{
-                result.append("&");
-            }
-
-            result.append(URLEncoder.encode(key, "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
-
-        }
-        return result.toString();
-    }
+    public static final String SCHEME_URL = "http";
+    public static final String SERVER_ADDRESS = "190.15.213.87:81";
 
     public static AlertDialog.Builder createGlobalDialog(Context context, String title, String message){
         AlertDialog.Builder builder;
@@ -53,7 +36,6 @@ public class Utils {
                 .setMessage(message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -62,7 +44,27 @@ public class Utils {
                     }
                 })
                 .setIcon(R.drawable.alerts);
-
         return builder;
+    }
+
+    public static URL urlBuilder(String controller, String actions, List<String> parameters) throws MalformedURLException {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(SCHEME_URL)
+                .encodedAuthority(SERVER_ADDRESS)
+                .appendPath(controller)
+                .appendPath(actions);
+        for(String param : parameters){
+            builder.appendPath(param);
+        }
+
+        String myUrl = builder.build().toString();
+        URL url = new URL(myUrl);
+        return url;
+    }
+
+    public static JSONObject convertStringIntoJson(String json) throws JSONException{
+        //funcions per a cridar el string amb JSON i convertir-lo de nou a JSON
+        JSONObject jsonObject = new JSONObject(json);
+        return jsonObject;
     }
 }

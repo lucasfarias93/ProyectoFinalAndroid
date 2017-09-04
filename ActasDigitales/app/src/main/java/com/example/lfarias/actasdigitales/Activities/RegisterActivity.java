@@ -10,8 +10,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
+import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Entities.TramiteDni;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
+import com.example.lfarias.actasdigitales.Services.ServiceUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +27,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback
+{
 
     @Bind(R.id.dni) EditText mDni;
     @Bind(R.id.tramide_id) EditText mTramideId;
@@ -59,28 +68,20 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if((mDni.getText().toString().equals("36850606") && (mTramideId.getText().toString().equals("19114724")))){
-                    mName.setVisibility(View.VISIBLE);
-                    mUser.setVisibility(View.VISIBLE);
-                    mTramideId.setVisibility(View.VISIBLE);
-                    mPassword.setVisibility(View.VISIBLE);
-                    mRepeatPassword.setVisibility(View.VISIBLE);
-                    mEmail.setVisibility(View.VISIBLE);
-                    mSpinner.setVisibility(View.VISIBLE);
-                    mPhoneNumber.setVisibility(View.VISIBLE);
-                    mName.setText("Lucas Sebastian Farias");
-                } else {
-                    Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos","El DNI / Nro. Tramite del documento es inválido").show();
-                }
+
+                DatabaseReadObject readObjectAsyncTask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this);
+                List<String> params = new ArrayList<>();
+                params.add(mTramideId.getText().toString());
+                params.add(mDni.getText().toString());
+
+                ConnectionParams conectParams = new ConnectionParams();
+                conectParams.setController_id(ServiceUtils.Controllers.TRAMITE_DNI_CONTROLLER);
+                conectParams.setAction_id(ServiceUtils.Actions.BUSCAR_CIUDADANO);
+                conectParams.setParams(params);
+                readObjectAsyncTask.execute(conectParams);
             }
         });
-
-       // setUpView();
     }
-
-    //public void setUpView(){
-
-    //}
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -90,6 +91,31 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void getResultSet(JSONObject object) {
+        String nombre = "";
+        String apellido = "";
+        if(object.length() != 0){
+            try {
+                nombre = (String)object.get("nombres");
+                apellido = (String)object.get("apellido");
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+            mName.setText(apellido + ", "+ nombre);
+            mName.setVisibility(View.VISIBLE);
+            mUser.setVisibility(View.VISIBLE);
+            mTramideId.setVisibility(View.VISIBLE);
+            mPassword.setVisibility(View.VISIBLE);
+            mRepeatPassword.setVisibility(View.VISIBLE);
+            mEmail.setVisibility(View.VISIBLE);
+            mSpinner.setVisibility(View.VISIBLE);
+            mPhoneNumber.setVisibility(View.VISIBLE);
+        } else {
+            Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos","El DNI / Nro. Tramite del documento es inválido").show();
+        }
     }
 }
 

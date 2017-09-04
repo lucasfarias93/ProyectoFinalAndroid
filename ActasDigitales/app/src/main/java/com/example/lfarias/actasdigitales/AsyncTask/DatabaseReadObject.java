@@ -2,30 +2,18 @@ package com.example.lfarias.actasdigitales.AsyncTask;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.example.lfarias.actasdigitales.Entities.Roles;
+import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -34,44 +22,41 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by acer on 28/08/2017.
  */
 
-public class DatabaseReadObject extends AsyncTask<String, Void, String> {
+public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, String> {
 
     Context context;
+    Callback callback;
     //List<Object> object = new ArrayList<>();
 
-    public DatabaseReadObject(Context context) {
+    public DatabaseReadObject(Context context, Callback callback) {
+        this.callback = callback;
         this.context = context;
     }
 
-    //public interface Callback {
-    //    void getResultSet(List<Object> object);
-    //}
+    public interface Callback {
+        void getResultSet(JSONObject object);
+    }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(ConnectionParams... params) {
 
         try {
-            URL url = new URL("http://190.15.213.87:81/tramitedni");
-
-            JSONObject postDataParams = new JSONObject();
-            postDataParams.put("dni", "36850606");
-            Log.e("params",postDataParams.toString());
+            /*Uri.Builder builder = new Uri.Builder();
+            builder.scheme("http")
+                    .encodedAuthority("190.15.213.87:81")
+                    .appendPath("tramitedni")
+                    .appendPath("buscar_ciudadano_por_id_dni_mobile")
+                    .appendPath("19114724")
+                    .appendPath("36850606");
+            String myUrl = builder.build().toString();*/
+            URL url = Utils.urlBuilder(params[0].getController_id(), params[0].getAction_id(), params[0].getParams());
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(Utils.getPostDataString(postDataParams));
-
-            writer.flush();
-            writer.close();
-            os.close();
 
             int responseCode=conn.getResponseCode();
 
@@ -103,7 +88,13 @@ public class DatabaseReadObject extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Toast.makeText(context, result,
-                Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, result,
+        //        Toast.LENGTH_LONG).show();
+        try{
+            JSONObject obj = Utils.convertStringIntoJson(result);
+            callback.getResultSet(obj);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
     }
 }
