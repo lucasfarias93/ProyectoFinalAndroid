@@ -22,9 +22,10 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:src="@drawable/app_logo_1"/>
+                android:layout_height="217dp"
+                android:src="@drawable/app_logo_1" />
 
             <TextView
                 android:id="@+id/login"

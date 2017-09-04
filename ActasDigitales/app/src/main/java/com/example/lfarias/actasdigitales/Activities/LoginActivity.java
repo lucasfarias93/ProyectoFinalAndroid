@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -60,7 +61,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().setTitle("GESTION DIGITAL DE ACTAS");
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Inicio de sesión");
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+
         // Set up the login form.
         mUserView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -324,5 +328,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    @Override
+    public boolean onSupportNavigateUp(){
+        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(i);
+        return true;
+    }
 }
 
