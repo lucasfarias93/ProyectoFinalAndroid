@@ -19,6 +19,4 @@ public class ServiceUtils {
          */
         public static final String TRAMITE_DNI_CONTROLLER = "tramitedni";
     }
-
-
 }

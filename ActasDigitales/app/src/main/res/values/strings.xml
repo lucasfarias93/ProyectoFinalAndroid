@@ -17,15 +17,22 @@
         completions."
     </string>
 
+    <string name="instructions_step">Para iniciar con el registro de una nueva cuenta, ingrese su dni y el numero de Id de Tramite que figura en su documento para verificar su identidad.
+        \n\nNo tenga en cuenta los 0s (ceros) que preceden el primer numero distinto de 0.
+        \n\nSi el nomobre que se autocompleta no corresponde con el suyo, por favor reporte un error con el boton al final del registro</string>
+    <string name="instructions_step2"></string>
     <string name="register"><u>Registrate aqui</u></string>
     <string name="forgot_password"><u>¿Olvidaste tu contraseña?</u></string>
     <string name="doc_number">Nº de documento</string>
     <string name="name">Nombre completo</string>
-    <string name="user_name">Ingrese un numero de usuario de Usuario</string>
+    <string name="user_name">Ingrese un nombre de usuario</string>
     <string name="email">Ingrese uan direccion de email</string>
     <string name="password">Ingrese su contraseña</string>
     <string name="repeat_password">Repita si contraseña</string>
     <string name="phone_type">Tipo de telefono</string>
     <string name="phone_number">Numero de telefono</string>
+    <string name="province">Provincia</string>
+    <string name="department">Departamento</string>
     <string name="tramite_id">Nº de id de tramite</string>
+    <string name="address">Domicilio</string>
 </resources>

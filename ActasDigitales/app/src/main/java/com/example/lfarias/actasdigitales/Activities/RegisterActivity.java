@@ -8,16 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
-import com.example.lfarias.actasdigitales.Entities.TramiteDni;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,8 +25,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback
-{
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback{
 
     @Bind(R.id.dni) EditText mDni;
     @Bind(R.id.tramide_id) EditText mTramideId;
@@ -37,9 +34,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Bind(R.id.password) EditText mPassword;
     @Bind(R.id.repeat_password) EditText mRepeatPassword;
     @Bind(R.id.email) EditText mEmail;
-    @Bind(R.id.spinner) Spinner mSpinner;
+    @Bind(R.id.spinner_phone) Spinner mSpinner;
     @Bind(R.id.phone_number) EditText mPhoneNumber;
     @Bind(R.id.button_register) Button mButton;
+    @Bind(R.id.descripcion1)TextView mDescription;
+    @Bind(R.id.spinner_privincia) Spinner mProvince;
+    @Bind(R.id.spinner_department) Spinner mDepartment;
+    @Bind(R.id.address) EditText mAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +49,44 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
         ButterKnife.bind(this);
         mSpinner.setOnItemSelectedListener(this);
+        mProvince.setOnItemSelectedListener(this);
+        mDepartment.setOnItemSelectedListener(this);
 
         List<String> categories = new ArrayList<>();
+        categories.add("Tipo de telefono");
         categories.add("Telefono Fijo");
         categories.add("Telefono Celular");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(dataAdapter);
+
+        List<String> provinces = new ArrayList<>();
+        provinces.add("Provincia");
+        provinces.add("Mendoza");
+        provinces.add("Jujuy");
+        provinces.add("Buenos Aires");
+        provinces.add("Salta");
+        provinces.add("San Juan");
+        provinces.add("San Luis");
+        provinces.add("Cordoba");
+        provinces.add("Misiones");
+
+        ArrayAdapter<String> dataProvincesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, provinces);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mProvince.setAdapter(dataProvincesAdapter);
+
+        List<String> departments = new ArrayList<>();
+        departments.add("Departamento");
+        departments.add("Godoy Cruz");
+        departments.add("Las Heras");
+        departments.add("Guaymallen");
+        departments.add("Ciudad");
+        departments.add("Tupungato");
+
+        ArrayAdapter<String> dataDepartmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departments);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mDepartment.setAdapter(dataDepartmentAdapter);
 
         mName.setVisibility(View.GONE);
         mUser.setVisibility(View.GONE);
@@ -64,6 +95,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mEmail.setVisibility(View.GONE);
         mSpinner.setVisibility(View.GONE);
         mPhoneNumber.setVisibility(View.GONE);
+        mDepartment.setVisibility(View.GONE);
+        mProvince.setVisibility(View.GONE);
+        mAddress.setVisibility(View.GONE);
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +138,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             }catch(JSONException e){
                 e.printStackTrace();
             }
+            mDescription.setVisibility(View.GONE);
             mName.setText(apellido + ", "+ nombre);
             mName.setVisibility(View.VISIBLE);
             mUser.setVisibility(View.VISIBLE);
@@ -113,6 +148,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             mEmail.setVisibility(View.VISIBLE);
             mSpinner.setVisibility(View.VISIBLE);
             mPhoneNumber.setVisibility(View.VISIBLE);
+            mDepartment.setVisibility(View.VISIBLE);
+            mProvince.setVisibility(View.VISIBLE);
+            mAddress.setVisibility(View.VISIBLE);
         } else {
             Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos","El DNI / Nro. Tramite del documento es inválido").show();
         }

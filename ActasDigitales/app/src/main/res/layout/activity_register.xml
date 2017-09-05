@@ -5,10 +5,9 @@
     android:layout_gravity="center"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="5dp"
     tools:context="com.example.lfarias.actasdigitales.Activities.LoginActivity">
 
     <ScrollView
@@ -26,49 +25,66 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Registrate!"
-                android:textColor="@color/colorAccent"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textStyle="bold|italic"
-                android:textSize="30dp"/>
+                android:text="Registrate!"
+                android:textColor="@color/colorAccent"
+                android:textSize="30dp"
+                android:textStyle="bold|italic" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="2dp">
 
-
-                <android.support.design.widget.TextInputLayout
+                <TextView
+                    android:id="@+id/descripcion1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:text="@string/instructions_step"
+                    android:textColor="@android:color/black"
+                    android:textStyle="italic" />
 
-                    <EditText
-                        android:id="@+id/dni"
-                        android:layout_width="150dp"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="25dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/doc_number"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:singleLine="true" />
+                        android:gravity="left">
 
-                </android.support.design.widget.TextInputLayout>
+                        <EditText
+                            android:id="@+id/dni"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:hint="@string/doc_number"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:singleLine="true" />
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    </android.support.design.widget.TextInputLayout>
 
-                    <EditText
-                        android:id="@+id/tramide_id"
-                        android:layout_gravity="left"
-                        android:layout_width="200dp"
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/tramite_id"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:singleLine="true" />
+                        android:gravity="right">
 
-                </android.support.design.widget.TextInputLayout>
+                        <EditText
+                            android:id="@+id/tramide_id"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:hint="@string/tramite_id"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+                </RelativeLayout>
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -158,7 +174,7 @@
                 android:orientation="horizontal">
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/spinner_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
@@ -185,14 +201,78 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
-            <Button
-                android:id="@+id/button_register"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Submit"
-                android:gravity="center"
-                android:layout_gravity="center"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="3dp"
+                android:layout_gravity="center">
 
+                <Spinner
+                    android:id="@+id/spinner_privincia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="3dp"
+                    android:prompt="@string/province" />
+
+                <Spinner
+                    android:id="@+id/spinner_department"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="6dp"
+                    android:prompt="@string/department" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp">
+
+                <EditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/address"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:layout_gravity="left"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:paddingBottom="5dp">
+
+                <Button
+                    android:id="@+id/button_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Registrarse"
+                    android:textColor="@color/colorPrimary" />
+
+                <Button
+                    android:id="@+id/button_report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Reportar error"
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
