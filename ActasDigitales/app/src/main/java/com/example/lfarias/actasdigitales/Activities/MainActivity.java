@@ -17,8 +17,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textView1, textView2, textView3, textView4, textView5, textView6, textView7, textView8, textView9, textView10, textView11, textView12;
-    private ImageView imageView1, imageView2, imageView3;
+    /*private TextView textView1, textView2, textView3, textView4, textView5, textView6, textView7, textView8, textView9, textView10, textView11, textView12;
+    private ImageView imageView1, imageView2, imageView3;*/
 
     private Button buttonLaunch;
 
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView1 = (TextView) findViewById(R.id.text1);
+        /*textView1 = (TextView) findViewById(R.id.text1);
         textView2 = (TextView) findViewById(R.id.text2);
         textView3 = (TextView) findViewById(R.id.text3);
         textView4 = (TextView) findViewById(R.id.text4);
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         textView9 = (TextView) findViewById(R.id.text9);
         textView10 = (TextView) findViewById(R.id.text10);
         textView11 = (TextView) findViewById(R.id.text11);
-        textView12 = (TextView) findViewById(R.id.text12);
+        textView12 = (TextView) findViewById(R.id.text12);*/
 
         buttonLaunch = (Button) findViewById(R.id.buttonLaunch);
         buttonLaunch.setOnClickListener(new View.OnClickListener() {
