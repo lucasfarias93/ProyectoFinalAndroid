@@ -2,17 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lfarias.actasdigitales"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SET_DEBUG_APP"/>
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -29,9 +34,10 @@
         </activity>
         <activity
             android:name=".Activities.LoginActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"/>
-        <activity android:name=".Activities.RegisterActivity"></activity>
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activities.RegisterActivity" />
+        <activity android:name=".Activities.UserSettingsRecoverActivity"></activity>
     </application>
 
 </manifest>

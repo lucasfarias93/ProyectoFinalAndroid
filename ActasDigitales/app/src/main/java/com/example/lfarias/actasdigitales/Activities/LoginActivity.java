@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.login_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             }
@@ -94,6 +94,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mRegister.setTextColor(Color.BLUE);
         mForgotPassword = (TextView) findViewById(R.id.forgotPassword);
         mForgotPassword.setTextColor(Color.BLUE);
+
+        mForgotPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, UserSettingsRecoverActivity.class);
+                startActivity(i);
+            }
+        });
 
         mRegister.setOnClickListener(new OnClickListener() {
             @Override
