@@ -206,7 +206,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="3dp"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:weightSum="1">
 
                 <Spinner
                     android:id="@+id/spinner_privincia"
@@ -230,6 +231,18 @@
                     android:padding="6dp"
                     android:prompt="@string/department" />
 
+                <Spinner
+                    android:id="@+id/spinner_localidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="6dp"
+                    android:prompt="@string/localidad"
+                    android:layout_weight="20.08" />
+
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -250,6 +263,14 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <Button
+                android:id="@+id/button_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/continuar"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -262,14 +283,14 @@
                     android:id="@+id/button_register"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Registrarse"
+                    android:text="@string/button_register"
                     android:textColor="@color/colorPrimary" />
 
                 <Button
                     android:id="@+id/button_report"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Reportar error"
+                    android:text="@string/button_report_error"
                     android:textColor="@color/colorPrimary" />
 
             </LinearLayout>

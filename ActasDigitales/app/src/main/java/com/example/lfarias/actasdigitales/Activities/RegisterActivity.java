@@ -13,10 +13,13 @@ import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Entities.Provincia;
+import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +45,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Bind(R.id.spinner_privincia) Spinner mProvince;
     @Bind(R.id.spinner_department) Spinner mDepartment;
     @Bind(R.id.address) EditText mAddress;
+    @Bind(R.id.button_continue) Button mContinue;
+
+    List<Provincia> provincias;
+    ArrayAdapter<String> dataProvincesAdapter;
+    ArrayAdapter<String> dataDepartmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +74,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(dataAdapter);
 
-        List<String> provinces = new ArrayList<>();
+
+        /*List<String> provinces = new ArrayList<>();
         provinces.add("Provincia");
         provinces.add("Mendoza");
         provinces.add("Jujuy");
@@ -75,23 +84,21 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         provinces.add("San Juan");
         provinces.add("San Luis");
         provinces.add("Cordoba");
-        provinces.add("Misiones");
+        provinces.add("Misiones");*/
 
-        ArrayAdapter<String> dataProvincesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, provinces);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mProvince.setAdapter(dataProvincesAdapter);
+        ;
 
-        List<String> departments = new ArrayList<>();
+        /*List<String> departments = new ArrayList<>();
         departments.add("Departamento");
         departments.add("Godoy Cruz");
         departments.add("Las Heras");
         departments.add("Guaymallen");
         departments.add("Ciudad");
-        departments.add("Tupungato");
+        departments.add("Tupungato");*/
 
-        ArrayAdapter<String> dataDepartmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departments);
+        /* = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departments);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mDepartment.setAdapter(dataDepartmentAdapter);
+        mDepartment.setAdapter(dataDepartmentAdapter);*/
 
         mName.setVisibility(View.GONE);
         mUser.setVisibility(View.GONE);
@@ -104,20 +111,21 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mProvince.setVisibility(View.GONE);
         mAddress.setVisibility(View.GONE);
 
-        mButton.setOnClickListener(new View.OnClickListener() {
+        mContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                DatabaseReadObject readObjectAsyncTask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this);
+                DecodeTextUtils.decodeStringText("Secci\u00f3n");
+                DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this);
                 List<String> params = new ArrayList<>();
                 params.add(mTramideId.getText().toString());
                 params.add(mDni.getText().toString());
 
                 ConnectionParams conectParams = new ConnectionParams();
-                conectParams.setController_id(ServiceUtils.Controllers.TRAMITE_DNI_CONTROLLER);
-                conectParams.setAction_id(ServiceUtils.Actions.BUSCAR_CIUDADANO);
+                conectParams.setmControllerId(ServiceUtils.Controllers.TRAMITE_DNI_CONTROLLER);
+                conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_CIUDADANO);
+                conectParams.setmSearchType(ServiceUtils.SearchType.CIUDADANO_SEARCH_TYPE);
                 conectParams.setParams(params);
-                readObjectAsyncTask.execute(conectParams);
+                userDataRetrieveAsynctask.execute(conectParams);
             }
         });
     }
@@ -133,16 +141,31 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
     @Override
-    public void getResultSet(JSONObject object) {
+    public void getUserData(JSONObject object) {
         String nombre = "";
         String apellido = "";
         if(object.length() != 0){
             try {
                 nombre = (String)object.get("nombres");
                 apellido = (String)object.get("apellido");
+
+                DatabaseReadObject provincesDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this);
+                List<String> params = new ArrayList<>();
+                params.add("1");
+
+                ConnectionParams conectParams = new ConnectionParams();
+                conectParams.setmControllerId(ServiceUtils.Controllers.PROVINCIA_CONTROLLER);
+                conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_PROVINCIAS);
+                conectParams.setmSearchType(ServiceUtils.SearchType.PROVINCIA_SEARCH_TYPE);
+                conectParams.setParams(params);
+                provincesDataRetrieveAsynctask.execute(conectParams);
+
             }catch(JSONException e){
                 e.printStackTrace();
+                Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos","El DNI / Nro. Tramite del documento es inválido").show();
             }
+
+            mContinue.setVisibility(View.GONE);
             mDescription.setVisibility(View.GONE);
             mName.setText(apellido + ", "+ nombre);
             mName.setVisibility(View.VISIBLE);
@@ -156,9 +179,32 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             mDepartment.setVisibility(View.VISIBLE);
             mProvince.setVisibility(View.VISIBLE);
             mAddress.setVisibility(View.VISIBLE);
-        } else {
-            Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos","El DNI / Nro. Tramite del documento es inválido").show();
         }
+    }
+
+    @Override
+    public void getProvinces(JSONObject object) {
+        try {
+            JSONArray array = object.getJSONObject("listProvincia").getJSONArray("items");
+            provincias = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject privinciaJSONObject = array.getJSONObject(i);
+                Provincia provincia = new Provincia();
+                provincia.setId(Integer.parseInt(privinciaJSONObject.getString("id")));
+                provincia.setNombreProvincia(privinciaJSONObject.getString("nombreprovincia"));
+                provincias.add(provincia);
+            }
+        }catch (JSONException exc){
+            Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos","No se pudieron cargar datos de las provincias para el registro").show();
+        }
+        List<String> provinciasNombre = new ArrayList<>();
+        for (Provincia provincia : provincias){
+            provinciasNombre.add(provincia.getNombreProvincia());
+        }
+
+        dataProvincesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, provinciasNombre);
+        dataProvincesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mProvince.setAdapter(dataProvincesAdapter);
     }
 }
 

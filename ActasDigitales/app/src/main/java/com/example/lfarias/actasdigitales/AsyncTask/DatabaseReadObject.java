@@ -2,7 +2,6 @@ package com.example.lfarias.actasdigitales.AsyncTask;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
@@ -14,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -22,11 +22,10 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by acer on 28/08/2017.
  */
 
-public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, String> {
+public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<String>> {
 
     Context context;
     Callback callback;
-    //List<Object> object = new ArrayList<>();
 
     public DatabaseReadObject(Context context, Callback callback) {
         this.callback = callback;
@@ -34,22 +33,16 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, String
     }
 
     public interface Callback {
-        void getResultSet(JSONObject object);
+        void getUserData(JSONObject object);
+        void getProvinces(JSONObject object) throws JSONException;
     }
 
     @Override
-    protected String doInBackground(ConnectionParams... params) {
+    protected List<String> doInBackground(ConnectionParams... params) {
+        List<String> resultSet = new ArrayList<>();
 
         try {
-            /*Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http")
-                    .encodedAuthority("190.15.213.87:81")
-                    .appendPath("tramitedni")
-                    .appendPath("buscar_ciudadano_por_id_dni_mobile")
-                    .appendPath("19114724")
-                    .appendPath("36850606");
-            String myUrl = builder.build().toString();*/
-            URL url = Utils.urlBuilder(params[0].getController_id(), params[0].getAction_id(), params[0].getParams());
+            URL url = Utils.urlBuilder(params[0].getmControllerId(), params[0].getmActionId(), params[0].getParams());
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
@@ -73,26 +66,41 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, String
                 }
 
                 in.close();
-                return sb.toString();
+                resultSet.add(sb.toString());
+                resultSet.add(params[0].getmSearchType().toString());
+                return resultSet;
 
             }
             else {
-                return new String("false : "+responseCode);
+                resultSet.add(new String("false : "+responseCode));
+                resultSet.add(params[0].getmSearchType().toString());
+                return resultSet;
             }
         }
         catch(Exception e){
-            return new String("Exception: " + e.getMessage());
+            resultSet.add(new String("Exception: " + e.getMessage()));
+            resultSet.add(params[0].getmSearchType().toString());
+            return resultSet;
         }
 
     }
 
     @Override
-    protected void onPostExecute(String result) {
-        //Toast.makeText(context, result,
-        //        Toast.LENGTH_LONG).show();
+    protected void onPostExecute(List<String> result) {
+        Integer searchType = Integer.parseInt(result.get(1));
+        JSONObject obj;
         try{
-            JSONObject obj = Utils.convertStringIntoJson(result);
-            callback.getResultSet(obj);
+            switch (searchType){
+                case 0:
+                     obj = Utils.convertStringIntoJson(result.get(0));
+                    callback.getUserData(obj);
+                    break;
+
+                case 1:
+                    obj = Utils.convertStringIntoJson(result.get(0));
+                    callback.getProvinces(obj);
+                    break;
+            }
         } catch(JSONException e){
             e.printStackTrace();
         }
