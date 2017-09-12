@@ -1,18 +1,26 @@
 package com.example.lfarias.actasdigitales.Activities;
 
+import android.content.Intent;
+import android.nfc.cardemulation.HostNfcFService;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Entities.Departamento;
+import com.example.lfarias.actasdigitales.Entities.Localidad;
 import com.example.lfarias.actasdigitales.Entities.Provincia;
 import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
@@ -29,27 +37,49 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback{
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback {
 
-    @Bind(R.id.dni) EditText mDni;
-    @Bind(R.id.tramide_id) EditText mTramideId;
-    @Bind(R.id.name) EditText mName;
-    @Bind(R.id.user) EditText mUser;
-    @Bind(R.id.password) EditText mPassword;
-    @Bind(R.id.repeat_password) EditText mRepeatPassword;
-    @Bind(R.id.email) EditText mEmail;
-    @Bind(R.id.spinner_phone) Spinner mSpinner;
-    @Bind(R.id.phone_number) EditText mPhoneNumber;
-    @Bind(R.id.button_register) Button mButton;
-    @Bind(R.id.descripcion1)TextView mDescription;
-    @Bind(R.id.spinner_privincia) Spinner mProvince;
-    @Bind(R.id.spinner_department) Spinner mDepartment;
-    @Bind(R.id.address) EditText mAddress;
-    @Bind(R.id.button_continue) Button mContinue;
+    @Bind(R.id.dni)
+    EditText mDni;
+    @Bind(R.id.tramide_id)
+    EditText mTramideId;
+    @Bind(R.id.name)
+    EditText mName;
+    @Bind(R.id.user)
+    EditText mUser;
+    @Bind(R.id.password)
+    EditText mPassword;
+    @Bind(R.id.repeat_password)
+    EditText mRepeatPassword;
+    @Bind(R.id.email)
+    EditText mEmail;
+    @Bind(R.id.spinner_phone)
+    Spinner mSpinner;
+    @Bind(R.id.phone_number)
+    EditText mPhoneNumber;
+    @Bind(R.id.button_register)
+    Button mButton;
+    @Bind(R.id.descripcion1)
+    TextView mDescription;
+    @Bind(R.id.spinner_privincia)
+    Spinner mProvince;
+    @Bind(R.id.spinner_department)
+    Spinner mDepartment;
+    @Bind(R.id.spinner_localidad)
+    Spinner mLocalidad;
+    @Bind(R.id.address)
+    EditText mAddress;
+    @Bind(R.id.button_continue)
+    Button mContinue;
+    @Bind(R.id.register_layout)
+    LinearLayout layout;
 
     List<Provincia> provincias;
+    List<Departamento> departamentos;
+    List<Localidad> localidades;
     ArrayAdapter<String> dataProvincesAdapter;
     ArrayAdapter<String> dataDepartmentAdapter;
+    ArrayAdapter<String> dataLocalidadAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +90,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mDni.clearFocus();
         mTramideId.clearFocus();
-
-        mSpinner.setOnItemSelectedListener(this);
-        mProvince.setOnItemSelectedListener(this);
-        mDepartment.setOnItemSelectedListener(this);
+        ;
 
         List<String> categories = new ArrayList<>();
         categories.add("Tipo de telefono");
@@ -74,32 +101,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(dataAdapter);
 
-
-        /*List<String> provinces = new ArrayList<>();
-        provinces.add("Provincia");
-        provinces.add("Mendoza");
-        provinces.add("Jujuy");
-        provinces.add("Buenos Aires");
-        provinces.add("Salta");
-        provinces.add("San Juan");
-        provinces.add("San Luis");
-        provinces.add("Cordoba");
-        provinces.add("Misiones");*/
-
-        ;
-
-        /*List<String> departments = new ArrayList<>();
-        departments.add("Departamento");
-        departments.add("Godoy Cruz");
-        departments.add("Las Heras");
-        departments.add("Guaymallen");
-        departments.add("Ciudad");
-        departments.add("Tupungato");*/
-
-        /* = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departments);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mDepartment.setAdapter(dataDepartmentAdapter);*/
-
         mName.setVisibility(View.GONE);
         mUser.setVisibility(View.GONE);
         mPassword.setVisibility(View.GONE);
@@ -109,7 +110,16 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mPhoneNumber.setVisibility(View.GONE);
         mDepartment.setVisibility(View.GONE);
         mProvince.setVisibility(View.GONE);
+        mLocalidad.setVisibility(View.GONE);
         mAddress.setVisibility(View.GONE);
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(RegisterActivity.this, RequestActActivity.class);
+                startActivity(i);
+            }
+        });
 
         mContinue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +138,72 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 userDataRetrieveAsynctask.execute(conectParams);
             }
         });
+
+        mProvince.setSelection(0);
+        mProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int idProvincia;
+                if (mProvince.getSelectedItem().equals("Seleccione Provincia")) {
+                } else {
+                    DatabaseReadObject departmentDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this);
+                    List<String> params = new ArrayList<>();
+                    for (int i = 0; i < provincias.size(); i++) {
+                        if (mProvince.getSelectedItem().toString().equals(provincias.get(i).getNombreProvincia())) {
+                            idProvincia = provincias.get(i).getId();
+                            params.add(String.valueOf(idProvincia));
+                        }
+                    }
+
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.DEPARTAMENTO_CONTROLLER);
+                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_DEPARTAMENTO_SEGUN_PROVINCIA);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.DEPARTAMENTO_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    departmentDataRetrieveAsynctask.execute(conectParams);
+                    mDepartment.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mDepartment.setSelection(0);
+        mDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int idDepartamento;
+                if (mProvince.getSelectedItem().equals("Seleccione Departamento")) {
+                } else {
+                    DatabaseReadObject localidadDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this);
+                    List<String> params = new ArrayList<>();
+                    for (int i = 0; i < departamentos.size(); i++) {
+                        if (mDepartment.getSelectedItem().toString().equals(departamentos.get(i).getNombreDepartamento())) {
+                            idDepartamento = departamentos.get(i).getId();
+                            params.add(String.valueOf(idDepartamento));
+                        }
+                    }
+
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.LOCALIDAD_CONTROLLER);
+                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_LOCALIDAD_SEGUN_DEPARTAMENTO);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.LOCALIDAD_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    localidadDataRetrieveAsynctask.execute(conectParams);
+                    mLocalidad.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mLocalidad.setSelection(0);
     }
 
     @Override
@@ -144,10 +220,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     public void getUserData(JSONObject object) {
         String nombre = "";
         String apellido = "";
-        if(object.length() != 0){
+        if (object.length() != 0) {
             try {
-                nombre = (String)object.get("nombres");
-                apellido = (String)object.get("apellido");
+                nombre = (String) object.get("nombres");
+                apellido = (String) object.get("apellido");
 
                 DatabaseReadObject provincesDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this);
                 List<String> params = new ArrayList<>();
@@ -160,14 +236,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 conectParams.setParams(params);
                 provincesDataRetrieveAsynctask.execute(conectParams);
 
-            }catch(JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
-                Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos","El DNI / Nro. Tramite del documento es inválido").show();
+                Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos", "El DNI / Nro. Tramite del documento es inválido").show();
             }
 
             mContinue.setVisibility(View.GONE);
             mDescription.setVisibility(View.GONE);
-            mName.setText(apellido + ", "+ nombre);
+            mName.setText(apellido + ", " + nombre);
             mName.setVisibility(View.VISIBLE);
             mUser.setVisibility(View.VISIBLE);
             mTramideId.setVisibility(View.VISIBLE);
@@ -176,9 +252,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             mEmail.setVisibility(View.VISIBLE);
             mSpinner.setVisibility(View.VISIBLE);
             mPhoneNumber.setVisibility(View.VISIBLE);
-            mDepartment.setVisibility(View.VISIBLE);
-            mProvince.setVisibility(View.VISIBLE);
             mAddress.setVisibility(View.VISIBLE);
+            mProvince.setVisibility(View.VISIBLE);
         }
     }
 
@@ -194,11 +269,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 provincia.setNombreProvincia(privinciaJSONObject.getString("nombreprovincia"));
                 provincias.add(provincia);
             }
-        }catch (JSONException exc){
-            Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos","No se pudieron cargar datos de las provincias para el registro").show();
+        } catch (JSONException exc) {
+            Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos", "No se pudieron cargar datos de las provincias para el registro").show();
         }
         List<String> provinciasNombre = new ArrayList<>();
-        for (Provincia provincia : provincias){
+        provinciasNombre.add("Seleccione Provincia");
+        for (Provincia provincia : provincias) {
             provinciasNombre.add(provincia.getNombreProvincia());
         }
 
@@ -206,5 +282,60 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         dataProvincesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mProvince.setAdapter(dataProvincesAdapter);
     }
+
+    @Override
+    public void getDepartmentByProvince(JSONObject object) {
+        try {
+            JSONArray array = object.getJSONArray("items");
+            departamentos = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject departamentoJSONObject = array.getJSONObject(i);
+                Departamento departamento = new Departamento();
+                departamento.setId(Integer.parseInt(departamentoJSONObject.getString("id")));
+                departamento.setNombreDepartamento(departamentoJSONObject.getString("nombredepartamento"));
+                departamento.setIdProvincia(Integer.parseInt(departamentoJSONObject.getString("idprovincia")));
+                departamentos.add(departamento);
+            }
+        } catch (JSONException exc) {
+            Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos", "No se pudieron cargar datos de los departamentos para el registro").show();
+        }
+        List<String> departamentosNombre = new ArrayList<>();
+        departamentosNombre.add("Seleccione Departamento");
+        for (Departamento departamento : departamentos) {
+            departamentosNombre.add(departamento.getNombreDepartamento());
+        }
+
+        dataDepartmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departamentosNombre);
+        dataDepartmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mDepartment.setAdapter(dataDepartmentAdapter);
+    }
+
+    @Override
+    public void getLocalidadByDepartment(JSONObject object) {
+        try {
+            JSONArray array = object.getJSONArray("items");
+            localidades = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject localidadJSONObject = array.getJSONObject(i);
+                Localidad localidad = new Localidad();
+                localidad.setId(Integer.parseInt(localidadJSONObject.getString("id")));
+                localidad.setNombreLocalidad(localidadJSONObject.getString("nombrelocalidad"));
+                localidad.setIdDepartamento(Integer.parseInt(localidadJSONObject.getString("iddepartamento")));
+                localidades.add(localidad);
+            }
+        } catch (JSONException exc) {
+            Utils.createGlobalDialog(RegisterActivity.this, "Error en la obtención de datos", "No se pudieron cargar datos de las localidades para el registro").show();
+        }
+        List<String> localidadesNombre = new ArrayList<>();
+        localidadesNombre.add("Seleccione Localidad");
+        for (Localidad localidad : localidades) {
+            localidadesNombre.add(localidad.getNombreLocalidad());
+        }
+
+        dataLocalidadAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localidadesNombre);
+        dataLocalidadAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mLocalidad.setAdapter(dataLocalidadAdapter);
+    }
 }
+
 

@@ -34,7 +34,9 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
 
     public interface Callback {
         void getUserData(JSONObject object);
-        void getProvinces(JSONObject object) throws JSONException;
+        void getProvinces(JSONObject object);
+        void getDepartmentByProvince(JSONObject object);
+        void getLocalidadByDepartment(JSONObject object);
     }
 
     @Override
@@ -99,6 +101,16 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
                 case 1:
                     obj = Utils.convertStringIntoJson(result.get(0));
                     callback.getProvinces(obj);
+                    break;
+
+                case 2:
+                    obj = Utils.convertStringIntoJson(result.get(0));
+                    callback.getDepartmentByProvince(obj);
+                    break;
+
+                case 3:
+                    obj = Utils.convertStringIntoJson(result.get(0));
+                    callback.getLocalidadByDepartment(obj);
                     break;
             }
         } catch(JSONException e){

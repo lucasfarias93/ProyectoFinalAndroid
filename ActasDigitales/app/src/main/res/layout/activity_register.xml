@@ -1,19 +1,18 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
+    android:clipToPadding="true"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="5dp"
-    tools:context="com.example.lfarias.actasdigitales.Activities.LoginActivity">
+    >
 
-    <ScrollView
-        android:id="@+id/login_form"
+    <LinearLayout
+        android:id="@+id/register_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -44,6 +43,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/instructions_step"
                     android:textColor="@android:color/black"
+                    android:paddingTop="10dp"
                     android:textStyle="italic" />
 
                 <RelativeLayout
@@ -54,7 +54,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="left">
+                        android:gravity="left"
+                        android:paddingTop="10dp">
 
                         <EditText
                             android:id="@+id/dni"
@@ -71,7 +72,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right">
+                        android:gravity="right"
+                        android:paddingTop="10dp">
 
                         <EditText
                             android:id="@+id/tramide_id"
@@ -194,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/phone_number"
                         android:imeOptions="actionUnspecified"
-                        android:inputType="textEmailAddress"
+                        android:inputType="number"
                         android:maxLines="1"
                         android:singleLine="true" />
 
@@ -204,9 +206,9 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:padding="3dp"
-                android:layout_gravity="center"
                 android:weightSum="1">
 
                 <Spinner
@@ -230,20 +232,20 @@
                     android:layout_alignParentTop="true"
                     android:padding="6dp"
                     android:prompt="@string/department" />
-
-                <Spinner
-                    android:id="@+id/spinner_localidad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:padding="6dp"
-                    android:prompt="@string/localidad"
-                    android:layout_weight="20.08" />
-
             </LinearLayout>
+
+            <Spinner
+                android:id="@+id/spinner_localidad"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:layout_weight="20.08"
+                android:padding="6dp"
+                android:prompt="@string/localidad" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -254,12 +256,12 @@
                     android:id="@+id/address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="left"
                     android:hint="@string/address"
                     android:imeOptions="actionUnspecified"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true"
-                    android:layout_gravity="left"/>
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -267,9 +269,9 @@
                 android:id="@+id/button_continue"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:text="@string/continuar"
-                android:textColor="@color/colorPrimary"
-                android:layout_gravity="center"/>
+                android:textColor="@color/colorPrimary" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -284,16 +286,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/button_register"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="10dp"/>
 
                 <Button
                     android:id="@+id/button_report"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/button_report_error"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="10dp"/>
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
