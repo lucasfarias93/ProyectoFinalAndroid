@@ -58,6 +58,15 @@
         android:text="@string/introduccion_recuperacion"
         android:textColor="@android:color/black" />
 
+    <TextView
+        android:id="@+id/text_nueva_contraseña"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7sp"
+        android:padding="3dp"
+        android:text="@string/texto_nueva_contraseña"
+        android:textColor="@android:color/black" />
+
     <LinearLayout
         android:id="@+id/code_layout"
         android:layout_width="match_parent"
@@ -92,6 +101,23 @@
 
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/email_sent_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -126,7 +152,64 @@
     <Button
         android:id="@+id/button_submit_code"
         android:layout_width="200dp"
+        android:paddingTop="15dp"
         android:layout_height="wrap_content"
         android:text="@string/continuar"
         android:layout_gravity="center" />
+
+    <LinearLayout
+        android:id="@+id/nueva_password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Su usuario es: usuario_prueba"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/nueva_contraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textEmailAddress"
+                android:hint="Ingrese nueva contraseña"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/repetir_nueva_contraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textEmailAddress"
+                android:hint="Repita contraseña"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_submit_contraseña"
+            android:layout_width="200dp"
+            android:paddingTop="15dp"
+            android:layout_height="wrap_content"
+            android:text="@string/continuar"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
 </LinearLayout>

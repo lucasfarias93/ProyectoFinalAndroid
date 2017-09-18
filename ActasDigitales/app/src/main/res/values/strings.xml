@@ -24,7 +24,8 @@
     <string name="register"><u>Registrate aqui</u></string>
     <string name="forgot_password"><u>¿Olvidaste tu contraseña?</u></string>
     <string name="doc_number">Nº de documento</string>
-    <string name="name">Nombre completo</string>
+    <string name="name">Nombre</string>
+    <string name="last_name">Apellido</string>
     <string name="user_name">Ingrese un nombre de usuario</string>
     <string name="email">Ingrese una direccion de email</string>
     <string name="password">Ingrese su contraseña</string>
@@ -37,13 +38,14 @@
     <string name="tramite_id">Nº de id de tramite</string>
     <string name="address">Domicilio</string>
     <string name="registrate">Registrate!</string>
+    <string name="texto_nueva_contraseña">Su contraseña ha sido reiniciada con éxito. Por favor ingrese una nueva contraseña para su usuario</string>
     <string name="introduccion_recuperacion">Le acabamos de enviar un código a tu casilla de email asociada a tu cuenta para que puedas ingresar a tu cuenta. Por favor revisa tu casilla de correo y sigue los pasos para recuperar tu cuenta:</string>
     <string name="continuar">Continuar</string>
     <string name="code_text">Ingrese el codigo:</string>
     <string name="recover_data">Recupera los datos \n de tu cuenta</string>
     <string name="code_exists">Ya tengo codigo!</string>
     <string name="code_not_exists">No tengo codigo</string>
-    <string name="text_init">Por favor, verifique si ya se le ha enviado un código de recuperación de contraseña a su cuenta y haga click en el boton correspondiente continuando con los pasos solicitados. Caso contrario, solicite un código mediante el otro boton y se le enviará a su email inmediatamente.</string>
+    <string name="text_init">Por favor, ingrese la dirección de correo electronico hacia donde desee que le enviemos el código par recuperar su cuenta.</string>
     <string name="text_code_exists">Por favor, ingrese el código que ya tenia para recuperar su contraseña. En caso de que el código haya expirado, solicite otro.</string>
     <string name="pedir_codigo"><u>Pedir otro código</u></string>
     <string name="recuperar_codigo_nuevo">Le acabamos de enviar un nuevo código a su email. Por favor revise su casilla de correo y utilice ese código para recuperar su contraseña</string>

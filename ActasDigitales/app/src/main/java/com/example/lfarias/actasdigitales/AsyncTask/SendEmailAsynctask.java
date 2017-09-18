@@ -1,9 +1,11 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 
 import org.json.JSONException;
@@ -13,30 +15,27 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by acer on 28/08/2017.
+ * Created by acer on 17/09/2017.
  */
 
-public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<String>> {
-
+public class SendEmailAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
     Context context;
     Callback callback;
 
-    public DatabaseReadObject(Context context, Callback callback) {
+    public SendEmailAsynctask(Context context, Callback callback) {
         this.callback = callback;
         this.context = context;
     }
 
     public interface Callback {
-        void getUserData(JSONObject object);
-        void getProvinces(JSONObject object);
-        void getDepartmentByProvince(JSONObject object);
-        void getLocalidadByDepartment(JSONObject object);
+        void sendEmail(Boolean success);
     }
 
     @Override
@@ -44,8 +43,9 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
         List<String> resultSet = new ArrayList<>();
 
         try {
-            URL url = Utils.urlBuilder(params[0].getmControllerId(), params[0].getmActionId(), params[0].getParams());
-
+            URL urlEncoded = Utils.urlBuilder(params[0].getmControllerId(), params[0].getmActionId(), params[0].getParams());
+            String urlDecoded = URLDecoder.decode(urlEncoded.toString(), "UTF-8");
+            URL url = new URL(urlDecoded);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
@@ -68,11 +68,11 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
                 }
 
                 in.close();
-                String result  = sb.toString().trim();
+                String result = sb.toString().trim();
                 resultSet.add(result);
-                if(result.equals("false")){
+                if (result.equals("false")) {
                     resultSet.add(new StringBuilder().append(500).toString());
-                }else {
+                } else {
                     resultSet.add(params[0].getmSearchType().toString());
                 }
                 return resultSet;
@@ -98,29 +98,19 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
             switch (searchType) {
                 case 0:
                     obj = Utils.convertStringIntoJson(result.get(0));
-                    callback.getUserData(obj);
+                    //callback.getUserData(obj);
                     break;
 
-                case 1:
-                    obj = Utils.convertStringIntoJson(result.get(0));
-                    callback.getProvinces(obj);
-                    break;
-
-                case 2:
-                    obj = Utils.convertStringIntoJson(result.get(0));
-                    callback.getDepartmentByProvince(obj);
-                    break;
-
-                case 3:
-                    obj = Utils.convertStringIntoJson(result.get(0));
-                    callback.getLocalidadByDepartment(obj);
+                case 4:
+                    callback.sendEmail(Boolean.parseBoolean(result.get(0)));
                     break;
 
                 default:
-                    Utils.createGlobalDialog(context, "ERROR","Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
+                   // Utils.createGlobalDialog(context, "ERROR", "Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 }
+

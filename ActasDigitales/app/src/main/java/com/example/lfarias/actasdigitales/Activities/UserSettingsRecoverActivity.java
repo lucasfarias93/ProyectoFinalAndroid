@@ -3,29 +3,33 @@ package com.example.lfarias.actasdigitales.Activities;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Icon;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.lfarias.actasdigitales.AsyncTask.SendEmailAsynctask;
+import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
+import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class UserSettingsRecoverActivity extends AppCompatActivity {
+public class UserSettingsRecoverActivity extends AppCompatActivity implements SendEmailAsynctask.Callback {
 
     @Bind(R.id.button_submit_code)
     Button mButtonCodeContinue;
@@ -45,6 +49,15 @@ public class UserSettingsRecoverActivity extends AppCompatActivity {
     TextView mTextLinkNewCode;
     @Bind(R.id.text_new_code)
     TextView mTextNewCodeInstructions;
+    @Bind(R.id.email_sent_code)
+    EditText mEmail;
+    @Bind(R.id.address)EditText mInputCode;
+    @Bind(R.id.text_nueva_contraseña) TextView mNuevaContraseñaIndicaciones;
+    @Bind(R.id.nueva_password_layout) LinearLayout mPasswordLayout;
+    @Bind(R.id.nueva_contraseña) EditText mNuevaContraseña;
+    @Bind(R.id.repetir_nueva_contraseña) EditText mRepetirContraseña;
+    @Bind(R.id.textView3) TextView mPutCode;
+    @Bind(R.id.button_submit_contraseña) Button mNewContraseñaSubmit;
 
     Context context;
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
@@ -62,6 +75,9 @@ public class UserSettingsRecoverActivity extends AppCompatActivity {
         mTextIntroduction.setVisibility(View.GONE);
         mTextCodeExists.setVisibility(View.GONE);
         mTextInit.setVisibility(View.VISIBLE);
+        mPasswordLayout.setVisibility(View.GONE);
+        mEmail.setVisibility(View.VISIBLE);
+        mNuevaContraseñaIndicaciones.setVisibility(View.GONE);
         mTextLinkNewCode.setVisibility(View.GONE);
         mTextLinkNewCode.setTextColor(Color.BLUE);
         mTextNewCodeInstructions.setVisibility(View.GONE);
@@ -71,6 +87,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity {
                 mButtonCodeLayout.setVisibility(View.VISIBLE);
                 mButtonCodeExists.setVisibility(View.INVISIBLE);
                 mButtonCodeNotExists.setVisibility(View.GONE);
+                mEmail.setVisibility(View.GONE);
                 mTextInit.setVisibility(View.GONE);
                 mTextCodeExists.setVisibility(View.VISIBLE);
                 mButtonCodeContinue.setVisibility(View.VISIBLE);
@@ -84,12 +101,14 @@ public class UserSettingsRecoverActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mTextIntroduction.setVisibility(View.VISIBLE);
                 mTextInit.setVisibility(View.GONE);
+                mEmail.setVisibility(View.GONE);
                 mButtonCodeExists.setVisibility(View.GONE);
                 mButtonCodeLayout.setVisibility(View.VISIBLE);
                 mButtonCodeNotExists.setVisibility(View.INVISIBLE);
                 mButtonCodeContinue.setVisibility(View.VISIBLE);
                 mTextLinkNewCode.setVisibility(View.VISIBLE);
-                createNotifications2();
+
+                sendEmail(mEmail.getText().toString());
             }
         });
 
@@ -108,6 +127,27 @@ public class UserSettingsRecoverActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                mPasswordLayout.setVisibility(View.VISIBLE);
+                mButtonCodeContinue.setVisibility(View.GONE);
+                mTextLinkNewCode.setVisibility(View.GONE);
+                mPutCode.setVisibility(View.GONE);
+                mInputCode.setVisibility(View.GONE);
+                mNuevaContraseñaIndicaciones.setVisibility(View.VISIBLE);
+                mTextIntroduction.setVisibility(View.GONE);
+                mTextCodeExists.setVisibility(View.GONE);
+                mTextInit.setVisibility(View.GONE);
+                mTextLinkNewCode.setVisibility(View.GONE);
+                mTextNewCodeInstructions.setVisibility(View.GONE);
+                mNewContraseñaSubmit.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mNewContraseñaSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Utils.createGlobalDialog(LoginActivity.class, "Contraseña modificada con éxito","Por favor inicie sesión con su nueva contraseña para continuar usando la aplicación").show();
+                Intent i = new Intent(UserSettingsRecoverActivity.this, LoginActivity.class);
+                startActivity(i);
             }
         });
     }
@@ -184,6 +224,26 @@ public class UserSettingsRecoverActivity extends AppCompatActivity {
         return resultPendingIntent;
     }
 
+    public void sendEmail(String email){
+        SendEmailAsynctask provincesDataRetrieveAsynctask = new SendEmailAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this);
+        List<String> params = new ArrayList<>();
+        params.add(email);
 
+        ConnectionParams conectParams = new ConnectionParams();
+        conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_PATH + "/" + ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_CONTROLLER);
+        conectParams.setmActionId(ServiceUtils.Actions.ENVIAR_CODIGO);
+        conectParams.setmSearchType(ServiceUtils.SearchType.ENVIAR_CODIGO);
+        conectParams.setParams(params);
+        provincesDataRetrieveAsynctask.execute(conectParams);
+    }
+
+    @Override
+    public void sendEmail(Boolean success) {
+        if(success){
+            createNotifications2();
+        } else {
+            Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "ERROR", "Se produjo un error al enviar el código. Por favor intente nuevamente").show();
+        }
+    }
 }
 

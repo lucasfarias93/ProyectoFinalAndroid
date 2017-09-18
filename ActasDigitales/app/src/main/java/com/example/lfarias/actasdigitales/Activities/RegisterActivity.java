@@ -1,12 +1,9 @@
 package com.example.lfarias.actasdigitales.Activities;
 
 import android.content.Intent;
-import android.nfc.cardemulation.HostNfcFService;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
@@ -59,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     EditText mPhoneNumber;
     @Bind(R.id.button_register)
     Button mButton;
+    @Bind(R.id.last_name) EditText mLast_name;
     @Bind(R.id.descripcion1)
     TextView mDescription;
     @Bind(R.id.spinner_privincia)
@@ -107,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mRepeatPassword.setVisibility(View.GONE);
         mEmail.setVisibility(View.GONE);
         mSpinner.setVisibility(View.GONE);
+        mLast_name.setVisibility(View.GONE);
         mPhoneNumber.setVisibility(View.GONE);
         mDepartment.setVisibility(View.GONE);
         mProvince.setVisibility(View.GONE);
@@ -176,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int idDepartamento;
-                if (mProvince.getSelectedItem().equals("Seleccione Departamento")) {
+                if (mDepartment.getSelectedItem().equals("Seleccione Departamento")) {
                 } else {
                     DatabaseReadObject localidadDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this);
                     List<String> params = new ArrayList<>();
@@ -243,7 +241,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
             mContinue.setVisibility(View.GONE);
             mDescription.setVisibility(View.GONE);
-            mName.setText(apellido + ", " + nombre);
+            mName.setText(nombre);
+            mLast_name.setText(apellido);
+            mLast_name.setVisibility(View.VISIBLE);
             mName.setVisibility(View.VISIBLE);
             mUser.setVisibility(View.VISIBLE);
             mTramideId.setVisibility(View.VISIBLE);
@@ -308,6 +308,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         dataDepartmentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departamentosNombre);
         dataDepartmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mDepartment.setAdapter(dataDepartmentAdapter);
+
+        List<String> localidadesNombre = new ArrayList<>();
+        localidadesNombre.add("Seleccione Localidad");
+
+        dataLocalidadAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localidadesNombre);
+        dataLocalidadAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mLocalidad.setAdapter(dataLocalidadAdapter);
     }
 
     @Override
