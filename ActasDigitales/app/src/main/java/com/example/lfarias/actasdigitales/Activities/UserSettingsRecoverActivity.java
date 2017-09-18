@@ -3,6 +3,7 @@ package com.example.lfarias.actasdigitales.Activities;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.SendEmailAsynctask;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
@@ -66,6 +68,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     Button mNewContraseñaSubmit;
 
     Context context;
+    ProgressDialog dialog;
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
 
     @Override
@@ -76,6 +79,8 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.cancel(getIntent().getIntExtra(NOTIFICATION_ID, -1));
+
+        dialog = Utils.createLoadingIndicator(this);
 
         context = getApplicationContext();
 
@@ -112,6 +117,8 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 String email = mEmail.getText().toString();
                 if(email.isEmpty()){
                     mEmail.setError("Este campo es obligatorio para continuar");
+                } else if(!Utils.emailValidator(email)){
+                    mEmail.setError("El email ingresado no es correcto o posee un formato inválido. Por favor reviselo y corrigalo");
                 } else {
                     mTextIntroduction.setVisibility(View.VISIBLE);
                     mTextInit.setVisibility(View.GONE);
@@ -173,7 +180,6 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         PendingIntent dismissIntent = UserSettingsRecoverActivity.getDismissIntent(notificationId, context);
 
         RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
-        //contentView.setImageViewResource(R.id.image, R.mipmap.ic_launcher);
         contentView.setTextViewText(R.id.title, "Custom notification");
         contentView.setTextViewText(R.id.text, "This is a custom layout");
 
@@ -202,7 +208,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     }
 
     public void sendEmail(String email) {
-        SendEmailAsynctask provincesDataRetrieveAsynctask = new SendEmailAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this);
+        SendEmailAsynctask provincesDataRetrieveAsynctask = new SendEmailAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this, dialog);
         List<String> params = new ArrayList<>();
         params.add(email);
 
@@ -211,12 +217,14 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         conectParams.setmActionId(ServiceUtils.Actions.ENVIAR_CODIGO);
         conectParams.setmSearchType(ServiceUtils.SearchType.ENVIAR_CODIGO);
         conectParams.setParams(params);
+        dialog.show();
         provincesDataRetrieveAsynctask.execute(conectParams);
     }
 
     @Override
     public void sendEmail(Boolean success) {
         //if(success){
+        dialog.hide();
         createNotifications2();
         /*} else {
             Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "ERROR", "Se produjo un error al enviar el código. Por favor intente nuevamente").show();

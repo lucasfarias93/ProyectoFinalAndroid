@@ -1,6 +1,7 @@
 package com.example.lfarias.actasdigitales.Helpers;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -66,5 +67,18 @@ public class Utils {
         //funcions per a cridar el string amb JSON i convertir-lo de nou a JSON
         JSONObject jsonObject = new JSONObject(json);
         return jsonObject;
+    }
+
+    public static boolean emailValidator(String email){
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public static ProgressDialog createLoadingIndicator(Context context){
+        ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setTitle("Cargando");
+        dialog.setMessage("Estamos procesando la información. Por favor espere...");
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        return dialog;
     }
 }

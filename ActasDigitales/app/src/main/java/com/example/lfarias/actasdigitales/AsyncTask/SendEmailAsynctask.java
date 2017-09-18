@@ -1,5 +1,6 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,8 +29,9 @@ import javax.net.ssl.HttpsURLConnection;
 public class SendEmailAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
     Context context;
     Callback callback;
+    ProgressDialog dialog;
 
-    public SendEmailAsynctask(Context context, Callback callback) {
+    public SendEmailAsynctask(Context context, Callback callback, ProgressDialog dialog) {
         this.callback = callback;
         this.context = context;
     }
@@ -94,23 +96,15 @@ public class SendEmailAsynctask extends AsyncTask<ConnectionParams, Void, List<S
     @Override
     protected void onPostExecute(List<String> result) {
         Integer searchType = Integer.parseInt(result.get(1));
-        JSONObject obj;
-        try {
-            switch (searchType) {
-                case 0:
-                    obj = Utils.convertStringIntoJson(result.get(0));
-                    //callback.getUserData(obj);
-                    break;
 
-                case 4:
-                    callback.sendEmail(Boolean.parseBoolean(result.get(0)));
-                    break;
+        switch (searchType) {
+            case 4:
+                callback.sendEmail(Boolean.parseBoolean(result.get(0)));
+                break;
 
-                default:
-                   // Utils.createGlobalDialog(context, "ERROR", "Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            default:
+                dialog.hide();
+                Utils.createGlobalDialog(context, "ERROR", "Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
         }
     }
 }

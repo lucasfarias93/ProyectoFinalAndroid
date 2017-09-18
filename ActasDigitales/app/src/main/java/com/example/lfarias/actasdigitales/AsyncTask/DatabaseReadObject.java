@@ -1,5 +1,6 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -26,10 +27,12 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
 
     Context context;
     Callback callback;
+    ProgressDialog dialog;
 
-    public DatabaseReadObject(Context context, Callback callback) {
+    public DatabaseReadObject(Context context, Callback callback, ProgressDialog dialog) {
         this.callback = callback;
         this.context = context;
+        this.dialog = dialog;
     }
 
     public interface Callback {
@@ -117,6 +120,7 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
                     break;
 
                 default:
+                    dialog.hide();
                     Utils.createGlobalDialog(context, "ERROR","Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
             }
         } catch (JSONException e) {
