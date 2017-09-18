@@ -83,6 +83,7 @@ public class SendEmailAsynctask extends AsyncTask<ConnectionParams, Void, List<S
                 return resultSet;
             }
         } catch (Exception e) {
+
             resultSet.add(new String("Exception:" + e.getMessage()));
             resultSet.add(new StringBuilder().append(500).toString());
             return resultSet;

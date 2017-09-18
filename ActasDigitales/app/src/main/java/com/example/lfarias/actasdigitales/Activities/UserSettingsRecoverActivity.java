@@ -5,8 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,16 +13,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.SendEmailAsynctask;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
-import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,13 +50,20 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     TextView mTextNewCodeInstructions;
     @Bind(R.id.email_sent_code)
     EditText mEmail;
-    @Bind(R.id.address)EditText mInputCode;
-    @Bind(R.id.text_nueva_contraseña) TextView mNuevaContraseñaIndicaciones;
-    @Bind(R.id.nueva_password_layout) LinearLayout mPasswordLayout;
-    @Bind(R.id.nueva_contraseña) EditText mNuevaContraseña;
-    @Bind(R.id.repetir_nueva_contraseña) EditText mRepetirContraseña;
-    @Bind(R.id.textView3) TextView mPutCode;
-    @Bind(R.id.button_submit_contraseña) Button mNewContraseñaSubmit;
+    @Bind(R.id.address)
+    EditText mInputCode;
+    @Bind(R.id.text_nueva_contraseña)
+    TextView mNuevaContraseñaIndicaciones;
+    @Bind(R.id.nueva_password_layout)
+    LinearLayout mPasswordLayout;
+    @Bind(R.id.nueva_contraseña)
+    EditText mNuevaContraseña;
+    @Bind(R.id.repetir_nueva_contraseña)
+    EditText mRepetirContraseña;
+    @Bind(R.id.textView3)
+    TextView mPutCode;
+    @Bind(R.id.button_submit_contraseña)
+    Button mNewContraseñaSubmit;
 
     Context context;
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
@@ -67,6 +73,9 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings_recover);
         ButterKnife.bind(this);
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.cancel(getIntent().getIntExtra(NOTIFICATION_ID, -1));
 
         context = getApplicationContext();
 
@@ -109,6 +118,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 mTextLinkNewCode.setVisibility(View.VISIBLE);
 
                 sendEmail(mEmail.getText().toString());
+                createNotifications2();
             }
         });
 
@@ -152,79 +162,40 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         });
     }
 
-    public void createNotifications() {
-        Intent notificationIntent = getPackageManager().getLaunchIntentForPackage("com.google.android.gm");
-        //notificationIntent.setClassName("com.google.android.gm", "com.google.android.gm.ConversationListActivity");
-        PendingIntent contentIntent = PendingIntent.getActivity(context,
-                0, notificationIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-        NotificationCompat.Action action = new NotificationCompat.Action.Builder(
-                (R.drawable.info_black),
-                "Ir a GMAIL",
-                contentIntent).build();
-
-        NotificationManager nm = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-
-        Resources res = context.getResources();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-
-        builder.setContentIntent(contentIntent)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.ic_launcher))
-                .setTicker(("This is an example"))
-                .setWhen(System.currentTimeMillis())
-                .addAction(action)
-                .addAction(action)
-                .addAction(action)
-                .setAutoCancel(true)
-                .setContentTitle("Recuperación de contraseña")
-                .setContentText("Se te envio un código de seguridad a tu casilla de correo asociada a tu cuenta de Actas Digitales. Por favor ingresa y obten el código para recuperar tu contraseña");
-        Notification n = builder.build();
-
-        nm.notify(1, n);
-
-    }
-
     public void createNotifications2() {
-        int notificationId = 1; // just use a counter in some util class...
-        PendingIntent gmailRedirectIntent = getGMAILRedirectIntent(notificationId, context);
-        PendingIntent dismissNotifIntent = getDismissIntent(notificationId, context);
+        int notificationId = new Random().nextInt(); // just use a counter in some util class...
+        PendingIntent dismissIntent = UserSettingsRecoverActivity.getDismissIntent(notificationId, context);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setPriority(NotificationCompat.PRIORITY_MAX) //HIGH, MAX, FULL_SCREEN and setDefaults(Notification.DEFAULT_ALL) will make it a Heads Up Display Style
-                .setDefaults(Notification.FLAG_AUTO_CANCEL) // also requires VIBRATE permission
-                .setSmallIcon(R.mipmap.ic_launcher) // Required!
-                .setContentTitle("Message from test")
-                .setContentText("message")
-                .setAutoCancel(true)
-                .addAction(R.drawable.info_black, "Go to GMAIL", gmailRedirectIntent)
-                .addAction(R.drawable.info_outline_black, "Dismiss", dismissNotifIntent);
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
+        //contentView.setImageViewResource(R.id.image, R.mipmap.ic_launcher);
+        contentView.setTextViewText(R.id.title, "Custom notification");
+        contentView.setTextViewText(R.id.text, "This is a custom layout");
 
-// Gets an instance of the NotificationManager service
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.info_black)
+                        .setContentTitle("Recuperación de cuenta")
+                        .setContentText("Se le ha enviado un email a su casilla de correo con...")
+                        .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Se le ha enviado un email a su casilla de correo con el código de recuperación de contraseña. Por favor revise su casilla de correo"))
+                        .addAction(R.drawable.clear,
+                                "Cerrar notificacion", dismissIntent);
+
         NotificationManager notifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-// Builds the notification and issues it.
         notifyMgr.notify(notificationId, builder.build());
-    }
-
-    public PendingIntent getGMAILRedirectIntent(int notificationId, Context context) {
-        Intent notificationIntent = getPackageManager().getLaunchIntentForPackage("com.google.android.gm");
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationIntent.putExtra(NOTIFICATION_ID, notificationId);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(context,  0, notificationIntent, 0);
-        return resultPendingIntent;
     }
 
     public static PendingIntent getDismissIntent(int notificationId, Context context) {
         Intent intent = new Intent(context, UserSettingsRecoverActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(NOTIFICATION_ID, notificationId);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(context,  0, intent, 0);
-        return resultPendingIntent;
+        PendingIntent dismissIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return dismissIntent;
     }
 
-    public void sendEmail(String email){
+    public void sendEmail(String email) {
         SendEmailAsynctask provincesDataRetrieveAsynctask = new SendEmailAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this);
         List<String> params = new ArrayList<>();
         params.add(email);
@@ -239,11 +210,11 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
     @Override
     public void sendEmail(Boolean success) {
-        if(success){
-            createNotifications2();
-        } else {
+        //if(success){
+        createNotifications2();
+        /*} else {
             Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "ERROR", "Se produjo un error al enviar el código. Por favor intente nuevamente").show();
-        }
+        }*/
     }
 }
 
