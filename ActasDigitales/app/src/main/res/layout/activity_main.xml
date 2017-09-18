@@ -71,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="Speeds up development"
+                android:text="Con esta aplicación evitaras..."
                 android:textAlignment="center"
                 android:textSize="25dp"
                 android:textStyle="normal" />
@@ -81,8 +81,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="4dp"
-                android:text="@string/test_text"
-                android:textAlignment="inherit" />
+                android:padding="10dp"
+                android:text="...ir innecesariamente a un registro civil u oficina del gobierno para realizar el tramite presencial"
+                android:textAlignment="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="User Experience Focused"
+                android:text="Te ofrecemos..."
                 android:textAlignment="center"
                 android:textSize="25dp"
                 android:textStyle="normal" />
@@ -113,8 +114,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="4dp"
-                android:text="@string/test_text"
-                android:textAlignment="inherit" />
+                android:padding="10dp"
+                android:text="...mucha facilidad de uso, sencillez y es 100% eficiente disponible para toda persona que quiera hacer uso de la aplicación."
+                android:textAlignment="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -135,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="Easy to work with"
+                android:text="Con esta aplicación..."
                 android:textAlignment="center"
                 android:textSize="25dp"
                 android:textStyle="normal" />
@@ -145,8 +147,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="4dp"
-                android:text="@string/test_text"
-                android:textAlignment="inherit" />
+                android:padding="10dp"
+                android:text="...te ahorramos tiempo de tu vida y evitamos cualquier tipo de fraude posible"
+                android:textAlignment="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -154,15 +157,6 @@
             android:layout_height="match_parent"
             android:background="@drawable/lights">
 
-            <TextView
-                android:id="@+id/text10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="Easy to work with"
-                android:textAlignment="center"
-                android:textSize="25dp"
-                android:textStyle="normal" />
         </LinearLayout>
 
         <TextView
@@ -180,15 +174,6 @@
             android:layout_height="match_parent"
             android:background="@drawable/lights">
 
-            <TextView
-                android:id="@+id/text11"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="Easy to work with"
-                android:textAlignment="center"
-                android:textSize="25dp"
-                android:textStyle="normal" />
         </LinearLayout>
 
         <TextView

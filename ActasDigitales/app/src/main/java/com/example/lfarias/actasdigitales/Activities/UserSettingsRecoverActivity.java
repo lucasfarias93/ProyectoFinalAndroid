@@ -108,17 +108,23 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         mButtonCodeNotExists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTextIntroduction.setVisibility(View.VISIBLE);
-                mTextInit.setVisibility(View.GONE);
-                mEmail.setVisibility(View.GONE);
-                mButtonCodeExists.setVisibility(View.GONE);
-                mButtonCodeLayout.setVisibility(View.VISIBLE);
-                mButtonCodeNotExists.setVisibility(View.INVISIBLE);
-                mButtonCodeContinue.setVisibility(View.VISIBLE);
-                mTextLinkNewCode.setVisibility(View.VISIBLE);
 
-                sendEmail(mEmail.getText().toString());
-                createNotifications2();
+                String email = mEmail.getText().toString();
+                if(email.isEmpty()){
+                    mEmail.setError("Este campo es obligatorio para continuar");
+                } else {
+                    mTextIntroduction.setVisibility(View.VISIBLE);
+                    mTextInit.setVisibility(View.GONE);
+                    mEmail.setVisibility(View.GONE);
+                    mButtonCodeExists.setVisibility(View.GONE);
+                    mButtonCodeLayout.setVisibility(View.VISIBLE);
+                    mButtonCodeNotExists.setVisibility(View.INVISIBLE);
+                    mButtonCodeContinue.setVisibility(View.VISIBLE);
+                    mTextLinkNewCode.setVisibility(View.VISIBLE);
+
+                    sendEmail(mEmail.getText().toString());
+                    createNotifications2();
+                }
             }
         });
 
