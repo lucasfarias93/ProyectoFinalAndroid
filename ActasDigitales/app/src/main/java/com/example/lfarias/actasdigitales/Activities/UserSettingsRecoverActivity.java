@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.example.lfarias.actasdigitales.AsyncTask.SendEmailAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.ValidateCodeAsynctask;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Entities.Usuarios;
+import com.example.lfarias.actasdigitales.Helpers.SQLiteDatabaseHelper;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
@@ -35,8 +37,8 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
     @Bind(R.id.button_submit_code)
     Button mButtonCodeContinue;
-    @Bind(R.id.button_code_exists)
-    Button mButtonCodeExists;
+    /*@Bind(R.id.button_code_exists)
+    Button mButtonCodeExists;*/
     @Bind(R.id.code_layout)
     LinearLayout mButtonCodeLayout;
     @Bind(R.id.button_code_not_exists)
@@ -68,15 +70,20 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     @Bind(R.id.button_submit_contraseña)
     Button mNewContraseñaSubmit;
 
+
     Context context;
+    SQLiteDatabaseHelper helper;
     ProgressDialog dialog;
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+    Usuarios user = new Usuarios();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings_recover);
         ButterKnife.bind(this);
+
+        helper = new SQLiteDatabaseHelper(this);
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.cancel(getIntent().getIntExtra(NOTIFICATION_ID, -1));
@@ -96,7 +103,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         mTextLinkNewCode.setVisibility(View.GONE);
         mTextLinkNewCode.setTextColor(Color.BLUE);
         mTextNewCodeInstructions.setVisibility(View.GONE);
-        mButtonCodeExists.setOnClickListener(new View.OnClickListener() {
+        /*mButtonCodeExists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mButtonCodeLayout.setVisibility(View.VISIBLE);
@@ -110,7 +117,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
             }
         });
-
+*/
         mButtonCodeNotExists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,15 +128,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 } else if(!Utils.emailValidator(email)){
                     mEmail.setError("El email ingresado no es correcto o posee un formato inválido. Por favor reviselo y corrigalo");
                 } else {
-                    mTextIntroduction.setVisibility(View.VISIBLE);
-                    mTextInit.setVisibility(View.GONE);
-                    mEmail.setVisibility(View.GONE);
-                    mButtonCodeExists.setVisibility(View.GONE);
-                    mButtonCodeLayout.setVisibility(View.VISIBLE);
-                    mButtonCodeNotExists.setVisibility(View.INVISIBLE);
-                    mButtonCodeContinue.setVisibility(View.VISIBLE);
-                    mTextLinkNewCode.setVisibility(View.VISIBLE);
-
+                    user.setEmail(mEmail.getText().toString());
                     sendEmail(mEmail.getText().toString());
                     //createNotifications2();
                 }
@@ -143,7 +142,8 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 mTextInit.setVisibility(View.GONE);
                 mTextCodeExists.setVisibility(View.GONE);
                 mTextNewCodeInstructions.setVisibility(View.VISIBLE);
-
+                user.setEmail(mEmail.getText().toString());
+                sendEmail(mEmail.getText().toString());
             }
         });
 
@@ -168,9 +168,31 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         mNewContraseñaSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Utils.createGlobalDialog(LoginActivity.class, "Contraseña modificada con éxito","Por favor inicie sesión con su nueva contraseña para continuar usando la aplicación").show();
-                Intent i = new Intent(UserSettingsRecoverActivity.this, LoginActivity.class);
-                startActivity(i);
+                String contraseña = mNuevaContraseña.getText().toString();
+                String repetirContraseña = mRepetirContraseña.getText().toString();
+
+                if(contraseña.isEmpty()){
+                    mNuevaContraseña.setError("Este campo es obligatorio");
+                    if(repetirContraseña.isEmpty()){
+                        mRepetirContraseña.setError("Este campo es obligatorio");
+                    }
+                } else if(repetirContraseña.isEmpty()){
+                    mRepetirContraseña.setError("Este campo es obligatorio");
+                } else if(!contraseña.equals(repetirContraseña)){
+                    mNuevaContraseña.setError("Las nuevas contraseñas deben conicidir");
+                } else {
+                    Usuarios userTest = helper.getUserByEmail(user.getEmail());
+                    if(!(userTest == null)){
+                        userTest.setContraseña(mNuevaContraseña.getText().toString());
+                        helper.onUpdate(userTest, user.getEmail());
+
+                        Intent i = new Intent(UserSettingsRecoverActivity.this, LoginActivity.class);
+                        startActivity(i);
+                    }else {
+                        Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "Error","Ocurrio un error al cambiar su nueva contraseña. Por favor intente nuevamente o contacte al soporte").show();
+                    }
+                }
+
             }
         });
     }
@@ -223,12 +245,20 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
     @Override
     public void sendEmail(Boolean success) {
-        //if(success){
+        if(success){
         dialog.dismiss();
         createNotifications2();
-        /*} else {
-            Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "ERROR", "Se produjo un error al enviar el código. Por favor intente nuevamente").show();
-        }*/
+            mTextIntroduction.setVisibility(View.VISIBLE);
+            mTextInit.setVisibility(View.GONE);
+            mEmail.setVisibility(View.GONE);
+            //mButtonCodeExists.setVisibility(View.GONE);
+            mButtonCodeLayout.setVisibility(View.VISIBLE);
+            mButtonCodeNotExists.setVisibility(View.INVISIBLE);
+            mButtonCodeContinue.setVisibility(View.VISIBLE);
+            mTextLinkNewCode.setVisibility(View.VISIBLE);
+        } else {
+            dialog.dismiss();
+        }
     }
 
     @Override
@@ -250,7 +280,6 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
             mNewContraseñaSubmit.setVisibility(View.VISIBLE);
         } else {
             dialog.dismiss();
-            Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "ERROR", "Se produjo un error al enviar el código. Por favor intente nuevamente").show();
         }
     }
 }

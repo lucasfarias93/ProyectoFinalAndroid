@@ -1,7 +1,10 @@
 package com.example.lfarias.actasdigitales.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +23,9 @@ import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.Departamento;
 import com.example.lfarias.actasdigitales.Entities.Localidad;
 import com.example.lfarias.actasdigitales.Entities.Provincia;
+import com.example.lfarias.actasdigitales.Entities.Usuarios;
 import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
+import com.example.lfarias.actasdigitales.Helpers.SQLiteDatabaseHelper;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
@@ -82,12 +87,15 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     ArrayAdapter<String> dataDepartmentAdapter;
     ArrayAdapter<String> dataLocalidadAdapter;
     ProgressDialog dialog;
+    SQLiteDatabaseHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+
+        helper = new SQLiteDatabaseHelper(this);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mDni.clearFocus();
@@ -120,6 +128,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mButtonReport.setVisibility(View.GONE);
 
         mButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 String password = mPassword.getText().toString();
@@ -128,20 +137,42 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
                 if ((!password.isEmpty()) && (!repeatPassword.isEmpty()) && password.equals(repeatPassword) && Utils.emailValidator(email)) {
                     //TODO: Create a login access
-                    /*LoginUserAsynctask userDataRetrieveAsynctask = new LoginUserAsynctask(RegisterActivity.this, RegisterActivity.this, dialog);
-                    List<String> params = new ArrayList<>();
-                    params.add(mTramideId.getText().toString());
-                    params.add(mDni.getText().toString());
+
+                    Usuarios user = new Usuarios();
+                    user.setId(1);
+                    user.setLogin(mUser.getText().toString());
+                    user.setContraseña(mPassword.getText().toString());
+                    user.setDni(mDni.getText().toString());
+                    user.setIdTramite(mTramideId.getText().toString());
+                    user.setEmail(mEmail.getText().toString());
+                    user.setNombres(mName.getText().toString());
+                    user.setApellido(mLast_name.getText().toString());
 
 
+                    Usuarios userDB = helper.getUserByUser(user.getLogin());
+                    if(userDB == null){
+                        helper.insertUser(user);
+                        AlertDialog.Builder builder;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            builder = new AlertDialog.Builder(RegisterActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+                        } else {
+                            builder = new AlertDialog.Builder(RegisterActivity.this);
+                        }
+                        builder.setTitle("Registro")
+                                .setMessage("Usuario registrado con éxito. Intente loguear con sus nuevas credenciales")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+                                        startActivity(i);
+                                    }
+                                })
+                                .setIcon(R.drawable.alerts)
+                                .show();
 
-                    ConnectionParams conectParams = new ConnectionParams();
-                    conectParams.setmControllerId(ServiceUtils.Controllers.TRAMITE_DNI_CONTROLLER);
-                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_CIUDADANO);
-                    conectParams.setmSearchType(ServiceUtils.SearchType.CIUDADANO_SEARCH_TYPE);
-                    conectParams.setParams(params);
-                    dialog.show();
-                    userDataRetrieveAsynctask.execute(conectParams);*/
+                    } else {
+                        Utils.createGlobalDialog(RegisterActivity.this, "Registro", "No se pudo registrar. El usuario ya existe.").show();
+                    }
+
                 } else if(password.isEmpty()){
                     mPassword.setError("Este campo es obligatorio");
                     if(repeatPassword.isEmpty()){
@@ -426,6 +457,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             startActivity(i);
         }
     }
+
+
 }
 
 

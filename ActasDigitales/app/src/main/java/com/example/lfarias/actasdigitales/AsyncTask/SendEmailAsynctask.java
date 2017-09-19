@@ -1,13 +1,17 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
+import com.example.lfarias.actasdigitales.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,12 +103,36 @@ public class SendEmailAsynctask extends AsyncTask<ConnectionParams, Void, List<S
 
         switch (searchType) {
             case 4:
-                callback.sendEmail(Boolean.parseBoolean(result.get(0)));
+                if(contains(result.get(0))){
+                    callback.sendEmail(true);
+                }
                 break;
 
             default:
-                dialog.hide();
-                Utils.createGlobalDialog(context, "ERROR", "Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(context);
+                }
+                builder.setTitle("Error al enviar el código")
+                        .setMessage("Ocurrio un error al enviar el código a su email. Por favor intente nuevamente mas tarde o contacte al soporte.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                callback.sendEmail(false);
+                            }
+                        })
+                        .setIcon(R.drawable.alerts)
+                        .show();
+
+        }
+    }
+
+    public boolean contains(String result){
+        if(result.contains("true")){
+            return true;
+        } else {
+            return false;
         }
     }
 }

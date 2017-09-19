@@ -1,11 +1,18 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 
+import com.example.lfarias.actasdigitales.Activities.LoginActivity;
+import com.example.lfarias.actasdigitales.Activities.RegisterActivity;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
+import com.example.lfarias.actasdigitales.R;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -94,12 +101,27 @@ public class ValidateCodeAsynctask extends AsyncTask<ConnectionParams, Void, Lis
 
         switch (searchType) {
             case 5:
-                callback.validateCode(Boolean.parseBoolean(result.get(0)));
+                callback.validateCode(true);
                 break;
 
             default:
-                dialog.hide();
-                Utils.createGlobalDialog(context, "ERROR", "Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(context);
+                }
+                builder.setTitle("Error al validar el código ingresado")
+                        .setMessage("Ocurrio un error al validar el código a su ingresado. Por favor intente nuevamente mas tarde o contacte al soporte.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                callback.validateCode(false);
+                            }
+                        })
+                        .setIcon(R.drawable.alerts)
+                        .show();
         }
     }
+
+
 }
