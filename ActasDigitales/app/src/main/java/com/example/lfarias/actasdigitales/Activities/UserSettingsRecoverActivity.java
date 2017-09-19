@@ -18,6 +18,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.SendEmailAsynctask;
+import com.example.lfarias.actasdigitales.AsyncTask.ValidateCodeAsynctask;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
@@ -30,7 +31,7 @@ import java.util.Random;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class UserSettingsRecoverActivity extends AppCompatActivity implements SendEmailAsynctask.Callback {
+public class UserSettingsRecoverActivity extends AppCompatActivity implements SendEmailAsynctask.Callback, ValidateCodeAsynctask.Callback {
 
     @Bind(R.id.button_submit_code)
     Button mButtonCodeContinue;
@@ -130,7 +131,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                     mTextLinkNewCode.setVisibility(View.VISIBLE);
 
                     sendEmail(mEmail.getText().toString());
-                    createNotifications2();
+                    //createNotifications2();
                 }
             }
         });
@@ -149,19 +150,18 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         mButtonCodeContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mInputCode.getText().toString();
+                ValidateCodeAsynctask asynctask = new ValidateCodeAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this, dialog);
+                List<String> params = new ArrayList<>();
+                params.add( mInputCode.getText().toString());
 
-                mPasswordLayout.setVisibility(View.VISIBLE);
-                mButtonCodeContinue.setVisibility(View.GONE);
-                mTextLinkNewCode.setVisibility(View.GONE);
-                mPutCode.setVisibility(View.GONE);
-                mInputCode.setVisibility(View.GONE);
-                mNuevaContraseñaIndicaciones.setVisibility(View.VISIBLE);
-                mTextIntroduction.setVisibility(View.GONE);
-                mTextCodeExists.setVisibility(View.GONE);
-                mTextInit.setVisibility(View.GONE);
-                mTextLinkNewCode.setVisibility(View.GONE);
-                mTextNewCodeInstructions.setVisibility(View.GONE);
-                mNewContraseñaSubmit.setVisibility(View.VISIBLE);
+                ConnectionParams conectParams = new ConnectionParams();
+                conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_PATH + "/" + ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_CONTROLLER);
+                conectParams.setmActionId(ServiceUtils.Actions.VERIFICAR_CODIGO);
+                conectParams.setmSearchType(ServiceUtils.SearchType.VALIDAR_CODIGO);
+                conectParams.setParams(params);
+                dialog.show();
+                asynctask.execute(conectParams);
             }
         });
 
@@ -224,11 +224,34 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     @Override
     public void sendEmail(Boolean success) {
         //if(success){
-        dialog.hide();
+        dialog.dismiss();
         createNotifications2();
         /*} else {
             Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "ERROR", "Se produjo un error al enviar el código. Por favor intente nuevamente").show();
         }*/
+    }
+
+    @Override
+    public void validateCode(Boolean success) {
+
+        if(success){
+            dialog.dismiss();
+            mPasswordLayout.setVisibility(View.VISIBLE);
+            mButtonCodeContinue.setVisibility(View.GONE);
+            mTextLinkNewCode.setVisibility(View.GONE);
+            mPutCode.setVisibility(View.GONE);
+            mInputCode.setVisibility(View.GONE);
+            mNuevaContraseñaIndicaciones.setVisibility(View.VISIBLE);
+            mTextIntroduction.setVisibility(View.GONE);
+            mTextCodeExists.setVisibility(View.GONE);
+            mTextInit.setVisibility(View.GONE);
+            mTextLinkNewCode.setVisibility(View.GONE);
+            mTextNewCodeInstructions.setVisibility(View.GONE);
+            mNewContraseñaSubmit.setVisibility(View.VISIBLE);
+        } else {
+            dialog.dismiss();
+            Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "ERROR", "Se produjo un error al enviar el código. Por favor intente nuevamente").show();
+        }
     }
 }
 

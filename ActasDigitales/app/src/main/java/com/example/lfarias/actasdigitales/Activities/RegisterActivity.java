@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
+import com.example.lfarias.actasdigitales.AsyncTask.LoginUserAsynctask;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.Departamento;
 import com.example.lfarias.actasdigitales.Entities.Localidad;
@@ -34,7 +35,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback {
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback, LoginUserAsynctask.Callback {
 
     @Bind(R.id.dni)
     EditText mDni;
@@ -126,8 +127,21 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 String email = mEmail.getText().toString();
 
                 if ((!password.isEmpty()) && (!repeatPassword.isEmpty()) && password.equals(repeatPassword) && Utils.emailValidator(email)) {
-                    Intent i = new Intent(RegisterActivity.this, RequestActActivity.class);
-                    startActivity(i);
+                    //TODO: Create a login access
+                    /*LoginUserAsynctask userDataRetrieveAsynctask = new LoginUserAsynctask(RegisterActivity.this, RegisterActivity.this, dialog);
+                    List<String> params = new ArrayList<>();
+                    params.add(mTramideId.getText().toString());
+                    params.add(mDni.getText().toString());
+
+
+
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.TRAMITE_DNI_CONTROLLER);
+                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_CIUDADANO);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.CIUDADANO_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    dialog.show();
+                    userDataRetrieveAsynctask.execute(conectParams);*/
                 } else if(password.isEmpty()){
                     mPassword.setError("Este campo es obligatorio");
                     if(repeatPassword.isEmpty()){
@@ -403,6 +417,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         dataLocalidadAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localidadesNombre);
         dataLocalidadAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLocalidad.setAdapter(dataLocalidadAdapter);
+    }
+
+    @Override
+    public void loginUser(Boolean success) {
+        if(success){
+            Intent i = new Intent(RegisterActivity.this, RequestActActivity.class);
+            startActivity(i);
+        }
     }
 }
 

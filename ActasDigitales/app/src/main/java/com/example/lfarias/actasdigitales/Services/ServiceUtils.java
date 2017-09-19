@@ -16,6 +16,7 @@ public class ServiceUtils {
         public static final String BUSCAR_LOCALIDAD_SEGUN_DEPARTAMENTO = "localidad_segun_dpto_mobile";
         public static final String ENVIAR_CODIGO = "correoandroid";
         public static final String VERIFICAR_CODIGO = "codigoactivacionandroid";
+        public static final String REGISTER_USER = "crear_mobile";
     }
 
     public static class Controllers{
@@ -26,7 +27,7 @@ public class ServiceUtils {
         public static final String PROVINCIA_CONTROLLER = "provincia";
         public static final String DEPARTAMENTO_CONTROLLER = "departamento";
         public static final String LOCALIDAD_CONTROLLER = "localidad";
-
+        public static final String REGISTER_USER_CONTROLLER = "usuarios";
 
         public static final String RECUPERACION_CONTRASEÑA_PATH = "olvido";
         public static final String RECUPERACION_CONTRASEÑA_CONTROLLER = "index";
@@ -44,5 +45,6 @@ public class ServiceUtils {
         public static final Integer LOCALIDAD_SEARCH_TYPE = 3;
         public static final Integer ENVIAR_CODIGO = 4;
         public static final Integer VALIDAR_CODIGO = 5;
+        public static final Integer REGISTER_USER_SEARCH_TYPE = 6;
     }
 }
