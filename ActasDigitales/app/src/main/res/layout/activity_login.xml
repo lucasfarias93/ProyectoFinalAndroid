@@ -19,13 +19,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="-32dp"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="217dp"
-                android:src="@drawable/app_logo" />
+                android:layout_height="163dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/actas_digitales" />
 
             <TextView
                 android:id="@+id/login"
@@ -34,6 +36,7 @@
                 android:textStyle="bold|italic"
                 android:textColor="@color/colorAccent"
                 android:gravity="center"
+                android:paddingBottom="25dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -99,11 +102,15 @@
 
             <Button
                 android:id="@+id/login_button"
-                style="?android:textAppearanceButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_button"
+                android:elevation="8dp"
+                android:translationZ="8dp"
+                android:stateListAnimator="@null"
+                android:textColorLink="@android:color/white"
+                android:background="@color/colorAccent"
+                android:elegantTextHeight="true"
                 android:layout_gravity="center"
                 android:text="@string/action_sign_in"
                 android:textColor="@android:color/white"

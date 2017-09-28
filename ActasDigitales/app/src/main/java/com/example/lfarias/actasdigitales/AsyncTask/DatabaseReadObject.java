@@ -40,6 +40,7 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
         void getProvinces(JSONObject object);
         void getDepartmentByProvince(JSONObject object);
         void getLocalidadByDepartment(JSONObject object);
+        void registerUser(Boolean response);
     }
 
     @Override
@@ -119,12 +120,24 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
                     callback.getLocalidadByDepartment(obj);
                     break;
 
+                case 6:
+                    callback.registerUser(checkResponseValue(result.get(0)));
+                    break;
+
                 default:
                     dialog.hide();
                     Utils.createGlobalDialog(context, "ERROR","Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean checkResponseValue(String responseValue){
+        if(responseValue.contains("true")){
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -136,42 +136,25 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 String email = mEmail.getText().toString();
 
                 if ((!password.isEmpty()) && (!repeatPassword.isEmpty()) && password.equals(repeatPassword) && Utils.emailValidator(email)) {
-                    //TODO: Create a login access
 
-                    Usuarios user = new Usuarios();
-                    user.setId(1);
-                    user.setLogin(mUser.getText().toString());
-                    user.setContraseña(mPassword.getText().toString());
-                    user.setDni(mDni.getText().toString());
-                    user.setIdTramite(mTramideId.getText().toString());
-                    user.setEmail(mEmail.getText().toString());
-                    user.setNombres(mName.getText().toString());
-                    user.setApellido(mLast_name.getText().toString());
+                    DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this, dialog);
+                    List<String> params = new ArrayList<>();
+                    params.add(mUser.getText().toString());
+                    params.add(mTramideId.getText().toString());
+                    params.add(mDni.getText().toString());
+                    params.add(mPassword.getText().toString());
+                    params.add(mRepeatPassword.getText().toString());
+                    params.add(mName.getText().toString());
+                    params.add(mLast_name.getText().toString());
+                    params.add(mEmail.getText().toString());
 
-
-                    Usuarios userDB = helper.getUserByUser(user.getLogin());
-                    if(userDB == null){
-                        helper.insertUser(user);
-                        AlertDialog.Builder builder;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            builder = new AlertDialog.Builder(RegisterActivity.this, android.R.style.Theme_Material_Dialog_Alert);
-                        } else {
-                            builder = new AlertDialog.Builder(RegisterActivity.this);
-                        }
-                        builder.setTitle("Registro")
-                                .setMessage("Usuario registrado con éxito. Intente loguear con sus nuevas credenciales")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-                                        startActivity(i);
-                                    }
-                                })
-                                .setIcon(R.drawable.alerts)
-                                .show();
-
-                    } else {
-                        Utils.createGlobalDialog(RegisterActivity.this, "Registro", "No se pudo registrar. El usuario ya existe.").show();
-                    }
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.REGISTER_USER_CONTROLLER);
+                    conectParams.setmActionId(ServiceUtils.Actions.REGISTER_USER);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.REGISTER_USER_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    dialog.show();
+                    userDataRetrieveAsynctask.execute(conectParams);
 
                 } else if(password.isEmpty()){
                     mPassword.setError("Este campo es obligatorio");
@@ -448,6 +431,32 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         dataLocalidadAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localidadesNombre);
         dataLocalidadAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLocalidad.setAdapter(dataLocalidadAdapter);
+    }
+
+    @Override
+    public void registerUser(Boolean response) {
+        if(response){
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(RegisterActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(RegisterActivity.this);
+            }
+            builder.setTitle("Usuario Registrado con éxito")
+                    .setMessage("El nuevo usuario ha sido registrado con éxito. Por favor inicie sesión con sus nuevas credenciales")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(i);
+                        }
+                    })
+                    .setIcon(R.drawable.alerts)
+                    .show();
+
+        }
+        else {
+            Utils.createGlobalDialog(RegisterActivity.this, "Error en la creación del nuevo usuario", "No se pudo crear su nuevo usuario. Intentelo nuevamente").show();
+        }
     }
 
     @Override
