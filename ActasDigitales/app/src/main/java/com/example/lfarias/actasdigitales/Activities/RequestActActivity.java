@@ -20,8 +20,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -68,17 +71,6 @@ public class RequestActActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
 
     /**
@@ -116,6 +108,7 @@ public class RequestActActivity extends AppCompatActivity {
             switch(getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 1:
                     rootView = inflater.inflate(R.layout.fragment_page_1, container, false);
+                    final RadioGroup radioGroup = (RadioGroup) rootView.findViewById(R.id.rdgGrupo);
                     Spinner spinner =(Spinner) rootView.findViewById(R.id.spinner1);
                     List<String> spinnerArray = new ArrayList<>();
                     spinnerArray.add("Seleccione tipo de acta");
@@ -126,6 +119,24 @@ public class RequestActActivity extends AppCompatActivity {
                     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
                     spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(spinnerArrayAdapter);
+
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            switch ((int)id){
+                                case 0:
+                                    final RadioButton button1 = (RadioButton)radioGroup.findViewById(R.id.rdbOne);
+                                    button1.setVisibility(View.GONE);
+
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
 
                     break;
 

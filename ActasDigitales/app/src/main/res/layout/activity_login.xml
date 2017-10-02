@@ -27,13 +27,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="163dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/actas_digitales" />
+                android:src="@drawable/app_logo_2" />
 
             <TextView
                 android:id="@+id/login"
                 android:text="Inicie sesión"
                 android:textSize="25dp"
-                android:textStyle="bold|italic"
+                android:textStyle="italic"
                 android:textColor="@color/colorAccent"
                 android:gravity="center"
                 android:paddingBottom="25dp"
