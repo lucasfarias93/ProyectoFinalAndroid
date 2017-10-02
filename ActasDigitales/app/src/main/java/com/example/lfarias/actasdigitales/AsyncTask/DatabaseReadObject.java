@@ -126,7 +126,7 @@ public class DatabaseReadObject extends AsyncTask<ConnectionParams, Void, List<S
 
                 default:
                     dialog.hide();
-                    Utils.createGlobalDialog(context, "ERROR","Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
+                    Utils.createGlobalDialog(context, "Error","Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
             }
         } catch (JSONException e) {
             e.printStackTrace();

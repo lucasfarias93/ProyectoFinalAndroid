@@ -82,38 +82,34 @@
                 <TextView
                     android:id="@+id/register"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="35dp"
                     android:layout_alignParentLeft="true"
                     android:clickable="true"
                     android:padding="5dp"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/register" />
 
                 <TextView
                     android:id="@+id/forgotPassword"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="35dp"
                     android:layout_alignParentRight="true"
                     android:clickable="true"
                     android:padding="5dp"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/forgot_password" />
 
             </RelativeLayout>
-
 
             <Button
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:elevation="8dp"
                 android:translationZ="8dp"
-                android:stateListAnimator="@null"
-                android:textColorLink="@android:color/white"
-                android:background="@color/colorAccent"
-                android:elegantTextHeight="true"
                 android:layout_gravity="center"
+                android:textColor="@color/colorPrimary"
                 android:text="@string/action_sign_in"
-                android:textColor="@android:color/white"
                 android:textStyle="bold" />
 
         </LinearLayout>

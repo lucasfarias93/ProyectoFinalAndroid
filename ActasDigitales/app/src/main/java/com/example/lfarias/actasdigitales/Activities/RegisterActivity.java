@@ -5,14 +5,18 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -79,6 +83,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Bind(R.id.register_layout)
     LinearLayout layout;
     @Bind(R.id.button_report) Button mButtonReport;
+    @Bind(R.id.first_dni)
+    ImageView dni1;
+    @Bind(R.id.second_dni)
+    ImageView dni2;
+    @Bind(R.id.descripcion2) TextView mDescripcion2;
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -93,6 +102,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Registro de usuario");
+        mActionBar.setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         helper = new SQLiteDatabaseHelper(this);
@@ -197,7 +210,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
 
-                DecodeTextUtils.decodeStringText("Secci\u00f3n");
                 DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this, dialog);
                 List<String> params = new ArrayList<>();
                 params.add(mTramideId.getText().toString());
@@ -299,7 +311,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         if (object.length() != 0) {
             try {
                 dialog.hide();
+                dni1.setVisibility(View.GONE);
+                dni2.setVisibility(View.GONE);
                 mButton.setVisibility(View.VISIBLE);
+                mDescripcion2.setVisibility(View.GONE);
                 mButtonReport.setVisibility(View.VISIBLE);
                 nombre = (String) object.get("nombres");
                 apellido = (String) object.get("apellido");
@@ -467,7 +482,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
-
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
 }
 
 
