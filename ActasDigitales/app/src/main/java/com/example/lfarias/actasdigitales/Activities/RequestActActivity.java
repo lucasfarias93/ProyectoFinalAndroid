@@ -111,43 +111,12 @@ public class RequestActActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             //TODO: crear 3 layout distintos uno para cada fragment y añadirlo asi.
 
-            View rootView = inflater.inflate(R.layout.fragment_request_act, container, false);
-            View rootModifiedView = new View(getContext());
-            TextView textView = new TextView(getContext());
+            View rootView = new View(getContext());
+
             switch(getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 1:
-                    textView.setText(getResources().getString(R.string.select_act_method));
-                    textView.setText(R.string.select_act_method);
-                    LinearLayout layout = new LinearLayout(getContext());
-                    layout.addView(textView);
-                    rootModifiedView = createFragmentLayout(layout, 1);
-                    break;
-
-                case 2:
-                    textView.setText(getResources().getString(R.string.expend_act));
-                    break;
-
-                case 3:
-                    textView.setText(getResources().getString(R.string.payment_methods));
-                    break;
-
-            }
-            return rootModifiedView;
-        }
-
-        public View createFragmentLayout(View rootView, int selectedFragment){
-            switch(selectedFragment){
-                case 1:
-
-                    LinearLayout layout = new LinearLayout(getContext());
-                    layout.setGravity(Gravity.CENTER);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    /*lp.setMargins(margin_left_right, margin_top_bottom, margin_left_right, margin_top_bottom);
-                    layout.setLayoutParams(lp);*/
-                    layout.setElevation(25);
-                    layout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-
-                    Spinner spinner = new Spinner(getContext());
+                    rootView = inflater.inflate(R.layout.fragment_page_1, container, false);
+                    Spinner spinner =(Spinner) rootView.findViewById(R.id.spinner1);
                     List<String> spinnerArray = new ArrayList<>();
                     spinnerArray.add("Nacimiento");
                     spinnerArray.add("Matrimonio");
@@ -156,10 +125,17 @@ public class RequestActActivity extends AppCompatActivity {
                     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
                     spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(spinnerArrayAdapter);
+                    
+                    break;
 
-                    layout.addView(spinner);
+                case 2:
+                    //textView.setText(getResources().getString(R.string.expend_act));
+                    break;
 
-                    rootView = layout;
+                case 3:
+                    //textView.setText(getResources().getString(R.string.payment_methods));
+                    break;
+
             }
             return rootView;
         }
