@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Build;
+import android.view.ContextThemeWrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +30,8 @@ public class Utils {
     public static AlertDialog.Builder createGlobalDialog(Context context, String title, String message){
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+            ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
+            builder = new AlertDialog.Builder(ctw);
         } else {
             builder = new AlertDialog.Builder(context);
         }
@@ -44,7 +46,7 @@ public class Utils {
 
                     }
                 })
-                .setIcon(R.drawable.alerts);
+                .setIcon(R.drawable.information);
         return builder;
     }
 

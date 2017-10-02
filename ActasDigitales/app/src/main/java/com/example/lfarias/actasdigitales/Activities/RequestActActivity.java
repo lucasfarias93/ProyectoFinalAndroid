@@ -1,7 +1,10 @@
 package com.example.lfarias.actasdigitales.Activities;
 
+import android.content.Intent;
+import android.support.annotation.Px;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -10,17 +13,27 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindDimen;
+
 public class RequestActActivity extends AppCompatActivity {
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,6 +57,10 @@ public class RequestActActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Solicitar acta");
+        mActionBar.setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -62,29 +79,6 @@ public class RequestActActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_request_act, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -115,9 +109,35 @@ public class RequestActActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_request_act, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            //TODO: crear 3 layout distintos uno para cada fragment y añadirlo asi.
+
+            View rootView = new View(getContext());
+
+            switch(getArguments().getInt(ARG_SECTION_NUMBER)){
+                case 1:
+                    rootView = inflater.inflate(R.layout.fragment_page_1, container, false);
+                    Spinner spinner =(Spinner) rootView.findViewById(R.id.spinner1);
+                    List<String> spinnerArray = new ArrayList<>();
+                    spinnerArray.add("Seleccione tipo de acta");
+                    spinnerArray.add("Nacimiento");
+                    spinnerArray.add("Matrimonio");
+                    spinnerArray.add("Defunción");
+                    spinnerArray.add("Unión Convivencial");
+                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
+                    spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(spinnerArrayAdapter);
+
+                    break;
+
+                case 2:
+                    //textView.setText(getResources().getString(R.string.expend_act));
+                    break;
+
+                case 3:
+                    //textView.setText(getResources().getString(R.string.payment_methods));
+                    break;
+
+            }
             return rootView;
         }
     }
@@ -157,5 +177,27 @@ public class RequestActActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_request_act, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                finish();
+                Intent i = new Intent(RequestActActivity.this, LoginActivity.class);
+                startActivity(i);
+                break;
+
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 }

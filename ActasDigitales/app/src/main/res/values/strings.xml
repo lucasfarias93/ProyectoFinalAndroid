@@ -21,6 +21,7 @@
         \n\nNo tenga en cuenta los 0s (ceros) que preceden el primer numero distinto de 0.
         \n\nSi el nomobre que se autocompleta no corresponde con el suyo, por favor reporte un error con el boton al final del registro</string>
     <string name="instructions_step2"></string>
+    <string name="instrucciones_tramite_dni">Las siguientes imagenes le indican de donde obtener el número de trámite solicitado de su DNI:</string>
     <string name="register"><u>Registrate aqui</u></string>
     <string name="forgot_password"><u>¿Olvidaste tu contraseña?</u></string>
     <string name="doc_number">Nº de documento</string>
@@ -54,4 +55,8 @@
     <string name="title_activity_request_act">RequestActActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="salir">Salir</string>
+    <string name="select_act_method">ELIGA TIPO DE ACTA Y \n PARENTEZCO</string>
+    <string name="expend_act">ACTA A EXPEDIR</string>
+    <string name="payment_methods">ELEGIR MEDIOS DE PAGO</string>
 </resources>

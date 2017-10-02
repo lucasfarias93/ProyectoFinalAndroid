@@ -5,14 +5,18 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -79,8 +83,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     Button mContinue;
     @Bind(R.id.register_layout)
     LinearLayout layout;
-    @Bind(R.id.button_report)
-    Button mButtonReport;
+    @Bind(R.id.button_report) Button mButtonReport;
+    @Bind(R.id.first_dni)
+    ImageView dni1;
+    @Bind(R.id.second_dni)
+    ImageView dni2;
+    @Bind(R.id.descripcion2) TextView mDescripcion2;
+
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -95,6 +104,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Registro de usuario");
+        mActionBar.setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         helper = new SQLiteDatabaseHelper(this);
@@ -138,9 +151,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 String email = mEmail.getText().toString();
 
                 if ((!password.isEmpty()) && (!repeatPassword.isEmpty()) && password.equals(repeatPassword) && Utils.emailValidator(email)) {
-                    //TODO: Create a login access
 
-                    RegisterUserAsynctask registerUserAsynctask = new RegisterUserAsynctask(RegisterActivity.this, RegisterActivity.this, dialog);
+                    DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this, dialog);
                     List<String> params = new ArrayList<>();
                     params.add(mUser.getText().toString());
                     params.add(mTramideId.getText().toString());
@@ -157,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     conectParams.setmSearchType(ServiceUtils.SearchType.REGISTER_USER_SEARCH_TYPE);
                     conectParams.setParams(params);
                     dialog.show();
-                    registerUserAsynctask.execute(conectParams);
+                    userDataRetrieveAsynctask.execute(conectParams);
 
                 } else if (password.isEmpty()) {
                     mPassword.setError("Este campo es obligatorio");
@@ -301,7 +313,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         if (object.length() != 0) {
             try {
                 dialog.hide();
+                dni1.setVisibility(View.GONE);
+                dni2.setVisibility(View.GONE);
                 mButton.setVisibility(View.VISIBLE);
+                mDescripcion2.setVisibility(View.GONE);
                 mButtonReport.setVisibility(View.VISIBLE);
                 nombre = (String) object.get("nombres");
                 apellido = (String) object.get("apellido");
@@ -436,36 +451,42 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
     @Override
+    public void registerUser(Boolean response) {
+        if(response){
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(RegisterActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(RegisterActivity.this);
+            }
+            builder.setTitle("Usuario Registrado con éxito")
+                    .setMessage("El nuevo usuario ha sido registrado con éxito. Por favor inicie sesión con sus nuevas credenciales")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(i);
+                        }
+                    })
+                    .setIcon(R.drawable.alerts)
+                    .show();
+
+        }
+        else {
+            Utils.createGlobalDialog(RegisterActivity.this, "Error en la creación del nuevo usuario", "No se pudo crear su nuevo usuario. Intentelo nuevamente").show();
+        }
+    }
+
+    @Override
     public void loginUser(Boolean success) {
         if (success) {
             Intent i = new Intent(RegisterActivity.this, RequestActActivity.class);
             startActivity(i);
         }
     }
-
-
     @Override
-    public void registerUser(Boolean success) {
-        if(success) {
-            dialog.dismiss();
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-            } else {
-                builder = new AlertDialog.Builder(this);
-            }
-            builder.setTitle("Usuario registrado con éxito")
-                    .setMessage("Usuario registrado. Por favor inicie sesión con su nuevo usuario")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .setIcon(R.drawable.alerts)
-                    .show();
-        } else {
-            dialog.dismiss();
-        }
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 }
 

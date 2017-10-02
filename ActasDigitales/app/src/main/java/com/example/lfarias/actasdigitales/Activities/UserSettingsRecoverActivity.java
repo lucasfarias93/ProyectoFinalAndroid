@@ -8,8 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -81,6 +84,9 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings_recover);
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Recuperar contraseña");
+        mActionBar.setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         helper = new SQLiteDatabaseHelper(this);
@@ -281,6 +287,12 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         } else {
             dialog.dismiss();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 }
 

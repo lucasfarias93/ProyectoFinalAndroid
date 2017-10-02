@@ -83,29 +83,31 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordView.clearFocus();
 
         Button mEmailSignInButton = (Button) findViewById(R.id.login_button);
+        mEmailSignInButton.setElevation(20);
+        //mEmailSignInButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Usuarios userTest = helper.getUserByUser(mUserView.getText().toString());
-                if(userTest == null){
+                //if(userTest == null){
                     Utils.createGlobalDialog(LoginActivity.this, "Error al iniciar sesión", "El usuario ingresado no existe. Verifique los datos por favor").show();
-                } else {
-                    if(mPasswordView.getText().toString().equals(userTest.getContraseña())){
+                //} else {
+                    //if(mPasswordView.getText().toString().equals(userTest.getContraseña())){
                         Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
                         startActivity(i);
-                    } else {
+                    //} else {
                         Utils.createGlobalDialog(LoginActivity.this, "Error al iniciar sesión", "La contraseña ingresada es incorrecta").show();
-                    }
-                }
+                    //}
+                //}
             }
     });
 
         mLoginFormView = findViewById(R.id.login_form);
 
         mRegister = (TextView) findViewById(R.id.register);
-        mRegister.setTextColor(Color.BLUE);
+        mRegister.setTextColor(getResources().getColor(R.color.colorPrimary));
         mForgotPassword = (TextView) findViewById(R.id.forgotPassword);
-        mForgotPassword.setTextColor(Color.BLUE);
+        mForgotPassword.setTextColor(getResources().getColor(R.color.colorPrimary));
 
         mForgotPassword.setOnClickListener(new OnClickListener() {
             @Override

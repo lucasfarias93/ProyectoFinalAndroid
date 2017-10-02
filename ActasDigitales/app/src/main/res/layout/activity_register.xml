@@ -51,10 +51,40 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="25dp">
 
+                    <TextView
+                        android:id="@+id/descripcion2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/instrucciones_tramite_dni"
+                        android:textColor="@android:color/black"
+                        android:paddingTop="10dp"
+                        android:textStyle="italic" />
+
+                    <ImageView
+                        android:id="@+id/first_dni"
+                        android:layout_width="203dp"
+                        android:layout_height="153dp"
+                        android:src="@drawable/dni1"
+                        android:layout_below="@+id/descripcion2"
+                        android:gravity="left"
+                        />
+
+                    <ImageView
+                        android:id="@+id/second_dni"
+                        android:layout_below="@+id/descripcion2"
+                        android:layout_width="200dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/dni2"
+                        android:gravity="right"
+                        android:layout_toRightOf="@+id/first_dni"
+                        />
+
                     <android.support.design.widget.TextInputLayout
+                        android:id="@+id/dni_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
+                        android:layout_below="@+id/first_dni"
                         android:paddingTop="10dp">
 
                         <EditText
@@ -73,7 +103,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:paddingTop="10dp">
+                        android:paddingTop="10dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="48dp">
 
                         <EditText
                             android:id="@+id/tramide_id"
@@ -87,6 +120,14 @@
 
                     </android.support.design.widget.TextInputLayout>
                 </RelativeLayout>
+
+                <Button
+                    android:id="@+id/button_continue"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="@string/continuar"
+                    android:textColor="@color/colorPrimary" />
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -281,34 +322,29 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/button_continue"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="@string/continuar"
-                android:textColor="@color/colorPrimary" />
-
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:padding="6dp"
+                android:weightSum="2"
                 android:paddingBottom="5dp">
 
                 <Button
                     android:id="@+id/button_register"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:text="@string/button_register"
+                    android:layout_weight="1"
                     android:textColor="@color/colorPrimary"
                     android:layout_marginBottom="10dp"/>
 
                 <Button
                     android:id="@+id/button_report"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="@string/button_report_error"
                     android:textColor="@color/colorPrimary"
                     android:layout_marginBottom="10dp"/>
