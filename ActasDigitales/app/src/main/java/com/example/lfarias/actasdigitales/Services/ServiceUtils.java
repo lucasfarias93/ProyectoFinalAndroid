@@ -31,6 +31,7 @@ public class ServiceUtils {
 
         public static final String RECUPERACION_CONTRASEÑA_PATH = "olvido";
         public static final String RECUPERACION_CONTRASEÑA_CONTROLLER = "index";
+        public static final String REGISTER_USER = "crear_mobile";
     }
 
     public static class SearchType {

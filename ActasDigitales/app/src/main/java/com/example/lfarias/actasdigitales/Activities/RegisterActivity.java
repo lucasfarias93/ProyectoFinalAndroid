@@ -19,12 +19,12 @@ import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.AsyncTask.LoginUserAsynctask;
+import com.example.lfarias.actasdigitales.AsyncTask.RegisterUserAsynctask;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.Departamento;
 import com.example.lfarias.actasdigitales.Entities.Localidad;
 import com.example.lfarias.actasdigitales.Entities.Provincia;
 import com.example.lfarias.actasdigitales.Entities.Usuarios;
-import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
 import com.example.lfarias.actasdigitales.Helpers.SQLiteDatabaseHelper;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
@@ -35,12 +35,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback, LoginUserAsynctask.Callback {
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback, LoginUserAsynctask.Callback, RegisterUserAsynctask.Callback {
 
     @Bind(R.id.dni)
     EditText mDni;
@@ -78,7 +79,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     Button mContinue;
     @Bind(R.id.register_layout)
     LinearLayout layout;
-    @Bind(R.id.button_report) Button mButtonReport;
+    @Bind(R.id.button_report)
+    Button mButtonReport;
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -138,73 +140,57 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 if ((!password.isEmpty()) && (!repeatPassword.isEmpty()) && password.equals(repeatPassword) && Utils.emailValidator(email)) {
                     //TODO: Create a login access
 
-                    Usuarios user = new Usuarios();
-                    user.setId(1);
-                    user.setLogin(mUser.getText().toString());
-                    user.setContraseña(mPassword.getText().toString());
-                    user.setDni(mDni.getText().toString());
-                    user.setIdTramite(mTramideId.getText().toString());
-                    user.setEmail(mEmail.getText().toString());
-                    user.setNombres(mName.getText().toString());
-                    user.setApellido(mLast_name.getText().toString());
+                    RegisterUserAsynctask registerUserAsynctask = new RegisterUserAsynctask(RegisterActivity.this, RegisterActivity.this, dialog);
+                    List<String> params = new ArrayList<>();
+                    params.add(mUser.getText().toString());
+                    params.add(mTramideId.getText().toString());
+                    params.add(mDni.getText().toString());
+                    params.add(mPassword.getText().toString());
+                    params.add(mRepeatPassword.getText().toString());
+                    params.add(mName.getText().toString());
+                    params.add(mLast_name.getText().toString());
+                    params.add(mEmail.getText().toString());
 
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.REGISTER_USER_CONTROLLER);
+                    conectParams.setmActionId(ServiceUtils.Actions.REGISTER_USER);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.REGISTER_USER_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    dialog.show();
+                    registerUserAsynctask.execute(conectParams);
 
-                    Usuarios userDB = helper.getUserByUser(user.getLogin());
-                    if(userDB == null){
-                        helper.insertUser(user);
-                        AlertDialog.Builder builder;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            builder = new AlertDialog.Builder(RegisterActivity.this, android.R.style.Theme_Material_Dialog_Alert);
-                        } else {
-                            builder = new AlertDialog.Builder(RegisterActivity.this);
-                        }
-                        builder.setTitle("Registro")
-                                .setMessage("Usuario registrado con éxito. Intente loguear con sus nuevas credenciales")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-                                        startActivity(i);
-                                    }
-                                })
-                                .setIcon(R.drawable.alerts)
-                                .show();
-
-                    } else {
-                        Utils.createGlobalDialog(RegisterActivity.this, "Registro", "No se pudo registrar. El usuario ya existe.").show();
-                    }
-
-                } else if(password.isEmpty()){
+                } else if (password.isEmpty()) {
                     mPassword.setError("Este campo es obligatorio");
-                    if(repeatPassword.isEmpty()){
+                    if (repeatPassword.isEmpty()) {
                         mRepeatPassword.setError("Este campo es obligatorio");
-                        if(email.isEmpty()){
+                        if (email.isEmpty()) {
                             mEmail.setError("Este campo es obligatorio");
-                        } else if(!Utils.emailValidator(email)){
+                        } else if (!Utils.emailValidator(email)) {
                             mEmail.setError("El formato del email ingresado no es válidio");
                         }
                     }
-                } else if(repeatPassword.isEmpty()){
+                } else if (repeatPassword.isEmpty()) {
                     mRepeatPassword.setError("Este campo es obligatorio");
-                    if(email.isEmpty()){
+                    if (email.isEmpty()) {
                         mEmail.setError("Este campo es obligatorio");
-                    } else if(!Utils.emailValidator(email)){
+                    } else if (!Utils.emailValidator(email)) {
                         mEmail.setError("El formato del email ingresado no es válido");
                     }
-                } else if(email.isEmpty()){
+                } else if (email.isEmpty()) {
                     mEmail.setError("Este campo es obligatorio");
-                } else if(!Utils.emailValidator(email)){
+                } else if (!Utils.emailValidator(email)) {
                     mEmail.setError("El formato del email ingresado no es válido");
                 }
-                if(!(password.equals(repeatPassword))){
+                if (!(password.equals(repeatPassword))) {
                     mPassword.setError("Las contraseñas ingresadas no coinciden");
-                    if(email.isEmpty()){
+                    if (email.isEmpty()) {
                         mEmail.setError("Este campo es obligatorio");
-                    } else if(!Utils.emailValidator(email)){
+                    } else if (!Utils.emailValidator(email)) {
                         mEmail.setError("El formato del email ingresado no es válido");
                     }
-                } else if(email.isEmpty()){
+                } else if (email.isEmpty()) {
                     mEmail.setError("Este campo es obligatorio");
-                } else if(!Utils.emailValidator(email)){
+                } else if (!Utils.emailValidator(email)) {
                     mEmail.setError("El formato del email ingresado no es válido");
                 }
             }
@@ -214,7 +200,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
 
-                DecodeTextUtils.decodeStringText("Secci\u00f3n");
                 DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this, dialog);
                 List<String> params = new ArrayList<>();
                 params.add(mTramideId.getText().toString());
@@ -452,13 +437,36 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void loginUser(Boolean success) {
-        if(success){
+        if (success) {
             Intent i = new Intent(RegisterActivity.this, RequestActActivity.class);
             startActivity(i);
         }
     }
 
 
+    @Override
+    public void registerUser(Boolean success) {
+        if(success) {
+            dialog.dismiss();
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(this);
+            }
+            builder.setTitle("Usuario registrado con éxito")
+                    .setMessage("Usuario registrado. Por favor inicie sesión con su nuevo usuario")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setIcon(R.drawable.alerts)
+                    .show();
+        } else {
+            dialog.dismiss();
+        }
+    }
 }
 
 
