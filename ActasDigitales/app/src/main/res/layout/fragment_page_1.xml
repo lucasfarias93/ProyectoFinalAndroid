@@ -10,7 +10,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="10dp">
+        android:layout_margin="15dp"
+        android:elevation="7dp"
+        >
 
         <TextView
             android:text="@string/select_act_method"
@@ -26,7 +28,7 @@
             android:id="@+id/spinner1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:prompt="Seleccione un tipo de acta">
+            >
         </Spinner>
 
         <RadioButton

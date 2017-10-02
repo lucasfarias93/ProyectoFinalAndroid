@@ -118,6 +118,7 @@ public class RequestActActivity extends AppCompatActivity {
                     rootView = inflater.inflate(R.layout.fragment_page_1, container, false);
                     Spinner spinner =(Spinner) rootView.findViewById(R.id.spinner1);
                     List<String> spinnerArray = new ArrayList<>();
+                    spinnerArray.add("Seleccione tipo de acta");
                     spinnerArray.add("Nacimiento");
                     spinnerArray.add("Matrimonio");
                     spinnerArray.add("Defunción");
@@ -125,7 +126,7 @@ public class RequestActActivity extends AppCompatActivity {
                     ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
                     spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(spinnerArrayAdapter);
-                    
+
                     break;
 
                 case 2:
