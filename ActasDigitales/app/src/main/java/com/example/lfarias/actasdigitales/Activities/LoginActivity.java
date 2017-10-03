@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -33,10 +34,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
+import com.example.lfarias.actasdigitales.AsyncTask.LoginUserAsynctask;
+import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.Usuarios;
 import com.example.lfarias.actasdigitales.Helpers.SQLiteDatabaseHelper;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
+import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
 import org.w3c.dom.Text;
 
@@ -48,21 +53,19 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via mEmail/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LoginUserAsynctask.Callback {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mUserView;
     private EditText mPasswordView;
     private View mLoginFormView;
     private TextView mRegister, mForgotPassword;
-    SQLiteDatabaseHelper helper;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +75,11 @@ public class LoginActivity extends AppCompatActivity {
         mActionBar.setTitle("Inicio de sesión");
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
+        dialog = Utils.createLoadingIndicator(LoginActivity.this);
+
         // Set up the login form.
         mUserView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
-
-        helper = new SQLiteDatabaseHelper(this);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mUserView.clearFocus();
@@ -84,21 +87,29 @@ public class LoginActivity extends AppCompatActivity {
 
         Button mEmailSignInButton = (Button) findViewById(R.id.login_button);
         mEmailSignInButton.setElevation(20);
-        //mEmailSignInButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Usuarios userTest = helper.getUserByUser(mUserView.getText().toString());
-                //if(userTest == null){
-                    Utils.createGlobalDialog(LoginActivity.this, "Error al iniciar sesión", "El usuario ingresado no existe. Verifique los datos por favor").show();
-                //} else {
-                    //if(mPasswordView.getText().toString().equals(userTest.getContraseña())){
-                        Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
-                        startActivity(i);
-                    //} else {
-                        Utils.createGlobalDialog(LoginActivity.this, "Error al iniciar sesión", "La contraseña ingresada es incorrecta").show();
-                    //}
-                //}
+                if(mUserView == null || mUserView.getText().toString().isEmpty()) {
+                    mUserView.setError("Este campo es obligatorio");
+                    if (mPasswordView == null || mPasswordView.getText().toString().isEmpty()) {
+                        mPasswordView.setError("Este campo es obligatorio");
+                    }
+                } else {
+                    LoginUserAsynctask asynctask = new LoginUserAsynctask(LoginActivity.this, LoginActivity.this, dialog);
+                    List<String> params = new ArrayList<>();
+                    params.add(mUserView.getText().toString());
+                    params.add(mPasswordView.getText().toString());
+
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.LOGIN_USER_CONTROLLER);
+                    conectParams.setmActionId(ServiceUtils.Actions.LOGIN_USER);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.LOGIN_USER_SEARCH_TYPE);
+                    conectParams.setParams(params);
+
+                    dialog.show();
+                    asynctask.execute(conectParams);
+                }
             }
     });
 
@@ -157,45 +168,16 @@ public class LoginActivity extends AppCompatActivity {
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+    @Override
+    public void loginUser(Boolean success) {
+        if(success){
+            dialog.hide();
+            Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
+            startActivity(i);
+        } else {
+            dialog.hide();
+            Utils.createGlobalDialog(this, "Error en el inicio de sesión", "Ocurrió un problema con los datos ingresados. El usuario no existe o los datos no son válidos").show();
         }
     }
 

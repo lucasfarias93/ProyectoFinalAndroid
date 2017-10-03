@@ -14,8 +14,10 @@ import org.json.JSONObject;
 
 import com.example.lfarias.actasdigitales.R;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -50,7 +52,7 @@ public class Utils {
         return builder;
     }
 
-    public static URL urlBuilder(String controller, String actions, List<String> parameters) throws MalformedURLException {
+    public static URL urlBuilder(String controller, String actions, List<String> parameters) throws MalformedURLException, UnsupportedEncodingException {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEME_URL)
                 .encodedAuthority(SERVER_ADDRESS)
@@ -61,7 +63,8 @@ public class Utils {
         }
 
         String myUrl = builder.build().toString();
-        URL url = new URL(myUrl);
+        String afterDecode = URLDecoder.decode(myUrl, "UTF-8");
+        URL url = new URL(afterDecode);
         return url;
     }
 

@@ -1,0 +1,96 @@
+package com.mercadopago.model;
+
+/**
+ * Created by vaserber on 2/13/17.
+ */
+
+public class PaymentResult {
+
+    private PaymentData paymentData;
+    private Long paymentId;
+    private String paymentStatus;
+    private String paymentStatusDetail;
+    private String payerEmail;
+    private String statementDescription;
+
+    private PaymentResult(Builder builder) {
+        this.paymentData = builder.paymentData;
+        this.paymentId = builder.paymentId;
+        this.paymentStatus = builder.paymentStatus;
+        this.paymentStatusDetail = builder.paymentStatusDetail;
+        this.payerEmail = builder.payerEmail;
+        this.statementDescription = builder.statementDescription;
+    }
+
+    public PaymentData getPaymentData() {
+        return paymentData;
+    }
+
+    public Long getPaymentId() {
+        return paymentId;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public String getPaymentStatusDetail() {
+        return paymentStatusDetail;
+    }
+
+    public String getPayerEmail() {
+        return payerEmail;
+    }
+
+    public String getStatementDescription() {
+        return statementDescription;
+    }
+
+    public boolean hasDiscount() {
+        return paymentData != null && paymentData.getDiscount() != null;
+    }
+
+    public static class Builder{
+
+        private PaymentData paymentData;
+        private Long paymentId;
+        private String paymentStatus;
+        private String paymentStatusDetail;
+        private String payerEmail;
+        private String statementDescription;
+
+        public Builder setPaymentData(PaymentData paymentData) {
+            this.paymentData = paymentData;
+            return this;
+        }
+
+        public Builder setPaymentId(Long paymentId) {
+            this.paymentId = paymentId;
+            return this;
+        }
+
+        public Builder setPaymentStatus(String paymentStatus) {
+            this.paymentStatus = paymentStatus;
+            return this;
+        }
+
+        public Builder setPaymentStatusDetail(String statusDetail) {
+            this.paymentStatusDetail = statusDetail;
+            return this;
+        }
+
+        public Builder setPayerEmail(String payerEmail) {
+            this.payerEmail = payerEmail;
+            return this;
+        }
+
+        public Builder setStatementDescription(String statementDescription) {
+            this.statementDescription = statementDescription;
+            return this;
+        }
+
+        public PaymentResult build() {
+            return new PaymentResult(this);
+        }
+    }
+}

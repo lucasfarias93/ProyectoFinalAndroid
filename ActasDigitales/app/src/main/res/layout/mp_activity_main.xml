@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/form_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/parent_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/isologo"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="MERCADO PAGO, tu forma más facil de realizar tus pagos en línea"
+            android:textSize="17sp"
+            android:textStyle="bold|italic"
+            android:textAlignment="center"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mpsdk_button_height"
+            android:layout_marginTop="25dp"
+            android:padding="10dp"
+            android:onClick="runCheckoutExample"
+            style="@style/mpsdk_button_normal">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pay_bills"
+                android:tint="@color/mpsdk_white"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="PAGAR CODIGOS"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

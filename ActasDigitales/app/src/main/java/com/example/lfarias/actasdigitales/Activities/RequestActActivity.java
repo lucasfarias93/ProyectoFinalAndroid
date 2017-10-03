@@ -28,6 +28,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.lfarias.actasdigitales.MercadoPago.MainExample.MPMainActivity;
 import com.example.lfarias.actasdigitales.R;
 
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class RequestActActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
     }
 
     /**
@@ -126,8 +128,7 @@ public class RequestActActivity extends AppCompatActivity {
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             switch ((int)id){
                                 case 0:
-                                    final RadioButton button1 = (RadioButton)radioGroup.findViewById(R.id.rdbOne);
-                                    button1.setVisibility(View.GONE);
+                                    
 
                             }
                         }
@@ -135,6 +136,14 @@ public class RequestActActivity extends AppCompatActivity {
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
 
+                        }
+                    });
+
+                    rootView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getContext(), MPMainActivity.class);
+                            startActivity(i);
                         }
                     });
 

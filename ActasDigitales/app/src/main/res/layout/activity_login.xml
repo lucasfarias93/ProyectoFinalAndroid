@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="163dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/app_logo_2" />
+                android:src="@drawable/actas_digitales" />
 
             <TextView
                 android:id="@+id/login"

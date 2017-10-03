@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 
 import org.json.JSONException;
@@ -94,13 +95,21 @@ public class LoginUserAsynctask extends AsyncTask<ConnectionParams, Void, List<S
     protected void onPostExecute(List<String> result) {
         Integer searchType = Integer.parseInt(result.get(1));
             switch (searchType) {
-                case 0:
-                    callback.loginUser(Boolean.parseBoolean(result.get(0)));
+                case 7:
+                    callback.loginUser(getResult(result.get(0)));
                     break;
 
                 default:
                     dialog.hide();
                     Utils.createGlobalDialog(context, "Error en el inicio de sesión","Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
             }
+    }
+
+    public Boolean getResult(String result){
+        if(result.contains("1")){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
