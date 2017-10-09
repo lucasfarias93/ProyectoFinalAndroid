@@ -1,18 +1,19 @@
 package com.example.lfarias.actasdigitales.Activities;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+import com.example.lfarias.actasdigitales.AsyncTask.ChangePasswordAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.SendEmailAsynctask;
+import com.example.lfarias.actasdigitales.AsyncTask.UserIdAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.ValidateCodeAsynctask;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.Usuarios;
@@ -36,7 +39,7 @@ import java.util.Random;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class UserSettingsRecoverActivity extends AppCompatActivity implements SendEmailAsynctask.Callback, ValidateCodeAsynctask.Callback {
+public class UserSettingsRecoverActivity extends AppCompatActivity implements SendEmailAsynctask.Callback, ValidateCodeAsynctask.Callback, ChangePasswordAsynctask.Callback, UserIdAsynctask.Callback {
 
     @Bind(R.id.button_submit_code)
     Button mButtonCodeContinue;
@@ -73,12 +76,12 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     @Bind(R.id.button_submit_contraseña)
     Button mNewContraseñaSubmit;
 
-
     Context context;
     SQLiteDatabaseHelper helper;
     ProgressDialog dialog;
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
     Usuarios user = new Usuarios();
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +165,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 params.add( mInputCode.getText().toString());
 
                 ConnectionParams conectParams = new ConnectionParams();
-                conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_PATH + "/" + ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_CONTROLLER);
+                conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_PATH + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
                 conectParams.setmActionId(ServiceUtils.Actions.VERIFICAR_CODIGO);
                 conectParams.setmSearchType(ServiceUtils.SearchType.VALIDAR_CODIGO);
                 conectParams.setParams(params);
@@ -187,16 +190,15 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 } else if(!contraseña.equals(repetirContraseña)){
                     mNuevaContraseña.setError("Las nuevas contraseñas deben conicidir");
                 } else {
-                    Usuarios userTest = helper.getUserByEmail(user.getEmail());
-                    if(!(userTest == null)){
-                        userTest.setContraseña(mNuevaContraseña.getText().toString());
-                        helper.onUpdate(userTest, user.getEmail());
+                    password = mNuevaContraseña.getText().toString();
+                    UserIdAsynctask asynctask = new UserIdAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this, dialog);
 
-                        Intent i = new Intent(UserSettingsRecoverActivity.this, LoginActivity.class);
-                        startActivity(i);
-                    }else {
-                        Utils.createGlobalDialog(UserSettingsRecoverActivity.this, "Error","Ocurrio un error al cambiar su nueva contraseña. Por favor intente nuevamente o contacte al soporte").show();
-                    }
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+                    conectParams.setmActionId(ServiceUtils.Actions.CIUDADANO_ID);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.USER_ID_SEARCH_TYPE);
+                    dialog.show();
+                    asynctask.execute(conectParams);
                 }
 
             }
@@ -241,7 +243,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         params.add(email);
 
         ConnectionParams conectParams = new ConnectionParams();
-        conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_PATH + "/" + ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_CONTROLLER);
+        conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERACION_CONTRASEÑA_PATH + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
         conectParams.setmActionId(ServiceUtils.Actions.ENVIAR_CODIGO);
         conectParams.setmSearchType(ServiceUtils.SearchType.ENVIAR_CODIGO);
         conectParams.setParams(params);
@@ -293,6 +295,69 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     public boolean onSupportNavigateUp(){
         finish();
         return true;
+    }
+
+    @Override
+    public void changePassword(Boolean success) {
+        if(success){
+            dialog.dismiss();
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this);
+            }
+            builder.setTitle("Contraseña cambiada con éxito")
+                    .setMessage("La nueva contraseña ha sido cambiada exitosamente. Por favor inicie sesión con sus nuevas credenciales")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(UserSettingsRecoverActivity.this, LoginActivity.class);
+                            startActivity(i);
+                        }
+                    })
+                    .setIcon(R.drawable.alerts)
+                    .show();
+        }
+        else {
+            dialog.dismiss();
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this);
+            }
+            builder.setTitle("Ocurrio un problema")
+                    .setMessage("La nueva contraseña no ha podido cambiarse. Por favor intentelo luego nuevamente")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(UserSettingsRecoverActivity.this, LoginActivity.class);
+                            startActivity(i);
+                        }
+                    })
+                    .setIcon(R.drawable.alerts)
+                    .show();
+        }
+    }
+
+    @Override
+    public void getUserId(Object success) {
+
+        if(!success.equals("false")) {
+            ChangePasswordAsynctask asynctask = new ChangePasswordAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this, dialog);
+            List<String> params = new ArrayList<>();
+            params.add(success.toString());
+            params.add(password);
+
+            ConnectionParams conectParams = new ConnectionParams();
+            conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERAR_CONTRASEÑA_CAMBIO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+            conectParams.setmActionId(ServiceUtils.Actions.CAMBIAR_CLAVE_MOBILE);
+            conectParams.setmSearchType(ServiceUtils.SearchType.CAMBIAR_CLAVE_MOBILE);
+            conectParams.setParams(params);
+            dialog.show();
+            asynctask.execute(conectParams);
+        } else {
+
+        }
     }
 }
 

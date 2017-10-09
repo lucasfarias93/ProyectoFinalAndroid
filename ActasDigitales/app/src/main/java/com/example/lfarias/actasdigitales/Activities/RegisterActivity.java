@@ -98,7 +98,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     ArrayAdapter<String> dataDepartmentAdapter;
     ArrayAdapter<String> dataLocalidadAdapter;
     ProgressDialog dialog;
-    SQLiteDatabaseHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +108,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mActionBar.setTitle("Registro de usuario");
         mActionBar.setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
-
-        helper = new SQLiteDatabaseHelper(this);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mDni.clearFocus();

@@ -1,6 +1,9 @@
 package com.example.lfarias.actasdigitales.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.Px;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,14 +26,19 @@ import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.lfarias.actasdigitales.AsyncTask.ImagenActaAsynctask;
+import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.MercadoPago.MainExample.MPMainActivity;
 import com.example.lfarias.actasdigitales.R;
+import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +62,7 @@ public class RequestActActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +88,13 @@ public class RequestActActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-
+        ProgressDialog dialog = Utils.createLoadingIndicator(getContext());
         public PlaceholderFragment() {
         }
 
@@ -128,7 +138,6 @@ public class RequestActActivity extends AppCompatActivity {
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             switch ((int)id){
                                 case 0:
-                                    
 
                             }
                         }
@@ -150,7 +159,20 @@ public class RequestActActivity extends AppCompatActivity {
                     break;
 
                 case 2:
-                    //textView.setText(getResources().getString(R.string.expend_act));
+                    rootView = inflater.inflate(R.layout.fragment_page_2, container, false);
+                    ImageView acta = (ImageView) rootView.findViewById(R.id.imagen_acta);
+
+                    ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), this, dialog);
+                    List<String> params = new ArrayList<>();
+                    params.add("/1/1");
+
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_IMAGEN_MOBILE);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.IMAGEN_ACTA_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    dialog.show();
+                    asynctask.execute(conectParams);
                     break;
 
                 case 3:
@@ -159,6 +181,15 @@ public class RequestActActivity extends AppCompatActivity {
 
             }
             return rootView;
+        }
+
+        @Override
+        public void getImageBase64(String success) {
+            if(!success.isEmpty() && success != null){
+                byte[] decodedString = Base64.decode(success, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+            }
         }
     }
 

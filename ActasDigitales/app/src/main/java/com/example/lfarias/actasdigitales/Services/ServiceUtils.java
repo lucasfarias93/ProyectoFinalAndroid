@@ -18,6 +18,11 @@ public class ServiceUtils {
         public static final String VERIFICAR_CODIGO = "codigoactivacionandroid";
         public static final String REGISTER_USER = "crear_mobile";
         public static final String LOGIN_USER = "login";
+        public static final String CIUDADANO_ID = "getCurrentId";
+        public static final String VALIDEZ_ACTA = "verificar_validez_usuario_mobile";
+        public static final String BUSCAR_IMAGEN_MOBILE = "buscar_imagen_mobile";
+        public static final String CAMBIAR_CLAVE_MOBILE = "cambiar_clave_mobile";
+
     }
 
     public static class Controllers{
@@ -30,9 +35,11 @@ public class ServiceUtils {
         public static final String LOCALIDAD_CONTROLLER = "localidad";
         public static final String REGISTER_USER_CONTROLLER = "usuarios";
         public static final String LOGIN_USER_CONTROLLER = "mobile/mobile";
+        public static final String CIUDADANO_CONTROLLER = "ciudadano";
 
         public static final String RECUPERACION_CONTRASEÑA_PATH = "olvido";
-        public static final String RECUPERACION_CONTRASEÑA_CONTROLLER = "index";
+        public static final String COMMON_INDEX_METHOD = "index";
+        public static final String RECUPERAR_CONTRASEÑA_CAMBIO_CONTROLLER = "recuperar";
         public static final String REGISTER_USER = "crear_mobile";
     }
 
@@ -50,5 +57,9 @@ public class ServiceUtils {
         public static final Integer VALIDAR_CODIGO = 5;
         public static final Integer REGISTER_USER_SEARCH_TYPE = 6;
         public static final Integer LOGIN_USER_SEARCH_TYPE = 7;
+        public static final Integer USER_ID_SEARCH_TYPE = 8;
+        public static final Integer VALIDEZ_ACTA_SEARCH_TYPE = 9;
+        public static final Integer IMAGEN_ACTA_SEARCH_TYPE = 10;
+        public static final Integer CAMBIAR_CLAVE_MOBILE = 11;
     }
 }

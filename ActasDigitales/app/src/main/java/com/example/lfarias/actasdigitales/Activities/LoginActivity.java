@@ -85,6 +85,15 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
         mUserView.clearFocus();
         mPasswordView.clearFocus();
 
+        TextView validarImagen = (TextView) findViewById(R.id.verificar_validez);
+        validarImagen.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, ValidarActaActivity.class);
+                startActivity(i);
+            }
+        });
+
         Button mEmailSignInButton = (Button) findViewById(R.id.login_button);
         mEmailSignInButton.setElevation(20);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
