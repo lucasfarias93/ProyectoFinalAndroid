@@ -6,11 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.widget.ImageView;
 
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,20 +26,21 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by lfarias on 10/9/17.
+ * Created by lfarias on 10/10/17.
  */
 
-public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
+public class VerificarValidezAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
     Context context;
     Callback callback;
+    ProgressDialog dialog;
 
-    public ImagenActaAsynctask(Context context, Callback callback) {
+    public VerificarValidezAsynctask(Context context, Callback callback, ProgressDialog dialog) {
         this.callback = callback;
         this.context = context;
     }
 
     public interface Callback {
-        void getImageBase64(String success);
+        void verificarValidez(Object success);
     }
 
     @Override
@@ -48,8 +52,8 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
             String urlDecoded = URLDecoder.decode(urlEncoded.toString(), "UTF-8");
             URL url = new URL(urlDecoded);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(15000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -95,22 +99,22 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
     @Override
     protected void onPostExecute(List<String> result) {
         Integer searchType = Integer.parseInt(result.get(1));
-
         switch (searchType) {
-            case 10:
-                callback.getImageBase64(result.get(0));
+            case 9:
+                callback.verificarValidez(result.get(0));
+
                 break;
 
             default:
-                final AlertDialog.Builder builder;
+                AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
                 } else {
                     builder = new AlertDialog.Builder(context);
                 }
-                builder.setTitle("Error al cambiar la contraseña")
-                        .setMessage("Ocurrio un error al cambiar la contraseña ingresada. Por favor intente nuevamente mas tarde o contacte al soporte.")
-                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                builder.setTitle("Error")
+                        .setMessage("Ocurrio un error al registrar un nuevo usuario. Por favor intente nuevamente mas tarde o contacte al soporte.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         })
@@ -118,6 +122,6 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
                         .show();
         }
     }
-
-
 }
+
+

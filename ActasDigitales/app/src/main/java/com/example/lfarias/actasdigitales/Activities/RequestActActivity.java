@@ -40,6 +40,10 @@ import com.example.lfarias.actasdigitales.MercadoPago.MainExample.MPMainActivity
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +65,7 @@ public class RequestActActivity extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    public ViewPager mViewPager;
 
 
     @Override
@@ -81,6 +85,7 @@ public class RequestActActivity extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
     }
@@ -93,8 +98,9 @@ public class RequestActActivity extends AppCompatActivity {
          * The fragment argument representing the section number for this
          * fragment.
          */
+        View rootView;
+
         private static final String ARG_SECTION_NUMBER = "section_number";
-        ProgressDialog dialog = Utils.createLoadingIndicator(getContext());
         public PlaceholderFragment() {
         }
 
@@ -111,11 +117,11 @@ public class RequestActActivity extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                                  Bundle savedInstanceState) {
             //TODO: crear 3 layout distintos uno para cada fragment y añadirlo asi.
 
-            View rootView = new View(getContext());
+            rootView = new View(getContext());
 
             switch(getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 1:
@@ -151,8 +157,11 @@ public class RequestActActivity extends AppCompatActivity {
                     rootView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(getContext(), MPMainActivity.class);
-                            startActivity(i);
+                            /*Intent i = new Intent(getContext(), MPMainActivity.class);
+                            startActivity(i);*/
+                            ViewPager mViewPager = (ViewPager)container.findViewById(R.id.container);
+                            mViewPager.setCurrentItem(1);
+
                         }
                     });
 
@@ -160,18 +169,16 @@ public class RequestActActivity extends AppCompatActivity {
 
                 case 2:
                     rootView = inflater.inflate(R.layout.fragment_page_2, container, false);
-                    ImageView acta = (ImageView) rootView.findViewById(R.id.imagen_acta);
 
-                    ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), this, dialog);
+                    ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), this);
                     List<String> params = new ArrayList<>();
-                    params.add("/1/1");
+                    params.add("1/1");
 
                     ConnectionParams conectParams = new ConnectionParams();
                     conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
                     conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_IMAGEN_MOBILE);
                     conectParams.setmSearchType(ServiceUtils.SearchType.IMAGEN_ACTA_SEARCH_TYPE);
                     conectParams.setParams(params);
-                    dialog.show();
                     asynctask.execute(conectParams);
                     break;
 
@@ -186,8 +193,22 @@ public class RequestActActivity extends AppCompatActivity {
         @Override
         public void getImageBase64(String success) {
             if(!success.isEmpty() && success != null){
-                byte[] decodedString = Base64.decode(success, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                JSONArray arr = null;
+                try {
+                    arr = new JSONArray(success);
+                    JSONObject jObj = arr.getJSONObject(0);
+                    String imageBase64 = jObj.getString("imagen");
+
+                    byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                    ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta);
+                    view.setImageBitmap(decodedByte);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
 
             }
         }

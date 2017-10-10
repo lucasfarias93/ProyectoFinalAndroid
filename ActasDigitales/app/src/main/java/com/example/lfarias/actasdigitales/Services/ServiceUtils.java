@@ -41,6 +41,7 @@ public class ServiceUtils {
         public static final String COMMON_INDEX_METHOD = "index";
         public static final String RECUPERAR_CONTRASEÑA_CAMBIO_CONTROLLER = "recuperar";
         public static final String REGISTER_USER = "crear_mobile";
+        public static final String VERIFICAR_CONTROLLER = "verificar";
     }
 
     public static class SearchType {

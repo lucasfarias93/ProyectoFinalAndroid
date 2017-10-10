@@ -44,6 +44,14 @@ public class LandingPageActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        mVerificarVigencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LandingPageActivity.this, ValidarActaActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override

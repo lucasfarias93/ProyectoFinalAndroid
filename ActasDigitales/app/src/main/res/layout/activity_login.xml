@@ -113,17 +113,6 @@
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/verificar_validez"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="30dp"
-                android:clickable="true"
-                android:text="@string/valide_su_acta"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:layout_weight="0.69" />
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
