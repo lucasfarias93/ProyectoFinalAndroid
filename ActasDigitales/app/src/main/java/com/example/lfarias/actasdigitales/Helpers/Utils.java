@@ -21,7 +21,13 @@ import java.net.URLDecoder;
 import java.util.List;
 
 /**
- * Created by lfarias on 9/1/17.
+ * Creado por Lucas.Farias
+ *
+ * Archivo creado: 05 de Septiembre de 2017
+ *
+ * Descripción: Metodos de acceso global, usados tanto para la conexión al web service, como transformación de
+ *              datos, armado de dialogos, etc.
+ *
  */
 
 public class Utils {

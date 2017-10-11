@@ -183,8 +183,7 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
 
     @Override
     public boolean onSupportNavigateUp(){
-        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(i);
+        finish();
         return true;
     }
 }

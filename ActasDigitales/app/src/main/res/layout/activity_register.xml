@@ -331,6 +331,25 @@
                 android:weightSum="2"
                 android:paddingBottom="5dp">
 
+            <TextView
+                android:id="@+id/terminos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/term_and_conditions"/>
+
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="2"
+                android:paddingBottom="5dp">
+
                 <Button
                     android:id="@+id/button_register"
                     android:layout_width="0dp"

@@ -1,7 +1,12 @@
 package com.example.lfarias.actasdigitales.Entities;
 
 /**
- * Created by lfarias on 8/28/17.
+ * Creado por Lucas.Farias
+ *
+ * Archivo creado: 24 de Septiembre de 2017
+ *
+ * Descripción: Entidad representativa del usuario que se registra en la aplicación.
+ *
  */
 
 public class Usuarios {

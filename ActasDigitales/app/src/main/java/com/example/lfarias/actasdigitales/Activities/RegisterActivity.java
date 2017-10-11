@@ -5,11 +5,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -28,8 +26,6 @@ import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.Departamento;
 import com.example.lfarias.actasdigitales.Entities.Localidad;
 import com.example.lfarias.actasdigitales.Entities.Provincia;
-import com.example.lfarias.actasdigitales.Entities.Usuarios;
-import com.example.lfarias.actasdigitales.Helpers.SQLiteDatabaseHelper;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
@@ -39,57 +35,46 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * Creado por Lucas.Farias
+ *
+ * Archivo creado: 9 de Septiembre de 2017
+ *
+ * Descripción: Activity principal en la que se incluyo toda la lógica del registro del usuario en la aplicación.
+ *              Se manejaron los eventos de transición, la comunicación con los procesos de llamada al web service,
+ *              el manejo de errores tanto unitarios como de la creación de pop-ups o alertas de error.
+ */
+
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback, LoginUserAsynctask.Callback, RegisterUserAsynctask.Callback {
 
-    @Bind(R.id.dni)
-    EditText mDni;
-    @Bind(R.id.tramide_id)
-    EditText mTramideId;
-    @Bind(R.id.name)
-    EditText mName;
-    @Bind(R.id.user)
-    EditText mUser;
-    @Bind(R.id.password)
-    EditText mPassword;
-    @Bind(R.id.repeat_password)
-    EditText mRepeatPassword;
-    @Bind(R.id.email)
-    EditText mEmail;
-    @Bind(R.id.spinner_phone)
-    Spinner mSpinner;
-    @Bind(R.id.phone_number)
-    EditText mPhoneNumber;
-    @Bind(R.id.button_register)
-    Button mButton;
-    @Bind(R.id.last_name)
-    EditText mLast_name;
-    @Bind(R.id.descripcion1)
-    TextView mDescription;
-    @Bind(R.id.spinner_privincia)
-    Spinner mProvince;
-    @Bind(R.id.spinner_department)
-    Spinner mDepartment;
-    @Bind(R.id.spinner_localidad)
-    Spinner mLocalidad;
-    @Bind(R.id.address)
-    EditText mAddress;
-    @Bind(R.id.button_continue)
-    Button mContinue;
-    @Bind(R.id.register_layout)
-    LinearLayout layout;
+    @Bind(R.id.dni)EditText mDni;
+    @Bind(R.id.tramide_id) EditText mTramideId;
+    @Bind(R.id.name) EditText mName;
+    @Bind(R.id.user) EditText mUser;
+    @Bind(R.id.password) EditText mPassword;
+    @Bind(R.id.repeat_password) EditText mRepeatPassword;
+    @Bind(R.id.email) EditText mEmail;
+    @Bind(R.id.spinner_phone) Spinner mSpinner;
+    @Bind(R.id.phone_number) EditText mPhoneNumber;
+    @Bind(R.id.button_register) Button mButton;
+    @Bind(R.id.last_name) EditText mLast_name;
+    @Bind(R.id.descripcion1) TextView mDescription;
+    @Bind(R.id.spinner_privincia) Spinner mProvince;
+    @Bind(R.id.spinner_department) Spinner mDepartment;
+    @Bind(R.id.spinner_localidad) Spinner mLocalidad;
+    @Bind(R.id.address) EditText mAddress;
+    @Bind(R.id.button_continue) Button mContinue;
+    @Bind(R.id.register_layout) LinearLayout layout;
     @Bind(R.id.button_report) Button mButtonReport;
-    @Bind(R.id.first_dni)
-    ImageView dni1;
-    @Bind(R.id.second_dni)
-    ImageView dni2;
+    @Bind(R.id.first_dni) ImageView dni1;
+    @Bind(R.id.second_dni) ImageView dni2;
+    @Bind(R.id.terminos) TextView mTermAndConditions;
     @Bind(R.id.descripcion2) TextView mDescripcion2;
-
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -138,6 +123,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mAddress.setVisibility(View.GONE);
         mButton.setVisibility(View.GONE);
         mButtonReport.setVisibility(View.GONE);
+        mTermAndConditions.setVisibility(View.GONE);
 
         mButton.setOnClickListener(new View.OnClickListener() {
 
@@ -314,6 +300,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 dni2.setVisibility(View.GONE);
                 mButton.setVisibility(View.VISIBLE);
                 mDescripcion2.setVisibility(View.GONE);
+                mTermAndConditions.setVisibility(View.VISIBLE);
+                mTermAndConditions.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(RegisterActivity.this, TermsAndCondsActivity.class);
+                        startActivity(i);
+                    }
+                });
                 mButtonReport.setVisibility(View.VISIBLE);
                 nombre = (String) object.get("nombres");
                 apellido = (String) object.get("apellido");
@@ -449,7 +443,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void registerUser(Boolean response) {
-        if(response){
+        if (response) {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder = new AlertDialog.Builder(RegisterActivity.this, android.R.style.Theme_Material_Dialog_Alert);
@@ -467,8 +461,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     .setIcon(R.drawable.alerts)
                     .show();
 
-        }
-        else {
+        } else {
             Utils.createGlobalDialog(RegisterActivity.this, "Error en la creación del nuevo usuario", "No se pudo crear su nuevo usuario. Intentelo nuevamente").show();
         }
     }
@@ -480,8 +473,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             startActivity(i);
         }
     }
+
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }

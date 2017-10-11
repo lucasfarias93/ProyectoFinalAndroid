@@ -1,7 +1,20 @@
 package com.example.lfarias.actasdigitales.Services;
 
 /**
- * Created by acer on 04/09/2017.
+ * Creado por Lucas.Farias
+ *
+ * Archivo creado: 3 de Septiembre de 2017
+ *
+ * Descripción: Utiles utilizados para el armado de la conexión con todos los webservice.
+ *
+ * @params  Actions: definen el nombre del método o acción en PHP el cual cumple el rol de webservice (encargado de
+ *                   una acción en particular, y solo una)
+ *
+ *          Controllers: nombre de los controllers donde estan ubicadas las actions. Un controller usualmente esta formado
+ *                       por, como mínimo, 2 acciones (una compatible con el cliente web, y otra paridad para la aplicación andriod)
+ *
+ *          SearchType: valores numericos utilizados en caso de conexiones de una sola entrada con múltiples resultados,
+ *                      de forma de discriminar cada caso, y devolver un valor especifico a ese caso, no otro.
  */
 
 public class ServiceUtils {

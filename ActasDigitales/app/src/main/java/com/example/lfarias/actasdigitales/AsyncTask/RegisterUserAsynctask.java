@@ -22,7 +22,12 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by acer on 24/09/2017.
+ * Creado por Lucas.Farias
+ *
+ * Archivo creado: 24 de Septiembre de 2017
+ *
+ * Descripción: Asynctask o tarea asincrona encargada de realizar la conexión con el webservice encargado
+ *              del registro de un nuevo usuario al sistema.
  */
 
 public class RegisterUserAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
