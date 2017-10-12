@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v7.view.ContextThemeWrapper;
 
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
@@ -111,7 +112,8 @@ public class SendEmailAsynctask extends AsyncTask<ConnectionParams, Void, List<S
             default:
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                    ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
+                    builder = new AlertDialog.Builder(ctw);
                 } else {
                     builder = new AlertDialog.Builder(context);
                 }
@@ -122,7 +124,7 @@ public class SendEmailAsynctask extends AsyncTask<ConnectionParams, Void, List<S
                                 callback.sendEmail(false);
                             }
                         })
-                        .setIcon(R.drawable.alerts)
+                        .setIcon(R.drawable.information)
                         .show();
 
         }

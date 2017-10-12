@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v7.view.ContextThemeWrapper;
 
 import com.example.lfarias.actasdigitales.Activities.LoginActivity;
 import com.example.lfarias.actasdigitales.Activities.RegisterActivity;
@@ -107,7 +108,8 @@ public class ValidateCodeAsynctask extends AsyncTask<ConnectionParams, Void, Lis
             default:
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                    ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
+                    builder = new AlertDialog.Builder(ctw);
                 } else {
                     builder = new AlertDialog.Builder(context);
                 }
@@ -118,7 +120,7 @@ public class ValidateCodeAsynctask extends AsyncTask<ConnectionParams, Void, Lis
                                 callback.validateCode(false);
                             }
                         })
-                        .setIcon(R.drawable.alerts)
+                        .setIcon(R.drawable.information)
                         .show();
         }
     }

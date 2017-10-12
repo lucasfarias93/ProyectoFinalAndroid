@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 
@@ -89,7 +90,8 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
             dialog.dismiss();
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+                ContextThemeWrapper ctw = new ContextThemeWrapper(ValidarActaActivity.this, R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
             } else {
                 builder = new AlertDialog.Builder(this);
             }
@@ -99,7 +101,7 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     })
-                    .setIcon(R.drawable.alerts)
+                    .setIcon(R.drawable.information)
                     .show();
         }
     }

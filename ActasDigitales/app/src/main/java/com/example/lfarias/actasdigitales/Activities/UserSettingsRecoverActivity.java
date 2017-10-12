@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -303,7 +304,8 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
             dialog.dismiss();
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+                ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
             } else {
                 builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this);
             }
@@ -315,14 +317,15 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                             startActivity(i);
                         }
                     })
-                    .setIcon(R.drawable.alerts)
+                    .setIcon(R.drawable.information)
                     .show();
         }
         else {
             dialog.dismiss();
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+                ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
             } else {
                 builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this);
             }
@@ -334,7 +337,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                             startActivity(i);
                         }
                     })
-                    .setIcon(R.drawable.alerts)
+                    .setIcon(R.drawable.information)
                     .show();
         }
     }

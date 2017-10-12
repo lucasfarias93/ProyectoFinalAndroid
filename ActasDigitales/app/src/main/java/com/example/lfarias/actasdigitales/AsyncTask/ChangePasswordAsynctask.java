@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v7.view.ContextThemeWrapper;
 
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
@@ -104,7 +105,8 @@ public class ChangePasswordAsynctask extends AsyncTask<ConnectionParams, Void, L
             default:
                 final AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                    ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
+                    builder = new AlertDialog.Builder(ctw);
                 } else {
                     builder = new AlertDialog.Builder(context);
                 }
@@ -114,7 +116,7 @@ public class ChangePasswordAsynctask extends AsyncTask<ConnectionParams, Void, L
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         })
-                        .setIcon(R.drawable.alerts)
+                        .setIcon(R.drawable.information)
                         .show();
         }
     }

@@ -1,18 +1,24 @@
+<!-- Creado por Lucas.Farias
+
+     Archivo creado: 9 de Septiembre de 2017
+
+     Descripción: Layout vinculado a RegisterActivity. En el se incluyen todos los elementos visuales o vistas
+                  que se proyectan a la pantalla del dispositivo.
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="true"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    >
+    android:clipToPadding="true">
 
     <LinearLayout
         android:id="@+id/register_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
-        android:layout_marginTop="10dp">
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -41,9 +47,9 @@
                     android:id="@+id/descripcion1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
                     android:text="@string/instructions_step"
                     android:textColor="@android:color/black"
-                    android:paddingTop="10dp"
                     android:textStyle="italic" />
 
                 <RelativeLayout
@@ -55,36 +61,34 @@
                         android:id="@+id/descripcion2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
                         android:text="@string/instrucciones_tramite_dni"
                         android:textColor="@android:color/black"
-                        android:paddingTop="10dp"
                         android:textStyle="italic" />
 
                     <ImageView
                         android:id="@+id/first_dni"
                         android:layout_width="203dp"
                         android:layout_height="153dp"
-                        android:src="@drawable/dni1"
                         android:layout_below="@+id/descripcion2"
                         android:gravity="left"
-                        />
+                        android:src="@drawable/dni1" />
 
                     <ImageView
                         android:id="@+id/second_dni"
-                        android:layout_below="@+id/descripcion2"
                         android:layout_width="200dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/dni2"
-                        android:gravity="right"
+                        android:layout_below="@+id/descripcion2"
                         android:layout_toRightOf="@+id/first_dni"
-                        />
+                        android:gravity="right"
+                        android:src="@drawable/dni2" />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/dni_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
                         android:layout_below="@+id/first_dni"
+                        android:gravity="left"
                         android:paddingTop="10dp">
 
                         <EditText
@@ -102,11 +106,11 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:paddingTop="10dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentStart="true"
-                        android:layout_marginStart="48dp">
+                        android:layout_marginStart="48dp"
+                        android:gravity="right"
+                        android:paddingTop="10dp">
 
                         <EditText
                             android:id="@+id/tramide_id"
@@ -328,18 +332,23 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:padding="6dp"
-                android:weightSum="2"
-                android:paddingBottom="5dp">
+                android:paddingBottom="5dp"
+                android:weightSum="2">
 
-            <TextView
-                android:id="@+id/terminos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:text="@string/term_and_conditions"/>
+                <CheckBox
+                    android:id="@+id/checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/terminos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/term_and_conditions"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -347,26 +356,26 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:padding="6dp"
-                android:weightSum="2"
-                android:paddingBottom="5dp">
+                android:paddingBottom="5dp"
+                android:weightSum="2">
 
                 <Button
                     android:id="@+id/button_register"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="@string/button_register"
+                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_marginBottom="10dp"/>
+                    android:text="@string/button_register"
+                    android:textColor="@color/colorPrimary" />
 
                 <Button
                     android:id="@+id/button_report"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:text="@string/button_report_error"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_marginBottom="10dp"/>
+                    android:textColor="@color/colorPrimary" />
 
             </LinearLayout>
         </LinearLayout>

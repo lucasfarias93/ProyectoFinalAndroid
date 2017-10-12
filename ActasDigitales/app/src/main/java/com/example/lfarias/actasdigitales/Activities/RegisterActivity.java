@@ -8,11 +8,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -75,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Bind(R.id.second_dni) ImageView dni2;
     @Bind(R.id.terminos) TextView mTermAndConditions;
     @Bind(R.id.descripcion2) TextView mDescripcion2;
+    @Bind(R.id.checkbox) CheckBox mCheckbox;
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -124,6 +127,16 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mButton.setVisibility(View.GONE);
         mButtonReport.setVisibility(View.GONE);
         mTermAndConditions.setVisibility(View.GONE);
+        mCheckbox.setVisibility(View.GONE);
+
+        mCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCheckbox.isChecked()){
+                    mCheckbox.setError(null);
+                }
+            }
+        });
 
         mButton.setOnClickListener(new View.OnClickListener() {
 
@@ -133,7 +146,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 String repeatPassword = mRepeatPassword.getText().toString();
                 String email = mEmail.getText().toString();
 
-                if ((!password.isEmpty()) && (!repeatPassword.isEmpty()) && password.equals(repeatPassword) && Utils.emailValidator(email)) {
+
+                if ((!password.isEmpty()) && (!repeatPassword.isEmpty()) && password.equals(repeatPassword) && Utils.emailValidator(email) && mCheckbox.isChecked()) {
 
                     DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this, dialog);
                     List<String> params = new ArrayList<>();
@@ -187,6 +201,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     mEmail.setError("Este campo es obligatorio");
                 } else if (!Utils.emailValidator(email)) {
                     mEmail.setError("El formato del email ingresado no es válido");
+                }
+                if(!mCheckbox.isChecked()){
+                    mCheckbox.setError("Debe aceptar los terminos y condiciones para poder registrarse");
                 }
             }
         });
@@ -301,6 +318,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 mButton.setVisibility(View.VISIBLE);
                 mDescripcion2.setVisibility(View.GONE);
                 mTermAndConditions.setVisibility(View.VISIBLE);
+                mCheckbox.setVisibility(View.VISIBLE);
                 mTermAndConditions.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -446,7 +464,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         if (response) {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(RegisterActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+                ContextThemeWrapper ctw = new ContextThemeWrapper(RegisterActivity.this, R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
             } else {
                 builder = new AlertDialog.Builder(RegisterActivity.this);
             }
@@ -458,7 +477,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             startActivity(i);
                         }
                     })
-                    .setIcon(R.drawable.alerts)
+                    .setIcon(R.drawable.information)
                     .show();
 
         } else {

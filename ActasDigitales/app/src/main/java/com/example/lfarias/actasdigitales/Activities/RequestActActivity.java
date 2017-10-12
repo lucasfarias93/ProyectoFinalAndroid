@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -157,11 +158,8 @@ public class RequestActActivity extends AppCompatActivity {
                     rootView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            /*Intent i = new Intent(getContext(), MPMainActivity.class);
-                            startActivity(i);*/
                             ViewPager mViewPager = (ViewPager)container.findViewById(R.id.container);
                             mViewPager.setCurrentItem(1);
-
                         }
                     });
 
@@ -180,6 +178,24 @@ public class RequestActActivity extends AppCompatActivity {
                     conectParams.setmSearchType(ServiceUtils.SearchType.IMAGEN_ACTA_SEARCH_TYPE);
                     conectParams.setParams(params);
                     asynctask.execute(conectParams);
+
+                    Button mButtonVisualize = (Button) rootView.findViewById(R.id.visualizar);
+                    mButtonVisualize.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ViewPager mViewPager = (ViewPager)container.findViewById(R.id.container);
+                            mViewPager.setCurrentItem(2);
+                        }
+                    });
+
+                    Button mButtonReportError = (Button) rootView.findViewById(R.id.reportar);
+                    mButtonReportError.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getContext(), ReportErrorActivity.class);
+                            startActivity(i);
+                        }
+                    });
                     break;
 
                 case 3:

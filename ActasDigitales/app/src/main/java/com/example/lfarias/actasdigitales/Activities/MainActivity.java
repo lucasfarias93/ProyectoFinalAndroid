@@ -29,19 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*textView1 = (TextView) findViewById(R.id.text1);
-        textView2 = (TextView) findViewById(R.id.text2);
-        textView3 = (TextView) findViewById(R.id.text3);
-        textView4 = (TextView) findViewById(R.id.text4);
-        textView5 = (TextView) findViewById(R.id.text5);
-        textView6 = (TextView) findViewById(R.id.text6);
-        textView7 = (TextView) findViewById(R.id.text7);
-        textView8 = (TextView) findViewById(R.id.text8);
-        textView9 = (TextView) findViewById(R.id.text9);
-        textView10 = (TextView) findViewById(R.id.text10);
-        textView11 = (TextView) findViewById(R.id.text11);
-        textView12 = (TextView) findViewById(R.id.text12);*/
-
         buttonLaunch = (Button) findViewById(R.id.buttonLaunch);
         buttonLaunch.setOnClickListener(new View.OnClickListener() {
             @Override

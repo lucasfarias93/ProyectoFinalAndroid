@@ -5,9 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="com.example.lfarias.actasdigitales.Activities.TermsAndCondsActivity"
     android:gravity="center">
@@ -18,7 +15,8 @@
         android:textAlignment="center"
         android:text="Terminos y Condiciones"
         android:textStyle="italic|bold"
-        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
         android:padding="10dp"/>
 
     <ScrollView
@@ -29,6 +27,8 @@
             android:text="@string/terms_and_cond"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:id="@+id/textView" />
     </ScrollView>
 
