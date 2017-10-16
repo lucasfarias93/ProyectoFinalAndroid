@@ -71,12 +71,13 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
         VerificarValidezAsynctask asynctask = new VerificarValidezAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
         List<String> params = new ArrayList<>();
         params.add("5");
-        params.add("1x32");
+        params.add("1xd32");
 
         ConnectionParams conectParams = new ConnectionParams();
         conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.VERIFICAR_CONTROLLER);
         conectParams.setmActionId(ServiceUtils.Actions.VALIDEZ_ACTA);
         conectParams.setmSearchType(ServiceUtils.SearchType.VALIDEZ_ACTA_SEARCH_TYPE);
+        conectParams.setParams(params);
         dialog.show();
         asynctask.execute(conectParams);
     }
