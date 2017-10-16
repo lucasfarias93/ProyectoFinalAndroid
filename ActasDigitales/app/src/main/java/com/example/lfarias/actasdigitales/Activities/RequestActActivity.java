@@ -167,8 +167,17 @@ public class RequestActActivity extends AppCompatActivity {
 
                 case 2:
                     rootView = inflater.inflate(R.layout.fragment_page_2, container, false);
+                    ImageView imagen = (ImageView)rootView.findViewById(R.id.imagen_acta);
+
+                    String imageDataBytes = getContext().getString(R.string.image_base64).substring(getContext().getString(R.string.image_base64).indexOf(",")+1);
+
+                    byte[] recvpicbyte = (Base64.decode(imageDataBytes.getBytes(), Base64.DEFAULT));
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(recvpicbyte, 0, recvpicbyte.length);
+
+                    imagen.setImageBitmap(decodedByte);
 
                     ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), this);
+
                     List<String> params = new ArrayList<>();
                     params.add("1/1");
 

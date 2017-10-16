@@ -35,7 +35,6 @@ public class LandingPageActivity extends AppCompatActivity {
 
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Panel principal");
-        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mSolicitarActa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,4 +76,7 @@ public class LandingPageActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 }
