@@ -310,6 +310,15 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     public void getUserData(JSONObject object) {
         String nombre = "";
         String apellido = "";
+        mDni.setEnabled(false);
+        mDni.setClickable(false);
+        mTramideId.setEnabled(false);
+        mTramideId.setClickable(false);
+        mName.setEnabled(false);
+        mName.setClickable(false);
+        mLast_name.setEnabled(false);
+        mLast_name.setClickable(false);
+        mUser.setFocusable(true);
         if (object.length() != 0) {
             try {
                 dialog.hide();
@@ -460,15 +469,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
     @Override
-    public void registerUser(Boolean response) {
-        if (response) {
+    public void registerUser(Boolean success, String response) {
+        if (success) {
+            dialog.dismiss();
             AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(RegisterActivity.this, R.style.AppTheme_PopupOverlay);
-                builder = new AlertDialog.Builder(ctw);
-            } else {
-                builder = new AlertDialog.Builder(RegisterActivity.this);
-            }
+            ContextThemeWrapper ctw = new ContextThemeWrapper(RegisterActivity.this, R.style.AppTheme_PopupOverlay);
+            builder = new AlertDialog.Builder(ctw);
             builder.setTitle("Usuario Registrado con éxito")
                     .setMessage("El nuevo usuario ha sido registrado con éxito. Por favor inicie sesión con sus nuevas credenciales")
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -481,7 +487,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     .show();
 
         } else {
-            Utils.createGlobalDialog(RegisterActivity.this, "Error en la creación del nuevo usuario", "No se pudo crear su nuevo usuario. Intentelo nuevamente").show();
+            dialog.dismiss();
+            Utils.createGlobalDialog(RegisterActivity.this, "Error en la creación del nuevo usuario", response).show();
         }
     }
 

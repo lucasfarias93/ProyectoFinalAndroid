@@ -39,6 +39,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private Integer mSelectedColor;
     private Button mpButton;
     private String mCheckoutPreferenceId;
+    private ImageView imageView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,144 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imagen_acta"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/primer_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-
-             <TextView
-                 android:id="@+id/año_acta"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:textSize="15sp"
-                 android:text="Acta año: 2016"/>
-
-            <TextView
-                android:id="@+id/nro_acta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:layout_alignParentRight="true"
-                android:text="Acta nro: 1689"/>
-
-            <TextView
-                android:layout_below="@+id/año_acta"
-                android:id="@+id/nro_libro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="Libro nro: 56"/>
-
-            <TextView
-                android:id="@+id/oficina"
-                android:layout_below="@+id/nro_libro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="Oficina Inscripcion: 1380 - Vicente Z."/>
-
-            <TextView
-                android:id="@+id/dni"
-                android:layout_below="@id/oficina"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="DNI: 36850606"/>
-        </RelativeLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingTop="20dp">
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp">
 
-        <TextView
-            android:id="@+id/nombre_1"
+        <ImageView
+            android:id="@+id/imagen_acta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="Nombre y Apellido Padre: Jorge Farias"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/doc_1"
+            <RelativeLayout
+                android:id="@+id/primer_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/año_acta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Acta año: 2016"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/nro_acta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="Acta nro: 1689"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/nro_libro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/año_acta"
+                    android:text="Libro nro: 56"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/oficina"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nro_libro"
+                    android:text="Oficina Inscripcion: 1380 - Vicente Z."
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/dni"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/oficina"
+                    android:text="DNI: 36850606"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="DNI del Padre: 10723393"/>
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/nombre_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre y Apellido Padre: Jorge Farias"
+                android:textSize="15sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp">
+            <TextView
+                android:id="@+id/doc_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DNI del Padre: 10723393"
+                android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/nombre_2"
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="Nombre y Apellido Madre: Virginia Cerutti"/>
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
 
-        <TextView
-            android:id="@+id/doc_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="DNI de la Madre: 13335019"/>
+            <TextView
+                android:id="@+id/nombre_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre y Apellido Madre: Virginia Cerutti"
+                android:textSize="15sp" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/doc_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DNI de la Madre: 13335019"
+                android:textSize="15sp" />
 
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/visualizar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/visualizar_imagen" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:padding="15dp">
 
         <Button
-            android:id="@+id/cancelar"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Cancelar" />
-
-        <Button
-            android:id="@+id/reportar"
+            android:id="@+id/visualizar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Reportar Error" />
+            android:text="@string/visualizar_imagen" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <Button
+                android:id="@+id/cancelar"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Cancelar" />
+
+            <Button
+                android:id="@+id/reportar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Reportar Error" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

@@ -39,6 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:text="Primero debera elegir el medio de pago a partir de las posibles opciones que le ofrecemos: TARJETAS (Credito o Débito), Transferencias o Pagos mediante Efectivo (Pago Fácil, RapiPago, etc.)" />
 
             </LinearLayout>
@@ -56,6 +57,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:text="Luego debera completar los datos necesarios que se le pidan apra completar con el pago de los códigos" />
 
             </LinearLayout>
@@ -73,6 +75,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:text="Finalmente tendrá el pago aprobado (caso del pago con tarjetas) o deberá dirigirse a un local para el pago en efectivo" />
 
             </LinearLayout>
@@ -81,7 +84,7 @@
                 style="@style/mpsdk_button_normal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:onClick="onContinueClicked"
                 android:text="Iniciar el pago" />
 

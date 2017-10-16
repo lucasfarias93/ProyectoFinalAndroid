@@ -33,19 +33,24 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lfarias.actasdigitales.AsyncTask.ImagenActaAsynctask;
+import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Entities.SolicitudActa;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.MercadoPago.MainExample.MPMainActivity;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
+import com.mercadopago.MercadoPagoBaseActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindDimen;
@@ -128,7 +133,14 @@ public class RequestActActivity extends AppCompatActivity {
                 case 1:
                     rootView = inflater.inflate(R.layout.fragment_page_1, container, false);
                     final RadioGroup radioGroup = (RadioGroup) rootView.findViewById(R.id.rdgGrupo);
-                    Spinner spinner =(Spinner) rootView.findViewById(R.id.spinner1);
+                    radioGroup.setVisibility(View.GONE);
+                    final RadioButton buttonPropio = (RadioButton)radioGroup.findViewById(R.id.rdbOne);
+                    final RadioButton buttonPadre = (RadioButton)radioGroup.findViewById(R.id.rdbTwo);
+                    final RadioButton buttonMadre = (RadioButton)radioGroup.findViewById(R.id.rdbThree);
+                    final RadioButton buttonHijo = (RadioButton)radioGroup.findViewById(R.id.rdbFour);
+                    final RadioButton buttonHija = (RadioButton)radioGroup.findViewById(R.id.rdbFive);
+                    final RadioButton buttonAbuelo = (RadioButton)radioGroup.findViewById(R.id.rdbSix);
+                    final Spinner spinner =(Spinner) rootView.findViewById(R.id.spinner1);
                     List<String> spinnerArray = new ArrayList<>();
                     spinnerArray.add("Seleccione tipo de acta");
                     spinnerArray.add("Nacimiento");
@@ -143,8 +155,19 @@ public class RequestActActivity extends AppCompatActivity {
 
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            switch ((int)id){
-                                case 0:
+                            switch (spinner.getSelectedItem().toString()){
+                                case "Nacimiento":
+                                    radioGroup.setVisibility(View.VISIBLE);
+                                    buttonAbuelo.setVisibility(View.GONE);
+                                    buttonHija.setVisibility(View.GONE);
+                                case "Matrimonio":
+                                case "Defuncion":
+                                    buttonPropio.setVisibility(View.GONE);
+                                    buttonHijo.setVisibility(View.GONE);
+                                    buttonHija.setVisibility(View.GONE);
+                                case "Union Convivencial":
+                                    buttonHijo.setVisibility(View.GONE);
+                                    buttonHija.setVisibility(View.GONE);
 
                             }
                         }
@@ -158,6 +181,26 @@ public class RequestActActivity extends AppCompatActivity {
                     rootView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            CacheService instance = CacheService.getInstance();
+                            SolicitudActa acta = new SolicitudActa();
+                            acta.setNombrePropietario("FARIAS CERUTTI, Lucas Sebastian");
+                            acta.setTipoSolicitud(spinner.getSelectedItem().toString());
+                            acta.setNroSolicitud(1);
+                            int selectedId;
+                            String parentesco;
+                            if(radioGroup.getCheckedRadioButtonId()==-1) {
+                                Toast.makeText(getContext(), "Tiene que seleccionar un parentezco", Toast.LENGTH_SHORT).show();
+                            } else {
+                                selectedId = radioGroup.getCheckedRadioButtonId();
+                                // find the radiobutton by returned id
+                                RadioButton selectedRadioButton = (RadioButton)radioGroup.findViewById(selectedId);
+                                parentesco = selectedRadioButton.getText().toString();
+                                acta.setParentesco(parentesco);
+                            }
+                            acta.setCuponPagoCodigo("-");
+                            acta.setEstadoSolicitud("");
+                            acta.setFechaSolicitud(Calendar.getInstance().getTime());
+                            instance.crearActaUser1(acta);
                             ViewPager mViewPager = (ViewPager)container.findViewById(R.id.container);
                             mViewPager.setCurrentItem(1);
                         }
@@ -166,16 +209,19 @@ public class RequestActActivity extends AppCompatActivity {
                     break;
 
                 case 2:
+                    final CacheService instance = CacheService.getInstance();
                     rootView = inflater.inflate(R.layout.fragment_page_2, container, false);
                     ImageView imagen = (ImageView)rootView.findViewById(R.id.imagen_acta);
 
                     String imageDataBytes = getContext().getString(R.string.image_base64).substring(getContext().getString(R.string.image_base64).indexOf(",")+1);
 
-                    byte[] recvpicbyte = (Base64.decode(imageDataBytes.getBytes(), Base64.DEFAULT));
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(recvpicbyte, 0, recvpicbyte.length);
-
-                    imagen.setImageBitmap(decodedByte);
-
+                    //byte[] recvpicbyte = (Base64.decode(imageDataBytes.getBytes(), Base64.NO_WRAP));
+                    Bitmap decodedByte = null;//BitmapFactory.decodeByteArray(recvpicbyte, 0, recvpicbyte.length);
+                    if(decodedByte == null){
+                        imagen.setImageResource(R.drawable.image_not_loaded);
+                    } else {
+                        imagen.setImageBitmap(decodedByte);
+                    }
                     ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), this);
 
                     List<String> params = new ArrayList<>();
@@ -189,11 +235,15 @@ public class RequestActActivity extends AppCompatActivity {
                     asynctask.execute(conectParams);
 
                     Button mButtonVisualize = (Button) rootView.findViewById(R.id.visualizar);
+                    mButtonVisualize.setText("Confirmar");
                     mButtonVisualize.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ViewPager mViewPager = (ViewPager)container.findViewById(R.id.container);
-                            mViewPager.setCurrentItem(2);
+                            List<SolicitudActa> actas= instance.getActaUser1();
+                            SolicitudActa acta = actas.get(0);
+                            acta.setEstadoSolicitud("Confirmada");
+                            Intent i = new Intent(getContext(), MPMainActivity.class);
+                            startActivity(i);
                         }
                     });
 
@@ -259,7 +309,7 @@ public class RequestActActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
@@ -269,8 +319,6 @@ public class RequestActActivity extends AppCompatActivity {
                     return "SECTION 1";
                 case 1:
                     return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
             }
             return null;
         }

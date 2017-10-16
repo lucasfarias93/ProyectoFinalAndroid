@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.example.lfarias.actasdigitales.Activities.LandingPageActivity;
 import com.example.lfarias.actasdigitales.R;
 
 /**
@@ -15,12 +18,23 @@ import com.example.lfarias.actasdigitales.R;
 
 public class MPMainActivity extends AppCompatActivity {
 
+    private LinearLayout layout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mp_activity_main);
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog()
                 .build());
+
+        layout = (LinearLayout) findViewById(R.id.volver_layout);
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MPMainActivity.this, LandingPageActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     public void runCheckoutExample(View view) {

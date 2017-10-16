@@ -42,7 +42,7 @@ public class RegisterUserAsynctask extends AsyncTask<ConnectionParams, Void, Lis
     }
 
     public interface Callback {
-        void registerUser(Boolean success);
+        void registerUser(Boolean success, String message);
     }
 
     @Override
@@ -104,28 +104,12 @@ public class RegisterUserAsynctask extends AsyncTask<ConnectionParams, Void, Lis
 
         switch (searchType) {
             case 6:
-                if(contains(result.get(0))){
-                    callback.registerUser(true);
+                if (contains(result.get(0))) {
+                    callback.registerUser(true, result.get(0));
+                } else {
+                    callback.registerUser(false, result.get(0));
                 }
                 break;
-
-            default:
-                AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(context);
-                }
-                builder.setTitle("Error")
-                        .setMessage("Ocurrio un error al registrar un nuevo usuario. Por favor intente nuevamente mas tarde o contacte al soporte.")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                callback.registerUser(false);
-                            }
-                        })
-                        .setIcon(R.drawable.information)
-                        .show();
         }
     }
 

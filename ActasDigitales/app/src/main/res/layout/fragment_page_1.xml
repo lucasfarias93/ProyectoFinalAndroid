@@ -52,42 +52,42 @@
                 android:id="@+id/rdbOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Parentezco 12"
+                android:text="Propio"
                 android:textSize="20sp"
                 android:padding="10dp"/>
             <RadioButton
                 android:id="@+id/rdbTwo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Parentezco 2"
+                android:text="Madre"
                 android:textSize="20sp"
                 android:padding="10dp"/>
             <RadioButton
                 android:id="@+id/rdbThree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Parentezco 3"
+                android:text="Padre"
                 android:textSize="20sp"
                 android:padding="10dp"/>
             <RadioButton
                 android:id="@+id/rdbFour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Parentezco 1"
+                android:text="Abuelo"
                 android:textSize="20sp"
                 android:padding="10dp"/>
             <RadioButton
                 android:id="@+id/rdbFive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Parentezco 1"
+                android:text="Hijo"
                 android:textSize="20sp"
                 android:padding="10dp"/>
             <RadioButton
                 android:id="@+id/rdbSix"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Parentezco 1"
+                android:text="Hija"
                 android:textSize="20sp"
                 android:padding="10dp"/>
         </RadioGroup>
