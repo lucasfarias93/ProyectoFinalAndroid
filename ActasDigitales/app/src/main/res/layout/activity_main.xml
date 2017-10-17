@@ -10,9 +10,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/lights"
+            android:layout_height="wrap_content"
             android:gravity="center"
+            android:background="@drawable/landing_background_1_1"
             android:orientation="vertical">
 
             <TextView
@@ -41,8 +41,8 @@
 
             <Button
                 android:id="@+id/buttonLaunch"
-                android:layout_width="200dp"
-                android:layout_height="80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:background="@color/colorPrimary"
@@ -154,8 +154,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/lights">
+            android:layout_height="wrap_content"
+            android:background="@drawable/landing_background_2_2">
 
         </LinearLayout>
 
@@ -166,25 +166,19 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:lineSpacingExtra="4dp"
-            android:text="@string/test_text"
-            android:textAlignment="inherit" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/lights">
-
-        </LinearLayout>
-
+            android:text="Algo de nosotros"
+            android:textSize="27sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textAlignment="center" />
         <TextView
             android:id="@+id/text8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
             android:lineSpacingExtra="4dp"
-            android:text="@string/test_text"
-            android:textAlignment="inherit" />
+            android:padding="10dp"
+            android:text="Somos un grupo de 4 estudiantes enfocandonos en este proyecto como nuestra tesis final de grado. Buscamos como objetivo proporcionar un servicio totalmente funcional a los ciudadanos para hacerles cualquier tarea, involucrada con la tematica principal de este sitio, mucho mas sencilla y cómoda de realizar."
+            android:textAlignment="center" />
 
     </LinearLayout>
 </ScrollView>

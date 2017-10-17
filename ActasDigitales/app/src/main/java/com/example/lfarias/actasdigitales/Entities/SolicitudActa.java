@@ -1,18 +1,21 @@
 package com.example.lfarias.actasdigitales.Entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by acer on 16/10/2017.
  */
 
-public class SolicitudActa {
+public class SolicitudActa{
     public String nombrePropietario;
-    public int nroSolicitud;
+    public String nroSolicitud;
     public String cuponPagoCodigo;
     public String parentesco;
     public String tipoSolicitud;
-    public Date fechaSolicitud;
+    public String fechaSolicitud;
     public String estadoSolicitud;
 
     public String getNombrePropietario() {
@@ -23,11 +26,11 @@ public class SolicitudActa {
         this.nombrePropietario = nombrePropietario;
     }
 
-    public int getNroSolicitud() {
+    public String getNroSolicitud() {
         return nroSolicitud;
     }
 
-    public void setNroSolicitud(int nroSolicitud) {
+    public void setNroSolicitud(String nroSolicitud) {
         this.nroSolicitud = nroSolicitud;
     }
 
@@ -55,11 +58,11 @@ public class SolicitudActa {
         this.tipoSolicitud = tipoSolicitud;
     }
 
-    public Date getFechaSolicitud() {
+    public String getFechaSolicitud() {
         return fechaSolicitud;
     }
 
-    public void setFechaSolicitud(Date fechaSolicitud) {
+    public void setFechaSolicitud(String fechaSolicitud) {
         this.fechaSolicitud = fechaSolicitud;
     }
 

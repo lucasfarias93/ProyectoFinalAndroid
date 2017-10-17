@@ -130,7 +130,7 @@
                 android:padding="6dp">
 
                 <EditText
-                    android:id="@+id/appellido_prop_acta"
+                    android:id="@+id/apellido_prop_acta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
@@ -163,7 +163,7 @@
 
             <Button
                 android:id="@+id/button_enviar_reporte"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingTop="15dp"

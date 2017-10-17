@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     >
 
     <TextView
@@ -19,11 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-
         android:layout_marginBottom="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:elevation="7dp"
+        android:paddingBottom="35dp"
         android:paddingTop="35dp"
         android:layout_below="@+id/title_text"
         >
@@ -70,17 +72,17 @@
                 android:textSize="20sp"
                 android:padding="10dp"/>
             <RadioButton
+                android:id="@+id/rdbSeven"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Conyuge"
+                android:textSize="20sp"
+                android:padding="10dp"/>
+            <RadioButton
                 android:id="@+id/rdbFour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Abuelo"
-                android:textSize="20sp"
-                android:padding="10dp"/>
-            <RadioButton
-                android:id="@+id/rdbFive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hijo"
                 android:textSize="20sp"
                 android:padding="10dp"/>
             <RadioButton
@@ -90,7 +92,22 @@
                 android:text="Hija"
                 android:textSize="20sp"
                 android:padding="10dp"/>
+            <RadioButton
+                android:id="@+id/rdbEight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hermana"
+                android:textSize="20sp"
+                android:padding="10dp"/>
         </RadioGroup>
+
+        <TextView
+            android:id="@+id/sin_opciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No posee opciones posibles para elegir de acuerdo al tipo de acta seleccionada"
+            android:textStyle="italic"
+            android:textSize="17sp"/>
     </LinearLayout>
 
 
@@ -99,5 +116,6 @@
         android:layout_below="@+id/layout_complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Siguiente" />
+        android:text="Siguiente"
+        />
 </RelativeLayout>

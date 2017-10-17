@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.R;
 
 import org.w3c.dom.Text;
@@ -51,6 +52,14 @@ public class LandingPageActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        mMisSolicitudes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LandingPageActivity.this, MisSolicitudesActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -64,6 +73,7 @@ public class LandingPageActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_settings:
                 finish();
+                CacheService.getInstance().clearUser1MockData();
                 Intent i = new Intent(LandingPageActivity.this, LoginActivity.class);
                 startActivity(i);
                 break;

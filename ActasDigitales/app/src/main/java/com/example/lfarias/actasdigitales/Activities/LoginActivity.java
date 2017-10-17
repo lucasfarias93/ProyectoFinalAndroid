@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.AsyncTask.LoginUserAsynctask;
+import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.Usuarios;
 import com.example.lfarias.actasdigitales.Helpers.SQLiteDatabaseHelper;
@@ -173,6 +174,7 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
     public void loginUser(Boolean success) {
         if(success){
             dialog.hide();
+            CacheService.getInstance().initActaUser1(mUserView.getText().toString());
             Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
             startActivity(i);
         } else {
