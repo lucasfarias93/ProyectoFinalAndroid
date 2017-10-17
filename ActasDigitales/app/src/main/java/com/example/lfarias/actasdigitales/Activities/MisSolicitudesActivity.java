@@ -33,6 +33,7 @@ public class MisSolicitudesActivity extends AppCompatActivity {
     ListAdapter adapter;
     List<Map<String, String>> mapStringListItem;
     List<SolicitudActa> actas;
+    TextView textView;
 
     private static final String TEXT1 = "text1";
     private static final String TEXT2 = "text2";
@@ -46,8 +47,13 @@ public class MisSolicitudesActivity extends AppCompatActivity {
         mActionBar.setTitle("Mis solicitudes");
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
+        textView = (TextView)findViewById(R.id.text_no_soli);
+        textView.setVisibility(View.GONE);
         view = (ListView) findViewById(android.R.id.list);
         actas = CacheService.getInstance().getActaUser1();
+        if(actas.size() == 0){
+            textView.setVisibility(View.VISIBLE);
+        }
         adapter = createListAdapter(actas);
         view.setAdapter(adapter);
 

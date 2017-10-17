@@ -39,6 +39,14 @@
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/text_no_soli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Actualmente no posee solicitudes creadas asociadas a su usuario."
+            android:textStyle="italic"
+            android:textSize="20sp"/>
     </LinearLayout>
 
 </LinearLayout>
