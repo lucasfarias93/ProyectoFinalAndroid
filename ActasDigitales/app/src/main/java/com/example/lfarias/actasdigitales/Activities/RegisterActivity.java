@@ -336,6 +336,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     }
                 });
                 mButtonReport.setVisibility(View.VISIBLE);
+                mButtonReport.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(RegisterActivity.this, ReportErrorActivity.class);
+                        startActivity(i);
+                    }
+                });
                 nombre = (String) object.get("nombres");
                 apellido = (String) object.get("apellido");
 
