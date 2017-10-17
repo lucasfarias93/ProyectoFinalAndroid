@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,6 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lfarias.actasdigitales.Activities.LoginActivity;
+import com.example.lfarias.actasdigitales.Activities.MisSolicitudesActivity;
+import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.MercadoPago.ExampleUtils.ExampleUtils;
 import com.example.lfarias.actasdigitales.R;
 import com.mercadopago.core.MercadoPagoCheckout;
@@ -49,6 +55,10 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mPublicKey = ExampleUtils.DUMMY_MERCHANT_PUBLIC_KEY;
         mCheckoutPreferenceId = ExampleUtils.DUMMY_PREFERENCE_ID;
         mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
+
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Pagar con MercadoPago");
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mRegularLayout = findViewById(R.id.regularLayout);
 
@@ -94,6 +104,29 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         showRegularLayout();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_request_act, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                finish();
+                CacheService.getInstance().clearUser1MockData();
+                Intent i = new Intent(CheckoutExampleActivity.this, LoginActivity.class);
+                startActivity(i);
+                break;
+
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     private void showRegularLayout() {

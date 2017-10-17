@@ -44,6 +44,9 @@
             android:id="@+id/text_no_soli"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="120dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:text="Actualmente no posee solicitudes creadas asociadas a su usuario."
             android:textStyle="italic"
             android:textSize="20sp"/>
