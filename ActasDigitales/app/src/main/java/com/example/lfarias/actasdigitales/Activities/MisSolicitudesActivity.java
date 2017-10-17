@@ -83,9 +83,9 @@ public class MisSolicitudesActivity extends AppCompatActivity {
                 new ArrayList<>(userList.size());
 
         for (final SolicitudActa solicitud : userList) {
-            final Map<String, String> listItemMap = new HashMap<String, String>();
+            final Map<String, String> listItemMap = new HashMap<>();
             listItemMap.put(TEXT1, solicitud.getNombrePropietario());
-            listItemMap.put(TEXT2, solicitud.getEstadoSolicitud());
+            listItemMap.put(TEXT2, solicitud.getParentesco());
             listItem.add(Collections.unmodifiableMap(listItemMap));
         }
 
