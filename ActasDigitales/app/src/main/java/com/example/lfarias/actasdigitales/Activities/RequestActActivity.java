@@ -325,12 +325,21 @@ public class RequestActActivity extends AppCompatActivity {
                                     } else {
                                         builder = new AlertDialog.Builder(getContext());
                                     }
-                                    builder.setTitle("Error")
-                                            .setMessage("No se ha encontrado un acta con el numero ingresado. Revise el numero que figura en el acta digital e intente nuevamente")
-                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    builder.setTitle("Acta creada!")
+                                            .setMessage("El acta se ha creado exitosamente. ¿Desea realizar el pago de los códigos provinciales?")
+                                            .setPositiveButton("PAGAR", new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     Intent i = new Intent(getContext(), MPMainActivity.class);
                                                     startActivity(i);
+                                                    getActivity().finish();
+                                                    dialog.dismiss();
+                                                }
+                                            })
+                                            .setNegativeButton("VOLVER", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Intent i = new Intent(getContext(), LandingPageActivity.class);
+                                                    startActivity(i);
+                                                    getActivity().finish();
                                                     dialog.dismiss();
                                                 }
                                             })
