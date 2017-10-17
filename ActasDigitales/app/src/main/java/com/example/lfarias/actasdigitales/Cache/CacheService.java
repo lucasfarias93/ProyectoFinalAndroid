@@ -67,7 +67,7 @@ public class CacheService {
         SolicitudActa acta3 = new SolicitudActa();
         acta3.setNombrePropietario("FARIAS CERUTTI, María Belen");
         acta3.setNroSolicitud("4");
-        acta3.setParentesco("Madre");
+        acta3.setParentesco("Hermana");
         acta3.setCuponPagoCodigo("-");
         acta3.setTipoSolicitud("Nacimiento");
         Calendar calendar = Calendar.getInstance();
