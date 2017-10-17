@@ -69,7 +69,7 @@ public class MPMainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 finish();
                 CacheService.getInstance().clearUser1MockData();
-                Intent i = new Intent(CheckoutExampleActivity.this, LoginActivity.class);
+                Intent i = new Intent(MPMainActivity.this, LoginActivity.class);
                 startActivity(i);
                 break;
 
