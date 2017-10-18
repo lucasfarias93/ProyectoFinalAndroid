@@ -78,6 +78,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Bind(R.id.terminos) TextView mTermAndConditions;
     @Bind(R.id.descripcion2) TextView mDescripcion2;
     @Bind(R.id.checkbox) CheckBox mCheckbox;
+    @Bind(R.id.image_contact)ImageView mContact;
+    @Bind(R.id.image_password)ImageView mPassword1;
+    @Bind(R.id.image_password2)ImageView mPassword2;
+    @Bind(R.id.image_email)ImageView mEmail2;
+    @Bind(R.id.image_telefono)ImageView mTelefono;
+    @Bind(R.id.image_domicilio)ImageView mDomicilio;
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -128,6 +134,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mButtonReport.setVisibility(View.GONE);
         mTermAndConditions.setVisibility(View.GONE);
         mCheckbox.setVisibility(View.GONE);
+        mContact.setVisibility(View.GONE);
+        mPassword1.setVisibility(View.GONE);
+        mPassword2.setVisibility(View.GONE);
+        mEmail2.setVisibility(View.GONE);
+        mTelefono.setVisibility(View.GONE);
+        mDomicilio.setVisibility(View.GONE);
 
         mCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,6 +340,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 mDescripcion2.setVisibility(View.GONE);
                 mTermAndConditions.setVisibility(View.VISIBLE);
                 mCheckbox.setVisibility(View.VISIBLE);
+                mContact.setVisibility(View.VISIBLE);
+                mPassword1.setVisibility(View.VISIBLE);
+                mPassword2.setVisibility(View.VISIBLE);
+                mEmail2.setVisibility(View.VISIBLE);
+                mTelefono.setVisibility(View.VISIBLE);
+                mDomicilio.setVisibility(View.VISIBLE);
+
                 mTermAndConditions.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

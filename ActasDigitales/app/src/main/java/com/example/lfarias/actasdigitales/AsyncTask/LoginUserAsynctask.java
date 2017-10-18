@@ -106,7 +106,7 @@ public class LoginUserAsynctask extends AsyncTask<ConnectionParams, Void, List<S
     }
 
     public Boolean getResult(String result){
-        if(result.contains("1")){
+        if(result.contains("true")){
             return true;
         } else {
             return false;

@@ -22,7 +22,8 @@
         android:padding="10dp"
         android:text="A continuación se presentaran todas las solicitudes asociadas a su usuario, mostrando unicamente el nombre de propietario y el estado de la misma. Si desea ver mas detalle de cada solicitud, haga click en cada una de ellas."
         android:textSize="15sp"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+       />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -33,7 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:elevation="3dp"/>
 
         <ListView
             android:id="@android:id/list"

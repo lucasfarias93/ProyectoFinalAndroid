@@ -56,15 +56,15 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
         mVerificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* UserIdAsynctask asynctask = new UserIdAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
+                UserIdAsynctask asynctask = new UserIdAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
 
                 ConnectionParams conectParams = new ConnectionParams();
                 conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
                 conectParams.setmActionId(ServiceUtils.Actions.CIUDADANO_ID);
                 conectParams.setmSearchType(ServiceUtils.SearchType.USER_ID_SEARCH_TYPE);
                 dialog.show();
-                asynctask.execute(conectParams);*/
-                if (mDni.getText().toString().isEmpty()) {
+                asynctask.execute(conectParams);
+                /*if (mDni.getText().toString().isEmpty()) {
                     mDni.setError("Este campo es obligatorio");
                     if (mCodeActa.getText().toString().isEmpty()) {
                         mCodeActa.setError("Este campo es obligatorio");
@@ -91,7 +91,7 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
                         startActivity(i);
                         finish();
                     }
-                });
+                });*/
 
             }
         });

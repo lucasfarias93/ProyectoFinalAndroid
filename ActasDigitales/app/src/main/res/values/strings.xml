@@ -331,4 +331,5 @@
     <string name="visualizar_imagen">Visualizar imagen</string>
     <string name="instructions_error">Siga los pasos pedidos para reportar el error encontrado.\nIngrese la mayor cantidad de datos que posea de modo que el reporte del error se resuelva lo antes posible</string>
     <string name="observaciones_adicionales"><u>Observaciones adicionales</u></string>
+    <string name="haga_click_aqui_para_empezar"><u>Haga click aqui para empezar</u></string>
 </resources>
