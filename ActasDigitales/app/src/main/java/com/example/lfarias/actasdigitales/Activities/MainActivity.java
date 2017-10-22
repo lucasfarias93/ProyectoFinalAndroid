@@ -13,6 +13,8 @@ import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.Entities.Roles;
 import com.example.lfarias.actasdigitales.R;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

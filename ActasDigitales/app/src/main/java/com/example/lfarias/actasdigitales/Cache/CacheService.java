@@ -14,6 +14,8 @@ import java.util.List;
 
 public class CacheService {
 
+    private static String tokenSessionId;
+
     List<SolicitudActa> solicitudesUser1 = new ArrayList<>();
     List<SolicitudActa> solicitudesUserHost = new ArrayList<>();
 
@@ -88,5 +90,13 @@ public class CacheService {
 
     public void clearUser1MockData(){
         solicitudesUser1.clear();
+    }
+
+    public static String getTokenSessionId() {
+        return tokenSessionId;
+    }
+
+    public static void setTokenSessionId(String token) {
+        tokenSessionId = token;
     }
 }

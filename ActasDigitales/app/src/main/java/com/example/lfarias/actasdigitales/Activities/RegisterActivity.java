@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
  *              el manejo de errores tanto unitarios como de la creación de pop-ups o alertas de error.
  */
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback, LoginUserAsynctask.Callback, RegisterUserAsynctask.Callback {
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback, RegisterUserAsynctask.Callback {
 
     @Bind(R.id.dni)EditText mDni;
     @Bind(R.id.tramide_id) EditText mTramideId;
@@ -515,14 +515,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         } else {
             dialog.dismiss();
             Utils.createGlobalDialog(RegisterActivity.this, "Error en la creación del nuevo usuario", response).show();
-        }
-    }
-
-    @Override
-    public void loginUser(Boolean success) {
-        if (success) {
-            Intent i = new Intent(RegisterActivity.this, RequestActActivity.class);
-            startActivity(i);
         }
     }
 

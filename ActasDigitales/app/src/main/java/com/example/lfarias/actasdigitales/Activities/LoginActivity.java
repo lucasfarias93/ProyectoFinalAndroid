@@ -97,6 +97,8 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
                         mPasswordView.setError("Este campo es obligatorio");
                     }
                 } else {
+                    /*Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
+                    startActivity(i);*/
                     LoginUserAsynctask asynctask = new LoginUserAsynctask(LoginActivity.this, LoginActivity.this, dialog);
                     List<String> params = new ArrayList<>();
                     params.add(mUserView.getText().toString());
@@ -171,15 +173,39 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
     }
 
     @Override
-    public void loginUser(Boolean success) {
-        if(success){
-            dialog.hide();
-            CacheService.getInstance().initActaUser1(mUserView.getText().toString());
-            Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
-            startActivity(i);
-        } else {
-            dialog.hide();
-            Utils.createGlobalDialog(this, "Error en el inicio de sesión", "Ocurrió un problema con los datos ingresados. El usuario no existe o los datos no son válidos").show();
+    public void loginUser(int success) {
+        switch(success){
+            case 0:
+                dialog.dismiss();
+                Utils.createGlobalDialog(this, "Error en el inicio de sesión", "Ocurrió un problema con los datos ingresados. El usuario no existe o los datos no son válidos").show();
+                break;
+
+            case 1:
+                LoginUserAsynctask asynctask = new LoginUserAsynctask(LoginActivity.this, LoginActivity.this, dialog);
+                List<String> params = new ArrayList<>();
+                params.add(mUserView.getText().toString());
+                params.add(mPasswordView.getText().toString());
+
+                ConnectionParams conectParams = new ConnectionParams();
+                conectParams.setmControllerId(ServiceUtils.Controllers.LOGIN_USER_CONTROLLER);
+                conectParams.setmActionId(ServiceUtils.Actions.LOGIN_USER);
+                conectParams.setmSearchType(ServiceUtils.SearchType.LOGIN_USER_SEARCH_TYPE);
+                conectParams.setParams(params);
+
+                asynctask.execute(conectParams);
+                break;
+
+            case 2:
+                dialog.dismiss();
+                //CacheService.getInstance().initActaUser1(mUserView.getText().toString());
+                Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
+                startActivity(i);
+                break;
+
+            default:
+                dialog.dismiss();
+                Utils.createGlobalDialog(this, "Error en el inicio de sesión", "Ocurrió un problema con los datos ingresados. El usuario no existe o los datos no son válidos").show();
+                break;
         }
     }
 

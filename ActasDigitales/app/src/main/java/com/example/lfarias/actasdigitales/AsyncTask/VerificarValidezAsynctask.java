@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -115,7 +116,7 @@ public class VerificarValidezAsynctask extends AsyncTask<ConnectionParams, Void,
                     builder = new AlertDialog.Builder(context);
                 }
                 builder.setTitle("Error")
-                        .setMessage("Ocurrio un error al registrar un nuevo usuario. Por favor intente nuevamente mas tarde o contacte al soporte.")
+                        .setMessage("Ocurrio un error al obtener la vigencia de su acta. Por favor intente nuevamente mas tarde o contacte al soporte.")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                             }

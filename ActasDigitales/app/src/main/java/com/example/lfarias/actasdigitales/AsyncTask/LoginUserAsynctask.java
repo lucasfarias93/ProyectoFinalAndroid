@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.DecodeTextUtils;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
@@ -13,7 +14,12 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.CacheRequest;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +35,7 @@ public class LoginUserAsynctask extends AsyncTask<ConnectionParams, Void, List<S
     Context context;
     Callback callback;
     ProgressDialog dialog;
+    String tokenEmpty = "PHPSESSID=";
 
     public LoginUserAsynctask(Context context, Callback callback, ProgressDialog dialog) {
         this.callback = callback;
@@ -37,7 +44,7 @@ public class LoginUserAsynctask extends AsyncTask<ConnectionParams, Void, List<S
     }
 
     public interface Callback {
-        void loginUser(Boolean success);
+        void loginUser(int success);
     }
 
     @Override
@@ -45,12 +52,23 @@ public class LoginUserAsynctask extends AsyncTask<ConnectionParams, Void, List<S
         List<String> resultSet = new ArrayList<>();
 
         try {
+            CookieManager cookieManager = new CookieManager();
+            CookieHandler.setDefault(cookieManager);
             URL url = Utils.urlBuilder(params[0].getmControllerId(), params[0].getmActionId(), params[0].getParams());
 
+            System.setProperty("http.keepAlive", "true");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Keep-Alive", "header");
+            HttpCookie cookie = new HttpCookie("lang", "es");
+            cookie.setDomain("190.15.213.87:81");
+            cookie.setPath("/");
+            cookie.setVersion(0);
+            cookieManager.getCookieStore().add(new URI("http://190.15.213.87:81/"), cookie);
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
@@ -105,11 +123,19 @@ public class LoginUserAsynctask extends AsyncTask<ConnectionParams, Void, List<S
             }
     }
 
-    public Boolean getResult(String result){
-        if(result.contains("true")){
-            return true;
+    public int getResult(String result){
+        int resultInt;
+        String resultado = result.toString().substring(1, result.toString().length()-1);
+        if(tokenEmpty.equals(resultado)){
+            resultInt = 2;
+        } else if ("false".contains(resultado)){
+            resultInt = 0;
         } else {
-            return false;
+            int tokenString = "=".indexOf(resultado);
+            String token = resultado.substring(tokenString + 1);
+            CacheService.setTokenSessionId(token);
+            resultInt = 2;
         }
+        return resultInt;
     }
 }

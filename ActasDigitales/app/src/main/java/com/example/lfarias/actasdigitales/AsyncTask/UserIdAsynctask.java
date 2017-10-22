@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.view.ContextThemeWrapper;
+import android.webkit.CookieManager;
 
+import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
