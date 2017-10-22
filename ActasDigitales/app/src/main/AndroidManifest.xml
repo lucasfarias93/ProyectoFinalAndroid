@@ -80,8 +80,13 @@
             android:name=".Activities.MisSolicitudesActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.DetalleSolicitud" android:configChanges="orientation|keyboardHidden"
+        <activity
+            android:name=".Activities.DetalleSolicitud"
+            android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity android:name=".Activities.DetailImageActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

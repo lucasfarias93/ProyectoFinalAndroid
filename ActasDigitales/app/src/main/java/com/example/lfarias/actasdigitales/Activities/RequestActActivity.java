@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.annotation.Px;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -277,16 +278,9 @@ public class RequestActActivity extends AppCompatActivity {
                     rootView = inflater.inflate(R.layout.fragment_page_2, container, false);
                     ImageView imagen = (ImageView)rootView.findViewById(R.id.imagen_acta);
 
+/*
                     String imageDataBytes = getContext().getString(R.string.image_base64).substring(getContext().getString(R.string.image_base64).indexOf(",")+1);
-
-                    //byte[] recvpicbyte = (Base64.decode(imageDataBytes.getBytes(), Base64.NO_WRAP));
-                    Bitmap decodedByte = null;//BitmapFactory.decodeByteArray(recvpicbyte, 0, recvpicbyte.length);
-                    if(decodedByte == null){
-                        imagen.setImageResource(R.drawable.image_not_loaded);
-                    } else {
-                        imagen.setImageBitmap(decodedByte);
-                    }
-                    ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), this);
+*/                  ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), this);
 
                     List<String> params = new ArrayList<>();
                     params.add("1/1");
@@ -374,7 +368,6 @@ public class RequestActActivity extends AppCompatActivity {
                     break;
 
                 case 3:
-                    //textView.setText(getResources().getString(R.string.payment_methods));
                     break;
 
             }
@@ -384,23 +377,26 @@ public class RequestActActivity extends AppCompatActivity {
         @Override
         public void getImageBase64(String success) {
             if(!success.isEmpty() && success != null){
-                JSONArray arr = null;
-                try {
-                    arr = new JSONArray(success);
-                    JSONObject jObj = arr.getJSONObject(0);
-                    String imageBase64 = jObj.getString("imagen");
+                    final String imageBase64 = success;
 
                     byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                    ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta);
-                    view.setImageBitmap(decodedByte);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta);
 
-
-
+                    if(decodedByte == null){
+                        view.setImageResource(R.drawable.image_not_loaded);
+                    } else {
+                        view.setImageBitmap(decodedByte);
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getContext(), DetailImageActivity.class);
+                                intent.putExtra("image", imageBase64);
+                                startActivity(intent);
+                            }
+                        });
+                    }
             }
         }
     }
