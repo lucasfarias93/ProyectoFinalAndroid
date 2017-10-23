@@ -72,10 +72,10 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ActionBar mActionBar = getSupportActionBar();
+        /*ActionBar mActionBar = getSupportActionBar();
 
         mActionBar.setTitle("Inicio de sesión");
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);*/
 
         dialog = Utils.createLoadingIndicator(LoginActivity.this);
 
