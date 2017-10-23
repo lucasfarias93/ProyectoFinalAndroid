@@ -2,15 +2,18 @@ package com.example.lfarias.actasdigitales.Activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -498,19 +501,30 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     public void registerUser(Boolean success, String response) {
         if (success) {
             dialog.dismiss();
-            AlertDialog.Builder builder;
-            ContextThemeWrapper ctw = new ContextThemeWrapper(RegisterActivity.this, R.style.AppTheme_PopupOverlay);
-            builder = new AlertDialog.Builder(ctw);
-            builder.setTitle("Usuario Registrado con éxito")
-                    .setMessage("El nuevo usuario ha sido registrado con éxito. Por favor inicie sesión con sus nuevas credenciales")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+            InputMethodManager inputManager = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+
+            Snackbar snackbar = Snackbar
+                    .make(getWindow().getDecorView().findViewById(R.id.register_layout), "Usuario registrado exitosamente", Snackbar.LENGTH_LONG)
+                    .setAction("IR AL LOGIN", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                             Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(i);
                         }
-                    })
-                    .setIcon(R.drawable.information)
-                    .show();
+                    });
+            // Changing message text color
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+
+            // Changing action button text color
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.show();
 
         } else {
             dialog.dismiss();

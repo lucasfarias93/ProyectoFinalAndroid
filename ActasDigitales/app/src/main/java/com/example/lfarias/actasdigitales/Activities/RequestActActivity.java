@@ -2,6 +2,7 @@ package com.example.lfarias.actasdigitales.Activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -41,6 +42,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lfarias.actasdigitales.AsyncTask.ChangePasswordAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.AsyncTask.ImagenActaAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.SearchParentBookTypeAsynctask;
@@ -91,7 +93,7 @@ public class RequestActActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_act);
-
+        CacheService.getInstance().clear();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -118,10 +120,6 @@ public class RequestActActivity extends AppCompatActivity {
          * fragment.
          */
         View rootView;
-        String padre = "FARIAS, Jorge Horacio";
-        String abuelo = "FARIAS, Omar Leonelo Victor";
-        String madre = "CERUTTI, Virginia";
-        String hermana = "FARIAS CERUTTI, Maria Belen";
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -158,7 +156,6 @@ public class RequestActActivity extends AppCompatActivity {
                     final RadioButton buttonPropio = (RadioButton) radioGroup.findViewById(R.id.rdbOne);
                     final RadioButton buttonMadre = (RadioButton) radioGroup.findViewById(R.id.rdbTwo);
                     final RadioButton buttonPadre = (RadioButton) radioGroup.findViewById(R.id.rdbThree);
-                    final RadioButton buttonHijos = (RadioButton) radioGroup.findViewById(R.id.rdbSix);
                     final RadioButton buttonConyuge = (RadioButton) radioGroup.findViewById(R.id.rdbSeven);
                     radioGroup.clearCheck();
                     final Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner1);
@@ -173,53 +170,24 @@ public class RequestActActivity extends AppCompatActivity {
                     spinner.setAdapter(spinnerArrayAdapter);
 
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             switch (spinner.getSelectedItem().toString()) {
                                 case "Nacimiento":
                                     CacheService.getInstance().setTipoLibro(ServiceUtils.RequestData.nacimiento);
-                                    buttonPropio.setVisibility(View.VISIBLE);
-                                    buttonHijos.setVisibility(View.GONE);
-                                    buttonConyuge.setVisibility(View.GONE);
-                                    radioGroup.setVisibility(View.VISIBLE);
-                                    buttonPadre.setVisibility(View.VISIBLE);
-                                    buttonMadre.setVisibility(View.VISIBLE);
-                                    /*SearchParentBookTypeAsynctask provincesDataRetrieveAsynctask = new SearchParentBookTypeAsynctask(getContext(), PlaceholderFragment.this);
-                                    List<String> params = new ArrayList<>();
-                                    params.add((String.valueOf(parentesco[0])));
-
-                                    ConnectionParams conectParams = new ConnectionParams();
-                                    conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
-                                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_PARENTESCO);
-                                    conectParams.setmSearchType(ServiceUtils.SearchType.BUSCAR_PARENTESCO_SEARCH_TYPE);
-                                    conectParams.setParams(params);
-
-                                    provincesDataRetrieveAsynctask.execute(conectParams);*/
-
+                                    callSearchTypeAsynctask(getContext(), PlaceholderFragment.this);
                                     break;
                                 case "Matrimonio":
                                     CacheService.getInstance().setTipoLibro(ServiceUtils.RequestData.matrimonio);
-                                    buttonPropio.setVisibility(View.GONE);
-                                    buttonHijos.setVisibility(View.GONE);
-                                    buttonConyuge.setVisibility(View.GONE);
-                                    radioGroup.setVisibility(View.VISIBLE);
-                                    buttonPadre.setVisibility(View.VISIBLE);
-                                    buttonMadre.setVisibility(View.VISIBLE);
+                                    callSearchTypeAsynctask(getContext(), PlaceholderFragment.this);
                                     break;
                                 case "Defunción":
                                     CacheService.getInstance().setTipoLibro(ServiceUtils.RequestData.defuncion);
-                                    buttonHijos.setVisibility(View.GONE);
-                                    buttonMadre.setVisibility(View.GONE);
-                                    buttonConyuge.setVisibility(View.GONE);
-                                    buttonPropio.setVisibility(View.GONE);
-                                    radioGroup.setVisibility(View.VISIBLE);
-                                    buttonPadre.setVisibility(View.VISIBLE);
+                                    callSearchTypeAsynctask(getContext(), PlaceholderFragment.this);
                                     break;
                                 case "Unión Convivencial":
                                     CacheService.getInstance().setTipoLibro(ServiceUtils.RequestData.union);
-                                    radioGroup.setVisibility(View.GONE);
-                                    viewText.setVisibility(View.VISIBLE);
+                                    callSearchTypeAsynctask(getContext(), PlaceholderFragment.this);
                                     break;
                             }
                         }
@@ -251,7 +219,7 @@ public class RequestActActivity extends AppCompatActivity {
                                     case "Conyuge":
                                         CacheService.getInstance().setParentesco(ServiceUtils.RequestData.conyuge);
                                         break;
-                                    case "Propio":
+                                    case "Propia":
                                         CacheService.getInstance().setParentesco(ServiceUtils.RequestData.propia);
                                         break;
                                 }
@@ -377,24 +345,83 @@ public class RequestActActivity extends AppCompatActivity {
         }
 
         @Override
-        public void getParent(Object success) {
+        public void getParent(JSONArray success) {
             List<ResponseParents> parents = new ArrayList<>();
             try {
-                JSONArray array = (JSONArray) success;
-                for(int index = 0;index < array.length(); index++) {
-                    JSONObject jsonObject = array.getJSONObject(index);
+                RadioGroup radioGroup = (RadioGroup) rootView.findViewById(R.id.rdgGrupo);
+                radioGroup.setVisibility(View.GONE);
+                final TextView viewText = (TextView) rootView.findViewById(R.id.sin_opciones);
+                viewText.setVisibility(View.GONE);
+                RadioButton button = (RadioButton) radioGroup.findViewById(R.id.rdbOne);
+                button.setVisibility(View.GONE);
+                RadioButton button1 = (RadioButton) radioGroup.findViewById(R.id.rdbFour);
+                button1.setVisibility(View.GONE);
+                RadioButton button2 = (RadioButton) radioGroup.findViewById(R.id.rdbSeven);
+                button2.setVisibility(View.GONE);
+                RadioButton button3 = (RadioButton) radioGroup.findViewById(R.id.rdbThree);
+                button3.setVisibility(View.GONE);
+                RadioButton button4 = (RadioButton) radioGroup.findViewById(R.id.rdbTwo);
+                button4.setVisibility(View.GONE);
+                for(int index = 0;index < success.length(); index++) {
+                    JSONObject jsonObject = success.getJSONObject(index);
+
                     String nombre = jsonObject.get("nombreparentesco").toString();
+                    switch(nombre){
+                        case "Propia":
+                            radioGroup.setVisibility(View.VISIBLE);
+                            button.setVisibility(View.VISIBLE);
+                            button.setText(nombre);
+                            viewText.setVisibility(View.GONE);
+                            break;
+                        case "Hijos":
+                            radioGroup.setVisibility(View.VISIBLE);
+                            button1.setVisibility(View.VISIBLE);
+                            button1.setText(nombre);
+                            viewText.setVisibility(View.GONE);
+                            break;
+                        case "Conyuge":
+                            radioGroup.setVisibility(View.VISIBLE);
+                            button2.setVisibility(View.VISIBLE);
+                            button2.setText(nombre);
+                            viewText.setVisibility(View.GONE);
+                            break;
+                        case "Padre":
+                            radioGroup.setVisibility(View.VISIBLE);
+                            button3.setVisibility(View.VISIBLE);
+                            button3.setText(nombre);
+                            viewText.setVisibility(View.GONE);
+                            break;
+                        case "Madre":
+                            radioGroup.setVisibility(View.VISIBLE);
+                            button4.setVisibility(View.VISIBLE);
+                            button4.setText(nombre);
+                            viewText.setVisibility(View.GONE);
+                            break;
+                        default:
+                            radioGroup.setVisibility(View.GONE);
+                            viewText.setVisibility(View.VISIBLE);
+                            break;
+
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
 
-            /*radioGroup.setVisibility(View.VISIBLE);
-            buttonPropio.setVisibility(View.VISIBLE);
-            buttonHijos.setVisibility(View.VISIBLE);
-            buttonConyuge.setVisibility(View.VISIBLE);
-            buttonPadre.setVisibility(View.VISIBLE);
-            buttonMadre.setVisibility(View.VISIBLE);*/
+
+        public void callSearchTypeAsynctask(Context context, SearchParentBookTypeAsynctask.Callback callback){
+            SearchParentBookTypeAsynctask provincesDataRetrieveAsynctask = new SearchParentBookTypeAsynctask(context, callback);
+            List<String> params = new ArrayList<>();
+            params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
+
+            ConnectionParams conectParams = new ConnectionParams();
+            conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+            conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_PARENTESCO);
+            conectParams.setmSearchType(ServiceUtils.SearchType.BUSCAR_PARENTESCO_SEARCH_TYPE);
+            conectParams.setParams(params);
+
+            provincesDataRetrieveAsynctask.execute(conectParams);
         }
     }
 

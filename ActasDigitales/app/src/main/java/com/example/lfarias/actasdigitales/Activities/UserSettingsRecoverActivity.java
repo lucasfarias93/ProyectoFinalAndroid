@@ -11,11 +11,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -317,43 +320,57 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     public void changePassword(Boolean success) {
         if(success){
             dialog.dismiss();
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
-                builder = new AlertDialog.Builder(ctw);
-            } else {
-                builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this);
-            }
-            builder.setTitle("Contraseña cambiada con éxito")
-                    .setMessage("La nueva contraseña ha sido cambiada exitosamente. Por favor inicie sesión con sus nuevas credenciales")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            mNuevaContraseña.clearFocus();
+            mRepetirContraseña.clearFocus();
+            InputMethodManager inputManager = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+            mNuevaContraseña.setText("");
+            mRepetirContraseña.setText("");
+            Snackbar snackbar = Snackbar
+                    .make(getWindow().getDecorView().findViewById(R.id.activity_user_settings_recover), "Contraseña cambiada exitosamente", Snackbar.LENGTH_LONG)
+                    .setAction("IR AL LOGIN", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                             Intent i = new Intent(UserSettingsRecoverActivity.this, LoginActivity.class);
                             startActivity(i);
                         }
-                    })
-                    .setIcon(R.drawable.information)
-                    .show();
+                    });
+            // Changing message text color
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+
+            // Changing action button text color
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.show();
         }
         else {
             dialog.dismiss();
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
-                builder = new AlertDialog.Builder(ctw);
-            } else {
-                builder = new AlertDialog.Builder(UserSettingsRecoverActivity.this);
-            }
-            builder.setTitle("Ocurrio un problema")
-                    .setMessage("La nueva contraseña no ha podido cambiarse. Por favor intentelo luego nuevamente")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent i = new Intent(UserSettingsRecoverActivity.this, LoginActivity.class);
-                            startActivity(i);
-                        }
-                    })
-                    .setIcon(R.drawable.information)
-                    .show();
+            InputMethodManager inputManager = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            mNuevaContraseña.clearFocus();
+            mRepetirContraseña.clearFocus();
+            mNuevaContraseña.setText("");
+            mRepetirContraseña.setText("");
+            Snackbar snackbar = Snackbar
+                    .make(getWindow().getDecorView().findViewById(R.id.activity_user_settings_recover), "Ocurrio un error al cambiar la contraseña. Intente nuevamente", Snackbar.LENGTH_LONG);
+
+            // Changing action button text color
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.show();
+
         }
     }
 

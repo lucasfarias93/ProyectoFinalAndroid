@@ -37,6 +37,7 @@
                 android:textStyle="italic"
                 android:textColor="@color/colorAccent"
                 android:gravity="center"
+                android:layout_marginTop="30dp"
                 android:paddingBottom="25dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -83,7 +84,7 @@
                 <TextView
                     android:id="@+id/register"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="45dp"
                     android:layout_alignParentLeft="true"
                     android:clickable="true"
                     android:padding="5dp"
@@ -93,7 +94,7 @@
                 <TextView
                     android:id="@+id/forgotPassword"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="45dp"
                     android:layout_alignParentRight="true"
                     android:clickable="true"
                     android:padding="5dp"

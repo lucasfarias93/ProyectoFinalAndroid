@@ -41,7 +41,7 @@ public class SearchParentBookTypeAsynctask extends AsyncTask<ConnectionParams, V
     }
 
     public interface Callback {
-        void getParent(Object success) throws JSONException;
+        void getParent(JSONArray success) throws JSONException;
     }
 
     @Override
@@ -103,8 +103,8 @@ public class SearchParentBookTypeAsynctask extends AsyncTask<ConnectionParams, V
             case 12:
                 if (!result.get(0).toString().isEmpty()) {
                     try {
-                        JSONObject obj = Utils.convertStringIntoJson(result.get(0));
-                        callback.getParent(result.get(0));
+                        JSONArray array = new JSONArray(result.get(0));
+                        callback.getParent(array);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
