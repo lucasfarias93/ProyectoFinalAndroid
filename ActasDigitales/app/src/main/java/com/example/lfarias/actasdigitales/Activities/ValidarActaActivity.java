@@ -240,7 +240,7 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
         switch (item.getItemId()){
             case R.id.action_settings:
                 finish();
-                CacheService.getInstance().clearUser1MockData();
+                CacheService.getInstance().clear();
                 Intent i = new Intent(ValidarActaActivity.this, LoginActivity.class);
                 startActivity(i);
                 break;

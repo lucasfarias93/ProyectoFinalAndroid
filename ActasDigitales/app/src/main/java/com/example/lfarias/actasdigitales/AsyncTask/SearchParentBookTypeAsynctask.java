@@ -1,43 +1,47 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.v7.view.ContextThemeWrapper;
-import android.widget.ImageView;
 
+import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
-import com.example.lfarias.actasdigitales.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by lfarias on 10/9/17.
+ * Created by acer on 22/10/2017.
  */
 
-public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
+public class SearchParentBookTypeAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
+
     Context context;
     Callback callback;
+    ProgressDialog dialog;
 
-    public ImagenActaAsynctask(Context context, Callback callback) {
+    public SearchParentBookTypeAsynctask(Context context, Callback callback) {
         this.callback = callback;
         this.context = context;
     }
 
     public interface Callback {
-        void getImageBase64(String success);
+        void getParent(Object success) throws JSONException;
     }
 
     @Override
@@ -45,12 +49,11 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
         List<String> resultSet = new ArrayList<>();
 
         try {
-            URL urlEncoded = Utils.urlBuilder(params[0].getmControllerId(), params[0].getmActionId(), params[0].getParams());
-            String urlDecoded = URLDecoder.decode(urlEncoded.toString(), "UTF-8");
-            URL url = new URL(urlDecoded);
+            URL url = Utils.urlBuilder(params[0].getmControllerId(), params[0].getmActionId(), params[0].getParams());
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(15000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -85,7 +88,6 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
                 return resultSet;
             }
         } catch (Exception e) {
-
             resultSet.add(new String("Exception:" + e.getMessage()));
             resultSet.add(new StringBuilder().append(500).toString());
             return resultSet;
@@ -98,29 +100,23 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
         Integer searchType = Integer.parseInt(result.get(1));
 
         switch (searchType) {
-            case 10:
-                callback.getImageBase64(result.get(0));
-                break;
+            case 12:
+                if (!result.get(0).toString().isEmpty()) {
+                    try {
+                        JSONObject obj = Utils.convertStringIntoJson(result.get(0));
+                        callback.getParent(result.get(0));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                } else {
+                    Utils.createGlobalDialog(context, "Error en el inicio de sesión", "Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
+                    break;
+                }
 
             default:
-                final AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(context);
-                }
-                builder.setTitle("Error al obtener la imagen")
-                        .setMessage("Ocurrio un error al obtener la imagen de su acta. Por favor intente nuevamente mas tarde o contacte al soporte.")
-                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                callback.getImageBase64("");
-                            }
-                        })
-                        .setIcon(R.drawable.information)
-                        .show();
+                Utils.createGlobalDialog(context, "Error en el inicio de sesión", "Ocurrio un error al obtener los datos del servidor, revise los datos o intente mas tarde").show();
+                break;
         }
     }
-
-
 }

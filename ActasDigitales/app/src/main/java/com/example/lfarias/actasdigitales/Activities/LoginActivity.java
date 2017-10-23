@@ -197,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
 
             case 2:
                 dialog.dismiss();
-                //CacheService.getInstance().initActaUser1(mUserView.getText().toString());
+                CacheService.getInstance().clear();
                 Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
                 startActivity(i);
                 break;

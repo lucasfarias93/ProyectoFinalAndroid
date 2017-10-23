@@ -41,14 +41,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.AsyncTask.ImagenActaAsynctask;
+import com.example.lfarias.actasdigitales.AsyncTask.SearchParentBookTypeAsynctask;
 import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
+import com.example.lfarias.actasdigitales.Entities.ResponseEntities.ResponseParents;
 import com.example.lfarias.actasdigitales.Entities.SolicitudActa;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.MercadoPago.MainExample.MPMainActivity;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
+import com.google.gson.Gson;
 import com.mercadopago.MercadoPagoBaseActivity;
 
 import org.json.JSONArray;
@@ -59,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindDimen;
@@ -107,19 +112,19 @@ public class RequestActActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback {
+    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback, SearchParentBookTypeAsynctask.Callback {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         View rootView;
-
         String padre = "FARIAS, Jorge Horacio";
         String abuelo = "FARIAS, Omar Leonelo Victor";
         String madre = "CERUTTI, Virginia";
         String hermana = "FARIAS CERUTTI, Maria Belen";
 
         private static final String ARG_SECTION_NUMBER = "section_number";
+
         public PlaceholderFragment() {
         }
 
@@ -142,22 +147,21 @@ public class RequestActActivity extends AppCompatActivity {
 
             rootView = new View(getContext());
 
-            switch(getArguments().getInt(ARG_SECTION_NUMBER)){
+            switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
+
                     rootView = inflater.inflate(R.layout.fragment_page_1, container, false);
                     final RadioGroup radioGroup = (RadioGroup) rootView.findViewById(R.id.rdgGrupo);
                     radioGroup.setVisibility(View.GONE);
-                    final TextView viewText = (TextView)rootView.findViewById(R.id.sin_opciones);
+                    final TextView viewText = (TextView) rootView.findViewById(R.id.sin_opciones);
                     viewText.setVisibility(View.GONE);
-                    final RadioButton buttonPropio = (RadioButton)radioGroup.findViewById(R.id.rdbOne);
-                    final RadioButton buttonMadre = (RadioButton)radioGroup.findViewById(R.id.rdbTwo);
-                    final RadioButton buttonPadre = (RadioButton)radioGroup.findViewById(R.id.rdbThree);
-                    final RadioButton buttonAbuelo = (RadioButton)radioGroup.findViewById(R.id.rdbFour);
-                    final RadioButton buttonHijos = (RadioButton)radioGroup.findViewById(R.id.rdbSix);
-                    final RadioButton buttonHermana = (RadioButton) radioGroup.findViewById(R.id.rdbEight);
-                    final RadioButton buttonConyuge = (RadioButton)radioGroup.findViewById(R.id.rdbSeven);
+                    final RadioButton buttonPropio = (RadioButton) radioGroup.findViewById(R.id.rdbOne);
+                    final RadioButton buttonMadre = (RadioButton) radioGroup.findViewById(R.id.rdbTwo);
+                    final RadioButton buttonPadre = (RadioButton) radioGroup.findViewById(R.id.rdbThree);
+                    final RadioButton buttonHijos = (RadioButton) radioGroup.findViewById(R.id.rdbSix);
+                    final RadioButton buttonConyuge = (RadioButton) radioGroup.findViewById(R.id.rdbSeven);
                     radioGroup.clearCheck();
-                    final Spinner spinner =(Spinner) rootView.findViewById(R.id.spinner1);
+                    final Spinner spinner = (Spinner) rootView.findViewById(R.id.spinner1);
                     List<String> spinnerArray = new ArrayList<>();
                     spinnerArray.add("Seleccione tipo de acta");
                     spinnerArray.add("Nacimiento");
@@ -172,38 +176,48 @@ public class RequestActActivity extends AppCompatActivity {
 
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            switch (spinner.getSelectedItem().toString()){
+                            switch (spinner.getSelectedItem().toString()) {
                                 case "Nacimiento":
-                                    buttonAbuelo.setVisibility(View.GONE);
-                                    radioGroup.setVisibility(View.VISIBLE);
+                                    CacheService.getInstance().setTipoLibro(ServiceUtils.RequestData.nacimiento);
                                     buttonPropio.setVisibility(View.VISIBLE);
-                                    buttonHijos.setVisibility(View.VISIBLE);
-                                    buttonConyuge.setVisibility(View.VISIBLE);
+                                    buttonHijos.setVisibility(View.GONE);
+                                    buttonConyuge.setVisibility(View.GONE);
+                                    radioGroup.setVisibility(View.VISIBLE);
                                     buttonPadre.setVisibility(View.VISIBLE);
                                     buttonMadre.setVisibility(View.VISIBLE);
-                                    buttonHermana.setVisibility(View.GONE);
+                                    /*SearchParentBookTypeAsynctask provincesDataRetrieveAsynctask = new SearchParentBookTypeAsynctask(getContext(), PlaceholderFragment.this);
+                                    List<String> params = new ArrayList<>();
+                                    params.add((String.valueOf(parentesco[0])));
+
+                                    ConnectionParams conectParams = new ConnectionParams();
+                                    conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+                                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_PARENTESCO);
+                                    conectParams.setmSearchType(ServiceUtils.SearchType.BUSCAR_PARENTESCO_SEARCH_TYPE);
+                                    conectParams.setParams(params);
+
+                                    provincesDataRetrieveAsynctask.execute(conectParams);*/
+
                                     break;
                                 case "Matrimonio":
+                                    CacheService.getInstance().setTipoLibro(ServiceUtils.RequestData.matrimonio);
                                     buttonPropio.setVisibility(View.GONE);
                                     buttonHijos.setVisibility(View.GONE);
                                     buttonConyuge.setVisibility(View.GONE);
                                     radioGroup.setVisibility(View.VISIBLE);
                                     buttonPadre.setVisibility(View.VISIBLE);
-                                    buttonAbuelo.setVisibility(View.VISIBLE);
                                     buttonMadre.setVisibility(View.VISIBLE);
-                                    buttonHermana.setVisibility(View.VISIBLE);
                                     break;
                                 case "Defunción":
+                                    CacheService.getInstance().setTipoLibro(ServiceUtils.RequestData.defuncion);
                                     buttonHijos.setVisibility(View.GONE);
                                     buttonMadre.setVisibility(View.GONE);
                                     buttonConyuge.setVisibility(View.GONE);
                                     buttonPropio.setVisibility(View.GONE);
-                                    buttonAbuelo.setVisibility(View.VISIBLE);
                                     radioGroup.setVisibility(View.VISIBLE);
                                     buttonPadre.setVisibility(View.VISIBLE);
-                                    buttonHermana.setVisibility(View.GONE);
                                     break;
                                 case "Unión Convivencial":
+                                    CacheService.getInstance().setTipoLibro(ServiceUtils.RequestData.union);
                                     radioGroup.setVisibility(View.GONE);
                                     viewText.setVisibility(View.VISIBLE);
                                     break;
@@ -219,53 +233,30 @@ public class RequestActActivity extends AppCompatActivity {
                     rootView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(radioGroup.getCheckedRadioButtonId()==-1) {
+                            if (radioGroup.getCheckedRadioButtonId() == -1) {
                                 Toast.makeText(getContext(), "Tiene que seleccionar un parentezco", Toast.LENGTH_SHORT).show();
                             } else {
-                            CacheService instance = CacheService.getInstance();
-                            SolicitudActa acta = new SolicitudActa();
-                            int idButton = radioGroup.getCheckedRadioButtonId();
-                            RadioButton button = (RadioButton) rootView.findViewById(idButton);
-                            switch(button.getText().toString()){
-                                case "Padre":
-                                    acta.setNombrePropietario(padre);
-                                    break;
-                                case "Madre":
-                                    acta.setNombrePropietario(madre);
-                                    break;
-                                case "Abuelo":
-                                    acta.setNombrePropietario(abuelo);
-                                    break;
-                                case "Hermana":
-                                    acta.setNombrePropietario(hermana);
-                                    break;
-                                case "Hijos":
-                                    acta.setNombrePropietario("CERUTTI, Lucia");
-                                    break;
-                                case "Conyuge":
-                                    acta.setNombrePropietario("GONZALES, Hernan");
-                                    break;
-                                case "Propio":
-                                    acta.setNombrePropietario("FARIAS CERUTTI, Lucas Sebastian");
-                                    break;
-                            }
+                                int idButton = radioGroup.getCheckedRadioButtonId();
+                                RadioButton button = (RadioButton) rootView.findViewById(idButton);
+                                switch (button.getText().toString()) {
+                                    case "Padre":
+                                        CacheService.getInstance().setParentesco(ServiceUtils.RequestData.padre);
+                                        break;
+                                    case "Madre":
+                                        CacheService.getInstance().setParentesco(ServiceUtils.RequestData.matrimonio);
+                                        break;
+                                    case "Hijos":
+                                        CacheService.getInstance().setParentesco(ServiceUtils.RequestData.hijos);
+                                        break;
+                                    case "Conyuge":
+                                        CacheService.getInstance().setParentesco(ServiceUtils.RequestData.conyuge);
+                                        break;
+                                    case "Propio":
+                                        CacheService.getInstance().setParentesco(ServiceUtils.RequestData.propia);
+                                        break;
+                                }
 
-                            acta.setTipoSolicitud(spinner.getSelectedItem().toString());
-                            acta.setNroSolicitud("1");
-                            int selectedId;
-                            String parentesco;
-                                selectedId = radioGroup.getCheckedRadioButtonId();
-                                // find the radiobutton by returned id
-                                RadioButton selectedRadioButton = (RadioButton)radioGroup.findViewById(selectedId);
-                                parentesco = selectedRadioButton.getText().toString();
-                                acta.setParentesco(parentesco);
-                                acta.setCuponPagoCodigo("-");
-                                acta.setEstadoSolicitud("");
-                                Date cDate2 = Calendar.getInstance().getTime();
-                                String fDate2 = new SimpleDateFormat("yyyy-MM-dd").format(cDate2);
-                                acta.setFechaSolicitud(fDate2);
-                                instance.crearActaUser1(acta);
-                                ViewPager mViewPager = (ViewPager)container.findViewById(R.id.container);
+                                ViewPager mViewPager = (ViewPager) container.findViewById(R.id.container);
                                 mViewPager.setCurrentItem(1);
                             }
                         }
@@ -276,72 +267,55 @@ public class RequestActActivity extends AppCompatActivity {
                 case 2:
                     final CacheService instance = CacheService.getInstance();
                     rootView = inflater.inflate(R.layout.fragment_page_2, container, false);
-                    ImageView imagen = (ImageView)rootView.findViewById(R.id.imagen_acta);
+                    ImageView imagen = (ImageView) rootView.findViewById(R.id.imagen_acta);
 
-/*
-                    String imageDataBytes = getContext().getString(R.string.image_base64).substring(getContext().getString(R.string.image_base64).indexOf(",")+1);
-*/                  ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), this);
+                    final Button mButtonVisualize = (Button) rootView.findViewById(R.id.visualizar);
 
-                    List<String> params = new ArrayList<>();
-                    params.add("1/1");
-
-                    ConnectionParams conectParams = new ConnectionParams();
-                    conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
-                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_IMAGEN_MOBILE);
-                    conectParams.setmSearchType(ServiceUtils.SearchType.IMAGEN_ACTA_SEARCH_TYPE);
-                    conectParams.setParams(params);
-                    asynctask.execute(conectParams);
-
-                    Button mButtonVisualize = (Button) rootView.findViewById(R.id.visualizar);
-                    mButtonVisualize.setText("Confirmar");
                     mButtonVisualize.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            List<SolicitudActa> actas= instance.getActaUser1();
-                            for (SolicitudActa acta : actas){
-                                if(acta.getEstadoSolicitud().equals("")){
-                                    acta.setEstadoSolicitud("Confirmada");
-                                }
-                            }
-                            final ProgressDialog dialog = Utils.createLoadingIndicator(getContext());
-                            dialog.show();
-                            final Handler handler = new Handler();
-                            dialog.setMessage("Aguarde mientras procesamos la información...");
-                            dialog.show();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog.dismiss();
-                                    AlertDialog.Builder builder;
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        ContextThemeWrapper ctw = new ContextThemeWrapper(getContext(), R.style.AppTheme_PopupOverlay);
-                                        builder = new AlertDialog.Builder(ctw);
-                                    } else {
-                                        builder = new AlertDialog.Builder(getContext());
-                                    }
-                                    builder.setTitle("Acta creada!")
-                                            .setMessage("El acta se ha creado exitosamente. ¿Desea realizar el pago de los códigos provinciales?")
-                                            .setPositiveButton("PAGAR", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent i = new Intent(getContext(), MPMainActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                    dialog.dismiss();
-                                                }
-                                            })
-                                            .setNegativeButton("VOLVER", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent i = new Intent(getContext(), LandingPageActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                    dialog.dismiss();
-                                                }
-                                            })
-                                            .setIcon(R.drawable.information)
-                                            .show();
-                                }
-                            }, 2500);
+                            if("Visualizar".equals(mButtonVisualize.getText().toString())){
+                                ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), PlaceholderFragment.this);
+                                List<String> params = new ArrayList<>();
+                                params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
+                                params.add(String.valueOf(CacheService.getInstance().getParentesco()));
 
+                                ConnectionParams conectParams = new ConnectionParams();
+                                conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+                                conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_IMAGEN_MOBILE);
+                                conectParams.setmSearchType(ServiceUtils.SearchType.IMAGEN_ACTA_SEARCH_TYPE);
+                                conectParams.setParams(params);
+                                asynctask.execute(conectParams);
+                                mButtonVisualize.setText("Confirmar");
+                            } else if("Confirmar".equals(mButtonVisualize.getText().toString())){
+                                AlertDialog.Builder builder;
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    ContextThemeWrapper ctw = new ContextThemeWrapper(getContext(), R.style.AppTheme_PopupOverlay);
+                                    builder = new AlertDialog.Builder(ctw);
+                                } else {
+                                    builder = new AlertDialog.Builder(getContext());
+                                }
+                                builder.setTitle("Acta creada!")
+                                        .setMessage("El acta se ha creado exitosamente. ¿Desea realizar el pago de los códigos provinciales?")
+                                        .setPositiveButton("PAGAR", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent i = new Intent(getContext(), MPMainActivity.class);
+                                                startActivity(i);
+                                                getActivity().finish();
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .setNegativeButton("VOLVER", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent i = new Intent(getContext(), LandingPageActivity.class);
+                                                startActivity(i);
+                                                getActivity().finish();
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .setIcon(R.drawable.information)
+                                        .show();
+                            }
                         }
                     });
 
@@ -376,28 +350,51 @@ public class RequestActActivity extends AppCompatActivity {
 
         @Override
         public void getImageBase64(String success) {
-            if(!success.isEmpty() && success != null){
-                    final String imageBase64 = success;
 
-                    byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            if (!success.isEmpty() && success != null) {
+                final String imageBase64 = success;
 
-                    final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta);
-
-                    if(decodedByte == null){
-                        view.setImageResource(R.drawable.image_not_loaded);
-                    } else {
-                        view.setImageBitmap(decodedByte);
-                        view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getContext(), DetailImageActivity.class);
-                                intent.putExtra("image", imageBase64);
-                                startActivity(intent);
-                            }
-                        });
-                    }
+                byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
+                if (decodedByte == null) {
+                    view.setImageResource(R.drawable.image_not_loaded);
+                } else {
+                    view.setImageBitmap(decodedByte);
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(), DetailImageActivity.class);
+                            intent.putExtra("image", imageBase64);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            } else {
+                final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
+                view.setImageResource(R.drawable.image_not_loaded);
             }
+        }
+
+        @Override
+        public void getParent(Object success) {
+            List<ResponseParents> parents = new ArrayList<>();
+            try {
+                JSONArray array = (JSONArray) success;
+                for(int index = 0;index < array.length(); index++) {
+                    JSONObject jsonObject = array.getJSONObject(index);
+                    String nombre = jsonObject.get("nombreparentesco").toString();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            /*radioGroup.setVisibility(View.VISIBLE);
+            buttonPropio.setVisibility(View.VISIBLE);
+            buttonHijos.setVisibility(View.VISIBLE);
+            buttonConyuge.setVisibility(View.VISIBLE);
+            buttonPadre.setVisibility(View.VISIBLE);
+            buttonMadre.setVisibility(View.VISIBLE);*/
         }
     }
 
@@ -444,10 +441,10 @@ public class RequestActActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 finish();
-                CacheService.getInstance().clearUser1MockData();
+                CacheService.getInstance().clear();
                 Intent i = new Intent(RequestActActivity.this, LoginActivity.class);
                 startActivity(i);
                 break;

@@ -35,6 +35,7 @@ public class ServiceUtils {
         public static final String VALIDEZ_ACTA = "verificar_validez_usuario_mobile";
         public static final String BUSCAR_IMAGEN_MOBILE = "buscar_imagen_mobile";
         public static final String CAMBIAR_CLAVE_MOBILE = "cambiar_clave_mobile";
+        public static final String BUSCAR_PARENTESCO = "buscar_parentesco_tipolibro_mobile";
 
     }
 
@@ -75,5 +76,22 @@ public class ServiceUtils {
         public static final Integer VALIDEZ_ACTA_SEARCH_TYPE = 9;
         public static final Integer IMAGEN_ACTA_SEARCH_TYPE = 10;
         public static final Integer CAMBIAR_CLAVE_MOBILE = 11;
+        public static final Integer BUSCAR_PARENTESCO_SEARCH_TYPE = 12;
+    }
+
+    public static class RequestData{
+
+        public static final int nacimiento = 1;
+        public static final int matrimonio = 3;
+        public static final int defuncion = 2;
+        public static final int union = 9;
+
+
+        public static final int propia = 1;
+        public static final int padre = 3;
+        public static final int madre = 2;
+        public static final int conyuge = 6;
+        public static final int hijos = 18;
+
     }
 }

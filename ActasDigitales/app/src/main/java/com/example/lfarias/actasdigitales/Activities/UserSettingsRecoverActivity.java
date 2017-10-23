@@ -83,6 +83,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
     Usuarios user = new Usuarios();
     String password;
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,14 +133,14 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
             @Override
             public void onClick(View v) {
 
-                String email = mEmail.getText().toString();
+                email = mEmail.getText().toString();
                 if(email.isEmpty()){
                     mEmail.setError("Este campo es obligatorio para continuar");
                 } else if(!Utils.emailValidator(email)){
                     mEmail.setError("El email ingresado no es correcto o posee un formato inválido. Por favor reviselo y corrigalo");
                 } else {
                     user.setEmail(mEmail.getText().toString());
-                    sendEmail(mEmail.getText().toString());
+                    sendEmail(email);
                     //createNotifications2();
                 }
             }
@@ -192,14 +193,28 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                     mNuevaContraseña.setError("Las nuevas contraseñas deben conicidir");
                 } else {
                     password = mNuevaContraseña.getText().toString();
-                    UserIdAsynctask asynctask = new UserIdAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this, dialog);
+                    //TODO: hace falta loguearse para obtener el id de usuario.. Porque necesito el id de usuario (logueandome)
+                    // si estoy fuera del login
+                    ChangePasswordAsynctask asynctask = new ChangePasswordAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this, dialog);
+                    List<String> params = new ArrayList<>();
+                    params.add(email);
+                    params.add(password);
+
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERAR_CONTRASEÑA_CAMBIO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+                    conectParams.setmActionId(ServiceUtils.Actions.CAMBIAR_CLAVE_MOBILE);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.CAMBIAR_CLAVE_MOBILE);
+                    conectParams.setParams(params);
+                    dialog.show();
+                    asynctask.execute(conectParams);
+                   /* UserIdAsynctask asynctask = new UserIdAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this, dialog);
 
                     ConnectionParams conectParams = new ConnectionParams();
                     conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
                     conectParams.setmActionId(ServiceUtils.Actions.CIUDADANO_ID);
                     conectParams.setmSearchType(ServiceUtils.SearchType.USER_ID_SEARCH_TYPE);
                     dialog.show();
-                    asynctask.execute(conectParams);
+                    asynctask.execute(conectParams);*/
                 }
 
             }
@@ -273,19 +288,19 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     @Override
     public void validateCode(Boolean success) {
 
-        if(success){
-            dialog.dismiss();
-            mPasswordLayout.setVisibility(View.VISIBLE);
-            mButtonCodeContinue.setVisibility(View.GONE);
-            mTextLinkNewCode.setVisibility(View.GONE);
-            mPutCode.setVisibility(View.GONE);
-            mInputCode.setVisibility(View.GONE);
-            mNuevaContraseñaIndicaciones.setVisibility(View.VISIBLE);
-            mTextIntroduction.setVisibility(View.GONE);
-            mTextCodeExists.setVisibility(View.GONE);
-            mTextInit.setVisibility(View.GONE);
             mTextLinkNewCode.setVisibility(View.GONE);
             mTextNewCodeInstructions.setVisibility(View.GONE);
+            if(success){
+                dialog.dismiss();
+                mPasswordLayout.setVisibility(View.VISIBLE);
+                mButtonCodeContinue.setVisibility(View.GONE);
+                mTextLinkNewCode.setVisibility(View.GONE);
+                mPutCode.setVisibility(View.GONE);
+                mInputCode.setVisibility(View.GONE);
+                mNuevaContraseñaIndicaciones.setVisibility(View.VISIBLE);
+                mTextIntroduction.setVisibility(View.GONE);
+                mTextCodeExists.setVisibility(View.GONE);
+                mTextInit.setVisibility(View.GONE);
             mNewContraseñaSubmit.setVisibility(View.VISIBLE);
         } else {
             dialog.dismiss();
@@ -346,18 +361,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     public void getUserId(Object success) {
 
         if(!success.equals("false")) {
-            ChangePasswordAsynctask asynctask = new ChangePasswordAsynctask(UserSettingsRecoverActivity.this, UserSettingsRecoverActivity.this, dialog);
-            List<String> params = new ArrayList<>();
-            params.add(success.toString());
-            params.add(password);
 
-            ConnectionParams conectParams = new ConnectionParams();
-            conectParams.setmControllerId(ServiceUtils.Controllers.RECUPERAR_CONTRASEÑA_CAMBIO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
-            conectParams.setmActionId(ServiceUtils.Actions.CAMBIAR_CLAVE_MOBILE);
-            conectParams.setmSearchType(ServiceUtils.SearchType.CAMBIAR_CLAVE_MOBILE);
-            conectParams.setParams(params);
-            dialog.show();
-            asynctask.execute(conectParams);
         } else {
 
         }

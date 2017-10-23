@@ -55,7 +55,7 @@ public class DetalleSolicitud extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_settings:
                 finish();
-                CacheService.getInstance().clearUser1MockData();
+                CacheService.getInstance().clear();
                 Intent i = new Intent(DetalleSolicitud.this, LoginActivity.class);
                 startActivity(i);
                 break;

@@ -16,6 +16,9 @@ public class CacheService {
 
     private static String tokenSessionId;
 
+    static int parentesco;
+    static int tipoLibro;
+
     List<SolicitudActa> solicitudesUser1 = new ArrayList<>();
     List<SolicitudActa> solicitudesUserHost = new ArrayList<>();
 
@@ -98,5 +101,25 @@ public class CacheService {
 
     public static void setTokenSessionId(String token) {
         tokenSessionId = token;
+    }
+
+    public static int getParentesco() {
+        return parentesco;
+    }
+
+    public static void setParentesco(int parentesco) {
+        CacheService.parentesco = parentesco;
+    }
+
+    public static int getTipoLibro() {
+        return tipoLibro;
+    }
+
+    public static void setTipoLibro(int tipoLibro) {
+        CacheService.tipoLibro = tipoLibro;
+    }
+
+    public static void clear() {
+        instance = null;
     }
 }
