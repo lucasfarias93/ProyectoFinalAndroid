@@ -9,6 +9,7 @@
 
     <ScrollView
         android:id="@+id/login_form"
+        android:background="@drawable/acta_defunc_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -34,8 +35,9 @@
                 android:id="@+id/login"
                 android:text="Inicie sesión"
                 android:textSize="25dp"
+                android:elevation="5dp"
                 android:textStyle="italic"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorAccent1"
                 android:gravity="center"
                 android:layout_marginTop="30dp"
                 android:paddingBottom="25dp"
@@ -45,6 +47,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHighlight="@color/colorAccent1"
                 android:padding="5dp">
 
                 <AutoCompleteTextView
@@ -53,6 +56,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_user"
                     android:inputType="text"
+                    android:textColorHighlight="@color/colorAccent1"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -61,12 +65,14 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHighlight="@color/colorAccent1"
                 android:padding="5dp">
 
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColorHighlight="@color/colorAccent1"
                     android:hint="@string/prompt_password"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
@@ -88,6 +94,8 @@
                     android:layout_alignParentLeft="true"
                     android:clickable="true"
                     android:padding="5dp"
+                    android:elevation="5dp"
+
                     android:textColor="@color/colorPrimary"
                     android:text="@string/register" />
 
@@ -96,6 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:layout_alignParentRight="true"
+                    android:elevation="5dp"
                     android:clickable="true"
                     android:padding="5dp"
                     android:textColor="@color/colorPrimary"

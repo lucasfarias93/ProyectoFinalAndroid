@@ -9,6 +9,7 @@
     android:id="@+id/login_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/acta_defunc_1"
     android:clipToPadding="true">
 
     <LinearLayout
@@ -68,16 +69,18 @@
 
                     <ImageView
                         android:id="@+id/first_dni"
-                        android:layout_width="203dp"
-                        android:layout_height="153dp"
+                        android:layout_width="170dp"
+                        android:layout_height="135dp"
+                        android:paddingRight="15dp"
                         android:layout_below="@+id/descripcion2"
                         android:gravity="left"
                         android:src="@drawable/dni1" />
 
                     <ImageView
                         android:id="@+id/second_dni"
-                        android:layout_width="200dp"
-                        android:layout_height="150dp"
+                        android:layout_width="170dp"
+                        android:layout_height="135dp"
+                        android:paddingLeft="15dp"
                         android:layout_below="@+id/descripcion2"
                         android:layout_toRightOf="@+id/first_dni"
                         android:gravity="right"

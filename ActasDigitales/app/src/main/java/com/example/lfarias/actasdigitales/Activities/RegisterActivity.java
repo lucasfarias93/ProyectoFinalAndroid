@@ -44,6 +44,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Creado por Lucas.Farias
@@ -105,6 +106,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mActionBar.setTitle("Registro de usuario");
         mActionBar.setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
+
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mDni.clearFocus();
