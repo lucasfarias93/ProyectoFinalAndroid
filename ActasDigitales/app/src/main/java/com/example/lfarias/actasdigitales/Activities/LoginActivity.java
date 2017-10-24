@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -67,6 +69,7 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
     private View mLoginFormView;
     private TextView mRegister, mForgotPassword;
     ProgressDialog dialog;
+    private TextInputLayout mUserLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,8 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
 
         mActionBar.setTitle("Inicio de sesión");
         mActionBar.setDisplayHomeAsUpEnabled(true);*/
+
+        mUserLayout = (TextInputLayout)findViewById(R.id.user_input);
 
         dialog = Utils.createLoadingIndicator(LoginActivity.this);
 
@@ -97,9 +102,9 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
                     if (mPasswordView == null || mPasswordView.getText().toString().isEmpty()) {
                         mPasswordView.setError("Este campo es obligatorio");
                     }
+                } else if (mPasswordView == null || mPasswordView.getText().toString().isEmpty()) {
+                    mPasswordView.setError("Este campo es obligatorio");
                 } else {
-                    /*Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
-                    startActivity(i);*/
                     LoginUserAsynctask asynctask = new LoginUserAsynctask(LoginActivity.this, LoginActivity.this, dialog);
                     List<String> params = new ArrayList<>();
                     params.add(mUserView.getText().toString());
@@ -139,11 +144,6 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
                 startActivity(i);
             }
         });
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
     }
 
     /**

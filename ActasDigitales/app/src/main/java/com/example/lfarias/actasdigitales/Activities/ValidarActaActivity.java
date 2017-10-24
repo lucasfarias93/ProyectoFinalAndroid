@@ -32,12 +32,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ValidarActaActivity extends AppCompatActivity implements UserIdAsynctask.Callback, VerificarValidezAsynctask.Callback{
+public class ValidarActaActivity extends AppCompatActivity implements UserIdAsynctask.Callback, VerificarValidezAsynctask.Callback {
 
-    @Bind(R.id.verificar)Button mVerificar;
-    @Bind(R.id.ir_inicio)Button mIrInicio;
-    @Bind(R.id.code)EditText mCodeActa;
-    @Bind(R.id.nro_doc)EditText mDni;
+    @Bind(R.id.verificar)
+    Button mVerificar;
+    @Bind(R.id.code)
+    EditText mCodeActa;
+    @Bind(R.id.nro_doc)
+    EditText mDni;
 
     ProgressDialog dialog;
 
@@ -64,35 +66,6 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
                 conectParams.setmSearchType(ServiceUtils.SearchType.USER_ID_SEARCH_TYPE);
                 dialog.show();
                 asynctask.execute(conectParams);
-                /*if (mDni.getText().toString().isEmpty()) {
-                    mDni.setError("Este campo es obligatorio");
-                    if (mCodeActa.getText().toString().isEmpty()) {
-                        mCodeActa.setError("Este campo es obligatorio");
-                    }
-                } else {
-                    final ProgressDialog dialog = Utils.createLoadingIndicator(ValidarActaActivity.this);
-
-                    final Handler handler = new Handler();
-                    dialog.setMessage("Aguarde mientras procesamos la información...");
-                    dialog.show();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Do something after 5s = 5000ms
-                            checkActExpire(mCodeActa.getText().toString(), dialog);
-                        }
-                    }, 4000);
-                }
-
-                mIrInicio.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(ValidarActaActivity.this, LandingPageActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                });*/
-
             }
         });
     }
@@ -115,7 +88,7 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
 
     @Override
     public void verificarValidez(Object success) {
-        if(success.toString().contains("No existen actas")){
+        if (success.toString().contains("No existen actas")) {
             dialog.dismiss();
             Utils.createGlobalDialog(this, "Error al validar acta", "No se encontraron actas con los datos ingresados").show();
         } else {
@@ -127,105 +100,15 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
             } else {
                 builder = new AlertDialog.Builder(this);
             }
+            String validez = success.toString().substring(1, success.toString().length() - 1);
             builder.setTitle("Vigencia de Acta")
-                    .setMessage(success.toString())
+                    .setMessage(validez)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     })
-                    .setIcon(R.drawable.information)
+                    .setIcon(R.drawable.success_1)
                     .show();
-        }
-    }
-
-    public void checkActExpire(String code, ProgressDialog dialog) {
-        AlertDialog.Builder builder;
-        switch (code) {
-            case "12345":
-                dialog.dismiss();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(ValidarActaActivity.this, R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(ValidarActaActivity.this);
-                }
-                builder.setTitle("Acta Vigente")
-                        .setMessage("- Su acta se encuentra en estado vigente.\n" +
-                                " - Tiempo restante de vigencia: 256 días")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                mDni.setText("");
-                                mCodeActa.setText("");
-                                dialog.dismiss();
-                            }
-                        })
-                        .setIcon(R.drawable.information)
-                        .show();
-                break;
-
-            case "00000":
-                dialog.dismiss();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(ValidarActaActivity.this, R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(ValidarActaActivity.this);
-                }
-                builder.setTitle("Acta Vigente")
-                        .setMessage("\" - Su acta se encuentra en estado vigente.\n" +
-                                "- Tiempo restante de vigencia: 15 días")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                mDni.setText("");
-                                mCodeActa.setText("");
-                                dialog.dismiss();
-                            }
-                        })
-                        .setIcon(R.drawable.information)
-                        .show();
-                break;
-
-            case "15963":
-                dialog.dismiss();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(ValidarActaActivity.this, R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(ValidarActaActivity.this);
-                }
-                builder.setTitle("Acta caducada")
-                        .setMessage("Su acta ha caducado. Si neccesita hacer uso de un acta digital, por favor inicie el proceso de solicitud nuevamente.")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                mDni.setText("");
-                                mCodeActa.setText("");
-                                dialog.dismiss();
-                            }
-                        })
-                        .setIcon(R.drawable.information)
-                        .show();
-                break;
-
-            default:
-                dialog.dismiss();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(ValidarActaActivity.this, R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(ValidarActaActivity.this);
-                }
-                builder.setTitle("Error")
-                        .setMessage("No se ha encontrado un acta con el numero ingresado. Revise el numero que figura en el acta digital e intente nuevamente")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                mDni.setText("");
-                                mCodeActa.setText("");
-                                dialog.dismiss();
-                            }
-                        })
-                        .setIcon(R.drawable.information)
-                        .show();
-                break;
         }
     }
 
@@ -237,7 +120,7 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 finish();
                 CacheService.getInstance().clear();

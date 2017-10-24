@@ -342,13 +342,13 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                         }
                     });
             // Changing message text color
-            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
 
             // Changing action button text color
             View sbView = snackbar.getView();
-            sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            sbView.setBackgroundColor(getResources().getColor(R.color.white));
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(getResources().getColor(R.color.colorAccent));
+            textView.setTextColor(getResources().getColor(R.color.colorPrimary));
             snackbar.show();
         }
         else {
@@ -368,9 +368,9 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
             // Changing action button text color
             View sbView = snackbar.getView();
-            sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            sbView.setBackgroundColor(getResources().getColor(R.color.white));
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(getResources().getColor(R.color.colorAccent));
+            textView.setTextColor(getResources().getColor(R.color.colorPrimary));
             snackbar.show();
 
         }

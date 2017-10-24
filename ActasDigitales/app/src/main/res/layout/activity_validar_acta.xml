@@ -85,13 +85,6 @@
         android:paddingTop="35dp">
 
         <Button
-            android:id="@+id/ir_inicio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:text="Ir al Inicio"/>
-
-        <Button
             android:id="@+id/verificar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

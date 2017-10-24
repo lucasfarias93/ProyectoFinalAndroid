@@ -112,7 +112,7 @@ public class ReportErrorActivity extends AppCompatActivity {
             builder = new AlertDialog.Builder(ReportErrorActivity.this);
         }
         builder.setTitle("Error Reportado")
-                .setMessage("El reporte fue enviado al Archivo General del Registro Civil con éxito. Tenga en cuenta que su resolución puede demorar de 2-5 dias hábiles.")
+                .setMessage("El reporte fue enviado al Archivo General del Registro Civil con éxito.\n Tenga en cuenta que su resolución puede demorar de 2-5 dias hábiles.")
                 .setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -120,7 +120,7 @@ public class ReportErrorActivity extends AppCompatActivity {
                         startActivity(i);
                     }
                 })
-                .setIcon(R.drawable.information)
+                .setIcon(R.drawable.success_1)
                 .show();
     }
 

@@ -48,46 +48,76 @@ import jp.wasabeef.blurry.Blurry;
 
 /**
  * Creado por Lucas.Farias
- *
+ * <p>
  * Archivo creado: 9 de Septiembre de 2017
- *
+ * <p>
  * Descripción: Activity principal en la que se incluyo toda la lógica del registro del usuario en la aplicación.
- *              Se manejaron los eventos de transición, la comunicación con los procesos de llamada al web service,
- *              el manejo de errores tanto unitarios como de la creación de pop-ups o alertas de error.
+ * Se manejaron los eventos de transición, la comunicación con los procesos de llamada al web service,
+ * el manejo de errores tanto unitarios como de la creación de pop-ups o alertas de error.
  */
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback, RegisterUserAsynctask.Callback {
 
-    @Bind(R.id.dni)EditText mDni;
-    @Bind(R.id.tramide_id) EditText mTramideId;
-    @Bind(R.id.name) EditText mName;
-    @Bind(R.id.user) EditText mUser;
-    @Bind(R.id.password) EditText mPassword;
-    @Bind(R.id.repeat_password) EditText mRepeatPassword;
-    @Bind(R.id.email) EditText mEmail;
-    @Bind(R.id.spinner_phone) Spinner mSpinner;
-    @Bind(R.id.phone_number) EditText mPhoneNumber;
-    @Bind(R.id.button_register) Button mButton;
-    @Bind(R.id.last_name) EditText mLast_name;
-    @Bind(R.id.descripcion1) TextView mDescription;
-    @Bind(R.id.spinner_privincia) Spinner mProvince;
-    @Bind(R.id.spinner_department) Spinner mDepartment;
-    @Bind(R.id.spinner_localidad) Spinner mLocalidad;
-    @Bind(R.id.address) EditText mAddress;
-    @Bind(R.id.button_continue) Button mContinue;
-    @Bind(R.id.register_layout) LinearLayout layout;
-    @Bind(R.id.button_report) Button mButtonReport;
-    @Bind(R.id.first_dni) ImageView dni1;
-    @Bind(R.id.second_dni) ImageView dni2;
-    @Bind(R.id.terminos) TextView mTermAndConditions;
-    @Bind(R.id.descripcion2) TextView mDescripcion2;
-    @Bind(R.id.checkbox) CheckBox mCheckbox;
-    @Bind(R.id.image_contact)ImageView mContact;
-    @Bind(R.id.image_password)ImageView mPassword1;
-    @Bind(R.id.image_password2)ImageView mPassword2;
-    @Bind(R.id.image_email)ImageView mEmail2;
-    @Bind(R.id.image_telefono)ImageView mTelefono;
-    @Bind(R.id.image_domicilio)ImageView mDomicilio;
+    @Bind(R.id.dni)
+    EditText mDni;
+    @Bind(R.id.tramide_id)
+    EditText mTramideId;
+    @Bind(R.id.name)
+    EditText mName;
+    @Bind(R.id.user)
+    EditText mUser;
+    @Bind(R.id.password)
+    EditText mPassword;
+    @Bind(R.id.repeat_password)
+    EditText mRepeatPassword;
+    @Bind(R.id.email)
+    EditText mEmail;
+    @Bind(R.id.spinner_phone)
+    Spinner mSpinner;
+    @Bind(R.id.phone_number)
+    EditText mPhoneNumber;
+    @Bind(R.id.button_register)
+    Button mButton;
+    @Bind(R.id.last_name)
+    EditText mLast_name;
+    @Bind(R.id.descripcion1)
+    TextView mDescription;
+    @Bind(R.id.spinner_privincia)
+    Spinner mProvince;
+    @Bind(R.id.spinner_department)
+    Spinner mDepartment;
+    @Bind(R.id.spinner_localidad)
+    Spinner mLocalidad;
+    @Bind(R.id.address)
+    EditText mAddress;
+    @Bind(R.id.button_continue)
+    Button mContinue;
+    @Bind(R.id.register_layout)
+    LinearLayout layout;
+    @Bind(R.id.button_report)
+    Button mButtonReport;
+    @Bind(R.id.first_dni)
+    ImageView dni1;
+    @Bind(R.id.second_dni)
+    ImageView dni2;
+    @Bind(R.id.terminos)
+    TextView mTermAndConditions;
+    @Bind(R.id.descripcion2)
+    TextView mDescripcion2;
+    @Bind(R.id.checkbox)
+    CheckBox mCheckbox;
+    @Bind(R.id.image_contact)
+    ImageView mContact;
+    @Bind(R.id.image_password)
+    ImageView mPassword1;
+    @Bind(R.id.image_password2)
+    ImageView mPassword2;
+    @Bind(R.id.image_email)
+    ImageView mEmail2;
+    @Bind(R.id.image_telefono)
+    ImageView mTelefono;
+    @Bind(R.id.image_domicilio)
+    ImageView mDomicilio;
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -102,9 +132,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        ActionBar mActionBar = getSupportActionBar();
+        /*ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Registro de usuario");
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);*/
         ButterKnife.bind(this);
 
 
@@ -149,7 +179,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mCheckbox.isChecked()){
+                if (mCheckbox.isChecked()) {
                     mCheckbox.setError(null);
                 }
             }
@@ -219,7 +249,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 } else if (!Utils.emailValidator(email)) {
                     mEmail.setError("El formato del email ingresado no es válido");
                 }
-                if(!mCheckbox.isChecked()){
+                if (!mCheckbox.isChecked()) {
                     mCheckbox.setError("Debe aceptar los terminos y condiciones para poder registrarse");
                 }
             }
@@ -228,19 +258,28 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mDni.getText().toString().isEmpty()) {
+                    mDni.setError("Este campo es obligatorio");
+                    if (mTramideId.getText().toString().isEmpty()) {
+                        mTramideId.setError("Este campo es obligatorio");
+                    }
+                } else if (mTramideId.getText().toString().isEmpty()) {
+                    mTramideId.setError("Este campo es obligatorio");
+                } else {
 
-                DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this, dialog);
-                List<String> params = new ArrayList<>();
-                params.add(mTramideId.getText().toString());
-                params.add(mDni.getText().toString());
+                    DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this, dialog);
+                    List<String> params = new ArrayList<>();
+                    params.add(mTramideId.getText().toString());
+                    params.add(mDni.getText().toString());
 
-                ConnectionParams conectParams = new ConnectionParams();
-                conectParams.setmControllerId(ServiceUtils.Controllers.TRAMITE_DNI_CONTROLLER);
-                conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_CIUDADANO);
-                conectParams.setmSearchType(ServiceUtils.SearchType.CIUDADANO_SEARCH_TYPE);
-                conectParams.setParams(params);
-                dialog.show();
-                userDataRetrieveAsynctask.execute(conectParams);
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.TRAMITE_DNI_CONTROLLER);
+                    conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_CIUDADANO);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.CIUDADANO_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    dialog.show();
+                    userDataRetrieveAsynctask.execute(conectParams);
+                }
             }
         });
 
@@ -519,13 +558,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                         }
                     });
             // Changing message text color
-            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
 
             // Changing action button text color
             View sbView = snackbar.getView();
-            sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            sbView.setBackgroundColor(getResources().getColor(R.color.white));
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(getResources().getColor(R.color.colorAccent));
+            textView.setTextColor(getResources().getColor(R.color.colorPrimary));
             snackbar.show();
 
         } else {

@@ -43,7 +43,8 @@
         <activity
             android:name=".Activities.RegisterActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".Activities.UserSettingsRecoverActivity"
             android:configChanges="orientation|keyboardHidden"
