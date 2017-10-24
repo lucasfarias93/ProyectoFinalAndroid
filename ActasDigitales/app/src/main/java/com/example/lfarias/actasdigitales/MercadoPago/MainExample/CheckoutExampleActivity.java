@@ -56,9 +56,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mCheckoutPreferenceId = ExampleUtils.DUMMY_PREFERENCE_ID;
         mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
 
-        ActionBar mActionBar = getSupportActionBar();
+        /*ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Pagar con MercadoPago");
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);*/
 
         mRegularLayout = findViewById(R.id.regularLayout);
 

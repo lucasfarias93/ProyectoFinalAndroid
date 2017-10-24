@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
@@ -235,6 +236,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.info_black)
+                        .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                         .setContentTitle("Recuperación de cuenta")
                         .setContentText("Se le ha enviado un email a su casilla de correo con...")
                         .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission

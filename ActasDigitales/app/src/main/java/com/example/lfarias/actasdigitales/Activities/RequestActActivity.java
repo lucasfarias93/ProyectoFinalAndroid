@@ -281,7 +281,7 @@ public class RequestActActivity extends AppCompatActivity {
                                                 dialog.dismiss();
                                             }
                                         })
-                                        .setIcon(R.drawable.information)
+                                        .setIcon(R.drawable.success_1)
                                         .show();
                             }
                         }

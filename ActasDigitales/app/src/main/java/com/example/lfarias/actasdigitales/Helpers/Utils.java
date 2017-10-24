@@ -54,7 +54,7 @@ public class Utils {
 
                     }
                 })
-                .setIcon(R.drawable.information);
+                .setIcon(R.drawable.error_1);
         return builder;
     }
 

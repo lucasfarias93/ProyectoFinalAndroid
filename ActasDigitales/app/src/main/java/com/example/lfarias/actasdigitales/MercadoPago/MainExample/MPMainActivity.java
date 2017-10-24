@@ -31,9 +31,9 @@ public class MPMainActivity extends AppCompatActivity {
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog()
                 .build());
 
-        ActionBar mActionBar = getSupportActionBar();
+        /*ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Pagar con MercadoPago");
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);*/
 
         layout = (LinearLayout) findViewById(R.id.volver_layout);
         layout.setOnClickListener(new View.OnClickListener() {
