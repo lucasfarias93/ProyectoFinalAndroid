@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:gravity="center_horizontal"
     android:orientation="vertical"
@@ -11,7 +12,7 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/acta_defunc_1">
+        android:background="@drawable/gradient_background">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -43,8 +44,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
+                    android:textColorHint="@color/white"
+                    app:hintTextAppearance="@style/mytext"
                     android:paddingTop="120dp"
-
+                    app:theme="@style/mytext"
                     >
 
                     <AutoCompleteTextView
@@ -55,7 +58,6 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:textColorHighlight="@color/colorAccent1"
                         />
 
                 </android.support.design.widget.TextInputLayout>
@@ -65,6 +67,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
+                    android:textColorHint="@color/white"
+                    app:hintTextAppearance="@style/mytext"
+                    app:theme="@style/mytext"
                     >
 
                     <EditText
@@ -78,7 +83,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:textColorHighlight="@color/colorAccent1"/>
+                      />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -94,9 +99,8 @@
                         android:clickable="true"
                         android:elevation="5dp"
                         android:padding="5dp"
-
                         android:text="@string/register"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@android:color/white" />
 
                     <TextView
                         android:id="@+id/forgotPassword"
@@ -107,7 +111,7 @@
                         android:elevation="5dp"
                         android:padding="5dp"
                         android:text="@string/forgot_password"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@android:color/white" />
 
                 </RelativeLayout>
 

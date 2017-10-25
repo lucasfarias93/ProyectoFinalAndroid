@@ -125,9 +125,9 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
         mLoginFormView = findViewById(R.id.login_form);
 
         mRegister = (TextView) findViewById(R.id.register);
-        mRegister.setTextColor(getResources().getColor(R.color.colorPrimary));
+        mRegister.setTextColor(getResources().getColor(R.color.white));
         mForgotPassword = (TextView) findViewById(R.id.forgotPassword);
-        mForgotPassword.setTextColor(getResources().getColor(R.color.colorPrimary));
+        mForgotPassword.setTextColor(getResources().getColor(R.color.white));
 
         mForgotPassword.setOnClickListener(new OnClickListener() {
             @Override
