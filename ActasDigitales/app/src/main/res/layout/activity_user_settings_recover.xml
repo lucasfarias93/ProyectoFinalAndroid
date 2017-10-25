@@ -32,15 +32,6 @@
         android:textColor="@android:color/black" />
 
     <TextView
-        android:id="@+id/text_new_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="7sp"
-        android:padding="3dp"
-        android:text="@string/recuperar_codigo_nuevo"
-        android:textColor="@android:color/black" />
-
-    <TextView
         android:id="@+id/text_code_exists"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

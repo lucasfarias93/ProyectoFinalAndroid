@@ -62,8 +62,6 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     TextView mTextCodeExists;
     @Bind(R.id.link_new_code)
     TextView mTextLinkNewCode;
-    @Bind(R.id.text_new_code)
-    TextView mTextNewCodeInstructions;
     @Bind(R.id.email_sent_code)
     EditText mEmail;
     @Bind(R.id.address)
@@ -117,7 +115,6 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         mNuevaContraseñaIndicaciones.setVisibility(View.GONE);
         mTextLinkNewCode.setVisibility(View.GONE);
         mTextLinkNewCode.setTextColor(Color.BLUE);
-        mTextNewCodeInstructions.setVisibility(View.GONE);
         /*mButtonCodeExists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +153,6 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 mTextIntroduction.setVisibility(View.GONE);
                 mTextInit.setVisibility(View.GONE);
                 mTextCodeExists.setVisibility(View.GONE);
-                mTextNewCodeInstructions.setVisibility(View.VISIBLE);
                 user.setEmail(mEmail.getText().toString());
                 sendEmail(mEmail.getText().toString());
             }
@@ -294,7 +290,6 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     public void validateCode(Boolean success) {
 
             mTextLinkNewCode.setVisibility(View.GONE);
-            mTextNewCodeInstructions.setVisibility(View.GONE);
             if(success){
                 dialog.dismiss();
                 mPasswordLayout.setVisibility(View.VISIBLE);

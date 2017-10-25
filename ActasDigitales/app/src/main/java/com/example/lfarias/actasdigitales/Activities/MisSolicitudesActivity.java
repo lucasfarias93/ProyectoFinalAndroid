@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -34,6 +37,7 @@ public class MisSolicitudesActivity extends AppCompatActivity {
     List<Map<String, String>> mapStringListItem;
     List<SolicitudActa> actas;
     TextView textView;
+    EditText mFilter;
 
     private static final String TEXT1 = "text1";
     private static final String TEXT2 = "text2";
@@ -46,6 +50,8 @@ public class MisSolicitudesActivity extends AppCompatActivity {
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Mis solicitudes");
         mActionBar.setDisplayHomeAsUpEnabled(true);
+
+        mFilter = (EditText)findViewById(R.id.list_filter);
 
         textView = (TextView)findViewById(R.id.text_no_soli);
         textView.setVisibility(View.GONE);
@@ -76,7 +82,24 @@ public class MisSolicitudesActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mFilter.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                // When user changed the Text
+                ((SimpleAdapter)MisSolicitudesActivity.this.adapter).getFilter().filter(cs);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {}
+        });
     }
+
+
 
     public List<Map<String, String>> getListItems(List<SolicitudActa> userList) {
         final List<Map<String, String>> listItem =
@@ -97,7 +120,7 @@ public class MisSolicitudesActivity extends AppCompatActivity {
         final int[] toLayoutId = new int[] {android.R.id.text1, android.R.id.text2};
         final List<Map<String, String>> list = getListItems(userList);
 
-        return new SimpleAdapter(this, list,
+        return new SimpleAdapter(MisSolicitudesActivity.this, list,
                 android.R.layout.simple_list_item_2,
                 fromMapKey, toLayoutId);
     }
