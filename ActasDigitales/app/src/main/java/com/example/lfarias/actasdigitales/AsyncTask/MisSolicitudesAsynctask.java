@@ -1,17 +1,19 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.view.ContextThemeWrapper;
-import android.widget.ImageView;
 
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,20 +26,21 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by lfarias on 10/9/17.
+ * Created by lfarias on 10/26/17.
  */
 
-public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
+public class MisSolicitudesAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
     Context context;
     Callback callback;
+    List<JSONObject> listadoSolicitudes = new ArrayList<>();
 
-    public ImagenActaAsynctask(Context context, Callback callback) {
+    public MisSolicitudesAsynctask(Context context, Callback callback) {
         this.callback = callback;
         this.context = context;
     }
 
     public interface Callback {
-        void getImageBase64(String success);
+        void getSolicitudesList(List<JSONObject> success);
     }
 
     @Override
@@ -98,8 +101,18 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
         Integer searchType = Integer.parseInt(result.get(1));
 
         switch (searchType) {
-            case 10:
-                callback.getImageBase64(result.get(0));
+            case 13:
+                try {
+                    JSONObject object = new JSONObject(result.get(0));
+                    JSONArray array = object.getJSONArray("listSolicitudacta");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object_list = array.getJSONObject(i);
+                        listadoSolicitudes.add(object_list);
+                    }
+                    callback.getSolicitudesList(listadoSolicitudes);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             default:
@@ -110,11 +123,11 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
                 } else {
                     builder = new AlertDialog.Builder(context);
                 }
-                builder.setTitle("Error al obtener la imagen")
-                        .setMessage("Ocurrio un error al obtener la imagen de su acta. Por favor intente nuevamente mas tarde o contacte al soporte.")
+                builder.setTitle("Error de obtencion de solicitudes")
+                        .setMessage("Ocurrio un error al obtener las solicitudes asociadas a su usuario. Por favor intente nuevamente mas tarde o contacte al soporte.")
                         .setNegativeButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                callback.getImageBase64("");
+
                             }
                         })
                         .setIcon(R.drawable.error_1)

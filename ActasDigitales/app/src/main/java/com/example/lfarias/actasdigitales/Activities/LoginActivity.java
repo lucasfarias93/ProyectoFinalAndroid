@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
     private static final int REQUEST_READ_CONTACTS = 0;
 
     // UI references.
-    private AutoCompleteTextView mUserView;
+    private EditText mUserView;
     private EditText mPasswordView;
     private View mLoginFormView;
     private TextView mRegister, mForgotPassword;
@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
         dialog = Utils.createLoadingIndicator(LoginActivity.this);
 
         // Set up the login form.
-        mUserView = (AutoCompleteTextView) findViewById(R.id.email);
+        mUserView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
