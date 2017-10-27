@@ -37,7 +37,7 @@
                     android:id="@+id/año_acta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Acta año: 2016"
+                    android:text="Acta año: "
                     android:textSize="15sp" />
 
                 <TextView
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="Acta nro: 1689"
+                    android:text="Acta nro: "
                     android:textSize="15sp" />
 
                 <TextView
@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/año_acta"
-                    android:text="Libro nro: 56"
+                    android:text="Libro nro: "
                     android:textSize="15sp" />
 
                 <TextView
@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/nro_libro"
-                    android:text="Oficina Inscripcion: 1380 - Vicente Z."
+                    android:text="Oficina Inscripcion: "
                     android:textSize="15sp" />
 
                 <TextView
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/oficina"
-                    android:text="DNI: 36850606"
+                    android:text="DNI: "
                     android:textSize="15sp" />
             </RelativeLayout>
 

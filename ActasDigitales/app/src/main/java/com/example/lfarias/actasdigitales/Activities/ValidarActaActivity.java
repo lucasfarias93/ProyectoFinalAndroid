@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +51,7 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
         ButterKnife.bind(this);
 
         ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setTitle("Verificar Acta");
+        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Verificar Acta</font>"));
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         dialog = Utils.createLoadingIndicator(this);

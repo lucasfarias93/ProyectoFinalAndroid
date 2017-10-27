@@ -3,10 +3,13 @@ package com.example.lfarias.actasdigitales.Activities;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,12 +18,17 @@ import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lfarias.actasdigitales.AsyncTask.MisSolicitudesAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.UserIdAsynctask;
@@ -28,6 +36,7 @@ import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.SolicitudActa;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
+import com.example.lfarias.actasdigitales.MercadoPago.MainExample.MPMainActivity;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
@@ -48,9 +57,12 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
     List<SolicitudActa> actas_1;
     TextView textView;
     EditText mFilter;
+    LinearLayout listItemLayout;
 
     private static final String TEXT1 = "text1";
     private static final String TEXT2 = "text2";
+    private static final String TEXT3 = "text3";
+    private String payImage, deleteImage;
     ProgressDialog dialog;
 
     @Override
@@ -59,7 +71,7 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
         setContentView(R.layout.activity_mis_solicitudes);
 
         ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setTitle("Mis solicitudes");
+        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Mis solicitudes</font>"));
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mFilter = (EditText) findViewById(R.id.list_filter);
@@ -83,7 +95,7 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 for (SolicitudActa acta : actas_1) {
-                    TextView soliView = (TextView) view.findViewById(android.R.id.text1);
+                    TextView soliView = (TextView) view.findViewById(R.id.nombre_prop);
                     if (acta.getNombrePropietarioActa().equals(soliView.getText().toString())) {
                         Intent i = new Intent(MisSolicitudesActivity.this, DetalleSolicitud.class);
                         i.putExtra("userName", acta.getNombrePropietarioActa());
@@ -101,6 +113,7 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
         });
 
         mFilter.clearFocus();
+        mFilter.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         mFilter.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -127,20 +140,22 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
         for (final SolicitudActa solicitud : userList) {
             final Map<String, String> listItemMap = new HashMap<>();
             listItemMap.put(TEXT1, solicitud.getNombrePropietarioActa());
-            listItemMap.put(TEXT2, solicitud.getNombreParentesco());
+            listItemMap.put(TEXT2, solicitud.getNombreEstadoSolicitud());
+            listItemMap.put(TEXT3, solicitud.getNombreParentesco());
             listItem.add(Collections.unmodifiableMap(listItemMap));
+
         }
 
         return Collections.unmodifiableList(listItem);
     }
 
     private ListAdapter createListAdapter(List<SolicitudActa> userList) {
-        final String[] fromMapKey = new String[]{TEXT1, TEXT2};
-        final int[] toLayoutId = new int[]{android.R.id.text1, android.R.id.text2};
+        final String[] fromMapKey = new String[]{TEXT1, TEXT2, TEXT3, payImage, deleteImage};
+        final int[] toLayoutId = new int[]{R.id.nombre_prop, R.id.estado_acta, R.id.parentesco, R.id.pagar, R.id.borrar};
         final List<Map<String, String>> list = getListItems(userList);
-
+        
         return new SimpleAdapter(MisSolicitudesActivity.this, list,
-                android.R.layout.simple_list_item_2,
+                R.layout.item_list,
                 fromMapKey, toLayoutId);
     }
 
@@ -201,6 +216,28 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
             textView.setVisibility(View.GONE);
             adapter = createListAdapter(actas);
             view.setAdapter(adapter);
+            enableExtraButtons(view);
+        }
+    }
+    
+    public void navigateToPaymentActivity(View v){
+        Intent i = new Intent(MisSolicitudesActivity.this, MPMainActivity.class);
+        startActivity(i);
+    }
+    
+    public void cancelSelectedRequest(View v){
+        Toast.makeText(this, "Canceled request", Toast.LENGTH_SHORT).show();
+    }
+
+    public void enableExtraButtons(ListView view){
+        ListAdapter adapter = view.getAdapter();
+        for(int i = 0; i < adapter.getCount(); i++){
+            Object object = adapter.getItem(i);
+            LinearLayout v = (LinearLayout) adapter.getView(i, null, view);
+            RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.images_id);
+            ImageView view2= (ImageView) layout.findViewById(R.id.pagar);
+            ImageView view3= (ImageView) layout.findViewById(R.id.borrar);
+            view2.setVisibility(View.GONE);
         }
     }
 }

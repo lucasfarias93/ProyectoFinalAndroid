@@ -37,6 +37,7 @@ public class ServiceUtils {
         public static final String CAMBIAR_CLAVE_MOBILE = "cambiar_clave_mobile";
         public static final String BUSCAR_PARENTESCO = "buscar_parentesco_tipolibro_mobile";
         public static final String LISTADO_SOLICITUDES = "listado_android";
+        public static final String CREAR_SOLICITUD = "crear_solicitud_android";
 
     }
 
@@ -55,6 +56,7 @@ public class ServiceUtils {
         public static final String RECUPERACION_CONTRASEÑA_PATH = "olvido";
         public static final String COMMON_INDEX_METHOD = "index";
         public static final String LISTADO_PATH = "listado";
+        public static final String SOLICITUD_PATH = "solicitud";
         public static final String RECUPERAR_CONTRASEÑA_CAMBIO_CONTROLLER = "recuperar";
         public static final String REGISTER_USER = "crear_mobile";
         public static final String VERIFICAR_CONTROLLER = "verificar";
@@ -80,6 +82,7 @@ public class ServiceUtils {
         public static final Integer CAMBIAR_CLAVE_MOBILE = 11;
         public static final Integer BUSCAR_PARENTESCO_SEARCH_TYPE = 12;
         public static final Integer BUSCAR_LISTADO_SOLICITUDES_TYPE = 13;
+        public static final Integer CREAR_SOLICITUD_SEARCH_TYPE = 14;
     }
 
     public static class RequestData{

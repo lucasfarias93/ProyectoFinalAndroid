@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lfarias.actasdigitales.AsyncTask.ChangePasswordAsynctask;
+import com.example.lfarias.actasdigitales.AsyncTask.CrearSolicitudAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
 import com.example.lfarias.actasdigitales.AsyncTask.ImagenActaAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.SearchParentBookTypeAsynctask;
@@ -98,7 +100,7 @@ public class RequestActActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setTitle("Solicitar acta");
+        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Solicitar acta </font>"));
         mActionBar.setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -114,7 +116,7 @@ public class RequestActActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback, SearchParentBookTypeAsynctask.Callback {
+    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback, SearchParentBookTypeAsynctask.Callback , CrearSolicitudAsynctask.Callback{
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -256,33 +258,17 @@ public class RequestActActivity extends AppCompatActivity {
                                 asynctask.execute(conectParams);
                                 mButtonVisualize.setText("Confirmar");
                             } else if("Confirmar".equals(mButtonVisualize.getText().toString())){
-                                AlertDialog.Builder builder;
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    ContextThemeWrapper ctw = new ContextThemeWrapper(getContext(), R.style.AppTheme_PopupOverlay);
-                                    builder = new AlertDialog.Builder(ctw);
-                                } else {
-                                    builder = new AlertDialog.Builder(getContext());
-                                }
-                                builder.setTitle("Acta creada!")
-                                        .setMessage("El acta se ha creado exitosamente. ¿Desea realizar el pago de los códigos provinciales?")
-                                        .setPositiveButton("PAGAR", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent i = new Intent(getContext(), MPMainActivity.class);
-                                                startActivity(i);
-                                                getActivity().finish();
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .setNegativeButton("VOLVER", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent i = new Intent(getContext(), LandingPageActivity.class);
-                                                startActivity(i);
-                                                getActivity().finish();
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .setIcon(R.drawable.success_1)
-                                        .show();
+                                CrearSolicitudAsynctask asynctask = new CrearSolicitudAsynctask(getContext(), PlaceholderFragment.this);
+                               /* List<String> params = new ArrayList<>();
+                                params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
+                                params.add(String.valueOf(CacheService.getInstance().getParentesco()));*/
+
+                                ConnectionParams conectParams = new ConnectionParams();
+                                conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.SOLICITUD_PATH);
+                                conectParams.setmActionId(ServiceUtils.Actions.CREAR_SOLICITUD);
+                                conectParams.setmSearchType(ServiceUtils.SearchType.CREAR_SOLICITUD_SEARCH_TYPE);
+                                /*conectParams.setParams(params);*/
+                                asynctask.execute(conectParams);
                             }
                         }
                     });
@@ -422,6 +408,11 @@ public class RequestActActivity extends AppCompatActivity {
             conectParams.setParams(params);
 
             provincesDataRetrieveAsynctask.execute(conectParams);
+        }
+
+        @Override
+        public void createRequest(Boolean success) {
+
         }
     }
 

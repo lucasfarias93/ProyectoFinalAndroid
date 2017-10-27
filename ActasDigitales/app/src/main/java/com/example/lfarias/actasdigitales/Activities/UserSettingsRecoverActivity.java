@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.view.ContextThemeWrapper;
+import android.text.Html;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -92,8 +93,8 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings_recover);
         ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setTitle("Recuperar contraseña");
         mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Recuperar contraseña </font>"));
         ButterKnife.bind(this);
 
         helper = new SQLiteDatabaseHelper(this);

@@ -4,12 +4,16 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Handler;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,9 +38,15 @@ public class ReportErrorActivity extends AppCompatActivity {
     @Bind(R.id.button_enviar_reporte)
     Button mButtonReport;
     @Bind(R.id.nombre_prop_acta)
-    EditText mNombreProp;
+    TextInputEditText mNombreProp;
     @Bind(R.id.apellido_prop_acta)
     EditText mApellidoProp;
+
+    @Bind(R.id.nombre_prop_acta_layout)
+    TextInputLayout nombreLayout;
+    @Bind(R.id.apellido_prop_acta_layout)
+    TextInputLayout apellitoLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +55,7 @@ public class ReportErrorActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setTitle("Reporte de Error");
+        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Reporte de Error</font>"));
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         List<String> spinnerArray = new ArrayList<>();
@@ -75,13 +85,18 @@ public class ReportErrorActivity extends AppCompatActivity {
                 if (mSpinnerReport.getSelectedItem().toString().equals("Seleccione tipo de Error")) {
                     Toast.makeText(ReportErrorActivity.this, "Debe seleccionar un tipo de error", Toast.LENGTH_SHORT).show();
                 } else if (mNombreProp.getText().toString().equals("")) {
-                    mNombreProp.setError("Este campo es obligatorio");
+                    nombreLayout.setError("Este campo es obligatorio");
+                    mNombreProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
+                    nombreLayout.setErrorTextAppearance(R.style.error_orange);
                     if (mApellidoProp.getText().toString().equals("")) {
-                        mApellidoProp.setError("Este campo es obligatorio");
+                        apellitoLayout.setError("Este campo es obligatorio");
+                        mApellidoProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
+                        apellitoLayout.setErrorTextAppearance(R.style.error_orange);
                     }
-
                 } else if (mApellidoProp.getText().toString().equals("")) {
-                    mApellidoProp.setError("Este campo es obligatorio");
+                    apellitoLayout.setError("Este campo es obligatorio");
+                    mApellidoProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
+                    apellitoLayout.setErrorTextAppearance(R.style.error_orange);
                 } else {
                     final ProgressDialog dialog = Utils.createLoadingIndicator(ReportErrorActivity.this);
 

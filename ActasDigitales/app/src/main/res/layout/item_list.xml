@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="2">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/nombre_prop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="HOLA"
+            android:textSize="20sp"/>
+
+        <RelativeLayout
+            android:id="@+id/attributes_layout"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="8dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/nombre_prop"
+            >
+
+            <TextView
+                android:id="@+id/estado_acta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HOLA"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/parentesco"
+                android:paddingLeft="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HOLA"
+
+                android:textSize="14sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/images_id"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:paddingTop="7dp">
+
+        <ImageView
+            android:id="@+id/pagar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="25dp"
+            android:tag="1"
+            android:layout_alignParentRight="true"
+            android:onClick="navigateToPaymentActivity"
+            android:src="@drawable/payment"/>
+
+        <ImageView
+            android:id="@+id/borrar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:tag="2"
+            android:onClick="cancelSelectedRequest"
+            android:layout_toLeftOf="@+id/pagar"
+            android:src="@drawable/trash"
+            />
+    </RelativeLayout>
+
+</LinearLayout>
