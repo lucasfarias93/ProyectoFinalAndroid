@@ -90,7 +90,7 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:clickable="true"
-                android:text="VALIDAR VALIDEZ ACTA"
+                android:text="VALIDAR VIGENCIA ACTA"
                 android:textSize="20sp"
                 android:textAlignment="center"
                 android:paddingLeft="15dp"/>

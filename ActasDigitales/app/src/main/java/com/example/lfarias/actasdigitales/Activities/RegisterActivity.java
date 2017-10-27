@@ -90,8 +90,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     Button mContinue;
     @Bind(R.id.register_layout)
     LinearLayout layout;
-    @Bind(R.id.button_report)
-    Button mButtonReport;
     @Bind(R.id.first_dni)
     ImageView dni1;
     @Bind(R.id.second_dni)
@@ -175,7 +173,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mLocalidad.setVisibility(View.GONE);
         mAddress.setVisibility(View.GONE);
         mButton.setVisibility(View.GONE);
-        mButtonReport.setVisibility(View.GONE);
         mTermAndConditions.setVisibility(View.GONE);
         mCheckbox.setVisibility(View.GONE);
         mContact.setVisibility(View.GONE);
@@ -449,14 +446,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                         startActivity(i);
                     }
                 });
-                mButtonReport.setVisibility(View.VISIBLE);
-                mButtonReport.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(RegisterActivity.this, ReportErrorActivity.class);
-                        startActivity(i);
-                    }
-                });
+
                 nombre = (String) object.get("nombres");
                 apellido = (String) object.get("apellido");
 

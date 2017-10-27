@@ -60,7 +60,6 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="25dp"
-            android:tag="1"
             android:layout_alignParentRight="true"
             android:onClick="navigateToPaymentActivity"
             android:src="@drawable/payment"/>
@@ -69,7 +68,6 @@
             android:id="@+id/borrar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:tag="2"
             android:onClick="cancelSelectedRequest"
             android:layout_toLeftOf="@+id/pagar"
             android:src="@drawable/trash"

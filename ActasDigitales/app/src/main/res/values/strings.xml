@@ -24,7 +24,7 @@
     <string name="instructions_step2"></string>
     <string name="instrucciones_tramite_dni">Las siguientes imagenes le indican de donde obtener el número de trámite solicitado de su DNI:</string>
     <string name="register"><u>Registrate aqui</u></string>
-    <string name="forgot_password"><u>¿Olvidaste tu contraseña?</u></string>
+    <string name="forgot_password"><u>¿Olvidaste tu cuenta?</u></string>
     <string name="doc_number">Nº de documento</string>
     <string name="name">Nombre</string>
     <string name="last_name">Apellido</string>

@@ -94,7 +94,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         setContentView(R.layout.activity_user_settings_recover);
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Recuperar contraseña </font>"));
+        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Recuperar cuenta </font>"));
         ButterKnife.bind(this);
 
         helper = new SQLiteDatabaseHelper(this);

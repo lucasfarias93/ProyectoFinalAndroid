@@ -150,8 +150,8 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
     }
 
     private ListAdapter createListAdapter(List<SolicitudActa> userList) {
-        final String[] fromMapKey = new String[]{TEXT1, TEXT2, TEXT3, payImage, deleteImage};
-        final int[] toLayoutId = new int[]{R.id.nombre_prop, R.id.estado_acta, R.id.parentesco, R.id.pagar, R.id.borrar};
+        final String[] fromMapKey = new String[]{TEXT1, TEXT2, TEXT3};
+        final int[] toLayoutId = new int[]{R.id.nombre_prop, R.id.estado_acta, R.id.parentesco};
         final List<Map<String, String>> list = getListItems(userList);
         
         return new SimpleAdapter(MisSolicitudesActivity.this, list,
@@ -237,7 +237,7 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
             RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.images_id);
             ImageView view2= (ImageView) layout.findViewById(R.id.pagar);
             ImageView view3= (ImageView) layout.findViewById(R.id.borrar);
-            view2.setVisibility(View.GONE);
+            layout.setVisibility(View.GONE);
         }
     }
 }

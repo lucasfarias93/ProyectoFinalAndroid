@@ -43,6 +43,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lfarias.actasdigitales.AsyncTask.BuscarDatosImagenAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.ChangePasswordAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.CrearSolicitudAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
@@ -116,12 +117,13 @@ public class RequestActActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback, SearchParentBookTypeAsynctask.Callback , CrearSolicitudAsynctask.Callback{
+    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback, SearchParentBookTypeAsynctask.Callback , CrearSolicitudAsynctask.Callback, BuscarDatosImagenAsynctask.Callback{
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         View rootView;
+        ProgressDialog dialog;
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -244,6 +246,7 @@ public class RequestActActivity extends AppCompatActivity {
                     mButtonVisualize.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            dialog = Utils.createLoadingIndicator(getContext());
                             if("Visualizar".equals(mButtonVisualize.getText().toString())){
                                 ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), PlaceholderFragment.this);
                                 List<String> params = new ArrayList<>();
@@ -255,20 +258,22 @@ public class RequestActActivity extends AppCompatActivity {
                                 conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_IMAGEN_MOBILE);
                                 conectParams.setmSearchType(ServiceUtils.SearchType.IMAGEN_ACTA_SEARCH_TYPE);
                                 conectParams.setParams(params);
+                                dialog.show();
                                 asynctask.execute(conectParams);
                                 mButtonVisualize.setText("Confirmar");
                             } else if("Confirmar".equals(mButtonVisualize.getText().toString())){
-                                CrearSolicitudAsynctask asynctask = new CrearSolicitudAsynctask(getContext(), PlaceholderFragment.this);
-                               /* List<String> params = new ArrayList<>();
+                               /* CrearSolicitudAsynctask asynctask = new CrearSolicitudAsynctask(getContext(), PlaceholderFragment.this);
+                                List<String> params = new ArrayList<>();
                                 params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
-                                params.add(String.valueOf(CacheService.getInstance().getParentesco()));*/
+                                params.add(String.valueOf(CacheService.getInstance().getParentesco()));
 
                                 ConnectionParams conectParams = new ConnectionParams();
                                 conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.SOLICITUD_PATH);
                                 conectParams.setmActionId(ServiceUtils.Actions.CREAR_SOLICITUD);
                                 conectParams.setmSearchType(ServiceUtils.SearchType.CREAR_SOLICITUD_SEARCH_TYPE);
-                                /*conectParams.setParams(params);*/
-                                asynctask.execute(conectParams);
+                                conectParams.setParams(params);
+                                asynctask.execute(conectParams);*/
+
                             }
                         }
                     });
@@ -304,7 +309,6 @@ public class RequestActActivity extends AppCompatActivity {
 
         @Override
         public void getImageBase64(String success) {
-
             if (!success.isEmpty() && success != null) {
                 final String imageBase64 = success;
 
@@ -328,6 +332,19 @@ public class RequestActActivity extends AppCompatActivity {
                 final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
                 view.setImageResource(R.drawable.image_not_loaded);
             }
+
+            callUserData();
+        }
+
+        public void callUserData(){
+            BuscarDatosImagenAsynctask asynctask = new BuscarDatosImagenAsynctask(getContext(), PlaceholderFragment.this);
+
+            ConnectionParams conectParams = new ConnectionParams();
+            conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+            conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_DATOS_MOBILE);
+            conectParams.setmSearchType(ServiceUtils.SearchType.OBTENER_DATOS_SEARCH_TYPE);
+
+            asynctask.execute(conectParams);
         }
 
         @Override
@@ -412,6 +429,12 @@ public class RequestActActivity extends AppCompatActivity {
 
         @Override
         public void createRequest(Boolean success) {
+
+        }
+
+        @Override
+        public void getUserDataMobile(JSONObject success) {
+            dialog.dismiss();
 
         }
     }
