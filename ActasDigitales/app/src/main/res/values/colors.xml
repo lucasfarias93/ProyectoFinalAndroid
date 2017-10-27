@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#232059</color>
     <color name="colorAccent">#3f71d4</color>
     <color name="colorAccent1">#cc6700</color>
+    <color name="color_error">#FF8000</color>
+    <color name="color_error2">#8A0808</color>
 
 
     <color name="white">#FFFFFF</color>

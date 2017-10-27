@@ -1,16 +1,14 @@
 package com.example.lfarias.actasdigitales.Activities;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -25,7 +23,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.DatabaseReadObject;
-import com.example.lfarias.actasdigitales.AsyncTask.LoginUserAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.RegisterUserAsynctask;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.Departamento;
@@ -44,7 +41,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * Creado por Lucas.Farias
@@ -59,23 +55,23 @@ import jp.wasabeef.blurry.Blurry;
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatabaseReadObject.Callback, RegisterUserAsynctask.Callback {
 
     @Bind(R.id.dni)
-    EditText mDni;
+    TextInputEditText mDni;
     @Bind(R.id.tramide_id)
-    EditText mTramideId;
+    TextInputEditText mTramideId;
     @Bind(R.id.name)
     EditText mName;
     @Bind(R.id.user)
-    EditText mUser;
+    TextInputEditText mUser;
     @Bind(R.id.password)
-    EditText mPassword;
+    TextInputEditText mPassword;
     @Bind(R.id.repeat_password)
-    EditText mRepeatPassword;
+    TextInputEditText mRepeatPassword;
     @Bind(R.id.email)
-    EditText mEmail;
+    TextInputEditText mEmail;
     @Bind(R.id.spinner_phone)
     Spinner mSpinner;
     @Bind(R.id.phone_number)
-    EditText mPhoneNumber;
+    TextInputEditText mPhoneNumber;
     @Bind(R.id.button_register)
     Button mButton;
     @Bind(R.id.last_name)
@@ -89,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Bind(R.id.spinner_localidad)
     Spinner mLocalidad;
     @Bind(R.id.address)
-    EditText mAddress;
+    TextInputEditText mAddress;
     @Bind(R.id.button_continue)
     Button mContinue;
     @Bind(R.id.register_layout)
@@ -118,6 +114,19 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     ImageView mTelefono;
     @Bind(R.id.image_domicilio)
     ImageView mDomicilio;
+
+    @Bind(R.id.dni_layout)
+    TextInputLayout dniLayout1;
+    @Bind(R.id.tramite_layout)
+    TextInputLayout tramiteLayout;
+    @Bind(R.id.user_layout)
+    TextInputLayout userLayout;
+    @Bind(R.id.password_layout)
+    TextInputLayout passwordLayout;
+    @Bind(R.id.repeat_password_layout)
+    TextInputLayout repeatLayout;
+    @Bind(R.id.email_layout)
+    TextInputLayout emailLayout;
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -189,10 +198,16 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
             @Override
             public void onClick(View v) {
+                String user = mUser.getText().toString();
                 String password = mPassword.getText().toString();
                 String repeatPassword = mRepeatPassword.getText().toString();
                 String email = mEmail.getText().toString();
 
+                if(user.isEmpty()){
+                    userLayout.setError("Este campo es obligatorio");
+                    mUser.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
+                    userLayout.setErrorTextAppearance(R.style.error_red);
+                }
 
                 if ((!password.isEmpty()) && (!repeatPassword.isEmpty()) && password.equals(repeatPassword) && Utils.emailValidator(email) && mCheckbox.isChecked()) {
 
@@ -216,38 +231,66 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     userDataRetrieveAsynctask.execute(conectParams);
 
                 } else if (password.isEmpty()) {
-                    mPassword.setError("Este campo es obligatorio");
+                    passwordLayout.setError("Este campo es obligatorio");
+                    mPassword.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    passwordLayout.setErrorTextAppearance(R.style.error_red);
                     if (repeatPassword.isEmpty()) {
-                        mRepeatPassword.setError("Este campo es obligatorio");
+                        repeatLayout.setError("Este campo es obligatorio");
+                        mRepeatPassword.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                        repeatLayout.setErrorTextAppearance(R.style.error_red);
                         if (email.isEmpty()) {
-                            mEmail.setError("Este campo es obligatorio");
+                            emailLayout.setError("Este campo es obligatorio");
+                            mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                            emailLayout.setErrorTextAppearance(R.style.error_red);
                         } else if (!Utils.emailValidator(email)) {
-                            mEmail.setError("El formato del email ingresado no es válidio");
+                            emailLayout.setError("El formato del email ingresado no es válidio");
+                            mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                            emailLayout.setErrorTextAppearance(R.style.error_red);
                         }
                     }
                 } else if (repeatPassword.isEmpty()) {
-                    mRepeatPassword.setError("Este campo es obligatorio");
+                    repeatLayout.setError("Este campo es obligatorio");
+                    mRepeatPassword.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    repeatLayout.setErrorTextAppearance(R.style.error_red);
                     if (email.isEmpty()) {
-                        mEmail.setError("Este campo es obligatorio");
+                        emailLayout.setError("Este campo es obligatorio");
+                        mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                        emailLayout.setErrorTextAppearance(R.style.error_red);
                     } else if (!Utils.emailValidator(email)) {
-                        mEmail.setError("El formato del email ingresado no es válido");
+                        emailLayout.setError("El formato del email ingresado no es válidio");
+                        mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                        emailLayout.setErrorTextAppearance(R.style.error_red);
                     }
                 } else if (email.isEmpty()) {
-                    mEmail.setError("Este campo es obligatorio");
+                    emailLayout.setError("Este campo es obligatorio");
+                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    emailLayout.setErrorTextAppearance(R.style.error_red);
                 } else if (!Utils.emailValidator(email)) {
-                    mEmail.setError("El formato del email ingresado no es válido");
+                    emailLayout.setError("El formato del email ingresado no es válidio");
+                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    emailLayout.setErrorTextAppearance(R.style.error_red);
                 }
                 if (!(password.equals(repeatPassword))) {
-                    mPassword.setError("Las contraseñas ingresadas no coinciden");
+                    passwordLayout.setError("Las contraseñas ingresadas no coinciden");
+                    mPassword.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    passwordLayout.setErrorTextAppearance(R.style.error_red);
                     if (email.isEmpty()) {
-                        mEmail.setError("Este campo es obligatorio");
+                        emailLayout.setError("Este campo es obligatorio");
+                        mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                        emailLayout.setErrorTextAppearance(R.style.error_red);
                     } else if (!Utils.emailValidator(email)) {
-                        mEmail.setError("El formato del email ingresado no es válido");
+                        emailLayout.setError("El formato del email ingresado no es válidio");
+                        mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                        emailLayout.setErrorTextAppearance(R.style.error_red);
                     }
                 } else if (email.isEmpty()) {
-                    mEmail.setError("Este campo es obligatorio");
+                    emailLayout.setError("Este campo es obligatorio");
+                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    emailLayout.setErrorTextAppearance(R.style.error_red);
                 } else if (!Utils.emailValidator(email)) {
-                    mEmail.setError("El formato del email ingresado no es válido");
+                    emailLayout.setError("El formato del email ingresado no es válidio");
+                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    emailLayout.setErrorTextAppearance(R.style.error_red);
                 }
                 if (!mCheckbox.isChecked()) {
                     mCheckbox.setError("Debe aceptar los terminos y condiciones para poder registrarse");
@@ -258,13 +301,21 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dniLayout1.setError(null);
+                tramiteLayout.setError(null);
                 if (mDni.getText().toString().isEmpty()) {
-                    mDni.setError("Este campo es obligatorio");
+                    dniLayout1.setError("Este campo es obligatorio");
+                    mDni.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    dniLayout1.setErrorTextAppearance(R.style.error_red);
                     if (mTramideId.getText().toString().isEmpty()) {
-                        mTramideId.setError("Este campo es obligatorio");
+                        tramiteLayout.setError("Este campo es obligatorio");
+                        mTramideId.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                        tramiteLayout.setErrorTextAppearance(R.style.error_red);
                     }
                 } else if (mTramideId.getText().toString().isEmpty()) {
-                    mTramideId.setError("Este campo es obligatorio");
+                    tramiteLayout.setError("Este campo es obligatorio");
+                    mTramideId.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    tramiteLayout.setErrorTextAppearance(R.style.error_red);
                 } else {
 
                     DatabaseReadObject userDataRetrieveAsynctask = new DatabaseReadObject(RegisterActivity.this, RegisterActivity.this, dialog);
@@ -575,8 +626,17 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public boolean onSupportNavigateUp() {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
         finish();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 }
 

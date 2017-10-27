@@ -309,8 +309,17 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
     @Override
     public boolean onSupportNavigateUp(){
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
         finish();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 
     @Override
