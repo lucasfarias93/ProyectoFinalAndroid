@@ -1,6 +1,5 @@
 package com.example.lfarias.actasdigitales.Activities;
 
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,10 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,12 +22,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.lfarias.actasdigitales.AsyncTask.CancelRequestAsynctask;
 import com.example.lfarias.actasdigitales.AsyncTask.MisSolicitudesAsynctask;
-import com.example.lfarias.actasdigitales.AsyncTask.UserIdAsynctask;
 import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.SolicitudActa;
@@ -49,7 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MisSolicitudesActivity extends AppCompatActivity implements MisSolicitudesAsynctask.Callback {
+public class MisSolicitudesActivity extends AppCompatActivity implements MisSolicitudesAsynctask.Callback, CancelRequestAsynctask.Callback {
 
     ListView view;
     ListAdapter adapter;
@@ -226,7 +220,15 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
     }
     
     public void cancelSelectedRequest(View v){
-        Toast.makeText(this, "Canceled request", Toast.LENGTH_SHORT).show();
+        CancelRequestAsynctask asynctask = new CancelRequestAsynctask(MisSolicitudesActivity.this, MisSolicitudesActivity.this);
+        List<String> params = new ArrayList<>();
+
+        ConnectionParams conectParams = new ConnectionParams();
+        conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.LISTADO_PATH);
+        conectParams.setmActionId(ServiceUtils.Actions.CANCELAR_SOLICITUD);
+        conectParams.setmSearchType(ServiceUtils.SearchType.CANCELAR_SOLICITUD_SEARCH_TYPE);
+        conectParams.setParams(params);
+        asynctask.execute(conectParams);
     }
 
     public void enableExtraButtons(ListView view){
@@ -239,5 +241,10 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
             ImageView view3= (ImageView) layout.findViewById(R.id.borrar);
             layout.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void getCancelRequestResponse(Boolean success) {
+
     }
 }

@@ -23,6 +23,7 @@
             />
 
         <LinearLayout
+            android:id="@+id/layout_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -38,7 +39,6 @@
                     android:id="@+id/año_acta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Acta año: "
                     android:textSize="15sp" />
 
                 <TextView
@@ -46,7 +46,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="Acta nro: "
                     android:textSize="15sp" />
 
                 <TextView
@@ -54,7 +53,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/año_acta"
-                    android:text="Libro nro: "
                     android:textSize="15sp" />
 
                 <TextView
@@ -62,7 +60,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/nro_libro"
-                    android:text="Oficina Inscripcion: "
                     android:textSize="15sp" />
 
                 <TextView
@@ -70,7 +67,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/oficina"
-                    android:text="DNI: "
                     android:textSize="15sp" />
             </RelativeLayout>
 
@@ -78,6 +74,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -90,7 +87,6 @@
                 android:id="@+id/nombre_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre y Apellido: FARIAS CERUTTI, Lucas Sebastian"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -109,6 +105,7 @@
             android:text="Visualizar" />
 
         <LinearLayout
+            android:id="@+id/layout_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

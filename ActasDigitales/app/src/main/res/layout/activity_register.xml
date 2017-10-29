@@ -39,9 +39,9 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Registrate!"
-                    android:textColor="#428bca"
+                    android:textColor="#FFFFFF"
                     android:textSize="30dp"
-                    android:textStyle="bold|italic" />
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
                         android:textStyle="italic" />
 
                     <RelativeLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="25dp">
 
@@ -95,7 +95,7 @@
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/dni_layout"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/first_dni"
                             android:gravity="left"
@@ -118,19 +118,19 @@
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/tramite_layout"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginStart="48dp"
                             android:gravity="right"
                             android:paddingTop="10dp"
                             app:hintTextAppearance="@style/mytext"
                             app:errorTextAppearance="@style/mytext"
-                            app:theme="@style/mytext">
+                            app:theme="@style/mytext"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentEnd="true">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/tramide_id"
+                                android:layout_toRightOf="@+id/dni_layout"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
@@ -463,7 +463,8 @@
                     <CheckBox
                         android:id="@+id/checkbox"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/colorPrimaryDark"/>
 
                     <TextView
                         android:id="@+id/terminos"
@@ -471,7 +472,7 @@
                         android:layout_height="20dp"
                         android:text="@string/term_and_conditions"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/black" />
 
                 </LinearLayout>
 
@@ -479,6 +480,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="6dp"
                     android:paddingBottom="5dp"
@@ -487,19 +489,11 @@
                     <Button
                         android:id="@+id/button_register"
                         android:layout_width="0dp"
+                        android:layout_gravity="center"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="@string/button_register"
-                        android:textColor="@color/colorPrimary" />
-
-                    <Button
-                        android:id="@+id/button_report"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:text="@string/button_report_error"
                         android:textColor="@color/colorPrimary" />
 
                 </LinearLayout>

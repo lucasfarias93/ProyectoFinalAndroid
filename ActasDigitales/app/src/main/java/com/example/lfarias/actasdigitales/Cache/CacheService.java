@@ -18,6 +18,7 @@ public class CacheService {
 
     static int parentesco;
     static int tipoLibro;
+    static int idUser;
 
     List<SolicitudActa> solicitudesUser1 = new ArrayList<>();
     List<SolicitudActa> solicitudesUserHost = new ArrayList<>();
@@ -76,5 +77,13 @@ public class CacheService {
 
     public static void clear() {
         instance = null;
+    }
+
+    public static int getIdUser() {
+        return idUser;
+    }
+
+    public static void setIdUser(int idUser) {
+        CacheService.idUser = idUser;
     }
 }

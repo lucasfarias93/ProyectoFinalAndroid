@@ -39,6 +39,7 @@ public class ServiceUtils {
         public static final String LISTADO_SOLICITUDES = "listado_android";
         public static final String CREAR_SOLICITUD = "crear_solicitud_android";
         public static final String BUSCAR_DATOS_MOBILE = "buscar_datos_mobile";
+        public static final String CANCELAR_SOLICITUD = "cancelar_mobile";
 
     }
 
@@ -85,6 +86,7 @@ public class ServiceUtils {
         public static final Integer BUSCAR_LISTADO_SOLICITUDES_TYPE = 13;
         public static final Integer CREAR_SOLICITUD_SEARCH_TYPE = 14;
         public static final Integer OBTENER_DATOS_SEARCH_TYPE = 15;
+        public static final Integer CANCELAR_SOLICITUD_SEARCH_TYPE = 16;
     }
 
     public static class RequestData{

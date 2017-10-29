@@ -63,6 +63,7 @@ import com.mercadopago.MercadoPagoBaseActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -239,8 +240,14 @@ public class RequestActActivity extends AppCompatActivity {
                 case 2:
                     final CacheService instance = CacheService.getInstance();
                     rootView = inflater.inflate(R.layout.fragment_page_2, container, false);
-                    ImageView imagen = (ImageView) rootView.findViewById(R.id.imagen_acta);
-
+                    ImageView imagen = (ImageView) rootView.findViewById(R.id.imagen_acta1);
+                    LinearLayout layout_1 = (LinearLayout) rootView.findViewById(R.id.layout_1);
+                    LinearLayout layout_2 = (LinearLayout) rootView.findViewById(R.id.layout_2);
+                    LinearLayout layout_3 = (LinearLayout) rootView.findViewById(R.id.layout_3);
+                    imagen.setVisibility(View.GONE);
+                    layout_1.setVisibility(View.GONE);
+                    layout_2.setVisibility(View.GONE);
+                    layout_3.setVisibility(View.GONE);
                     final Button mButtonVisualize = (Button) rootView.findViewById(R.id.visualizar);
 
                     mButtonVisualize.setOnClickListener(new View.OnClickListener() {
@@ -260,19 +267,40 @@ public class RequestActActivity extends AppCompatActivity {
                                 conectParams.setParams(params);
                                 dialog.show();
                                 asynctask.execute(conectParams);
+
+                                ImageView imagen = (ImageView) rootView.findViewById(R.id.imagen_acta1);
+                                LinearLayout layout_1 = (LinearLayout) rootView.findViewById(R.id.layout_1);
+                                LinearLayout layout_2 = (LinearLayout) rootView.findViewById(R.id.layout_2);
+                                LinearLayout layout_3 = (LinearLayout) rootView.findViewById(R.id.layout_3);
+
+                                imagen.setVisibility(View.VISIBLE);
+                                layout_1.setVisibility(View.VISIBLE);
+                                layout_2.setVisibility(View.VISIBLE);
+                                layout_3.setVisibility(View.VISIBLE);
+
                                 mButtonVisualize.setText("Confirmar");
                             } else if("Confirmar".equals(mButtonVisualize.getText().toString())){
-                               /* CrearSolicitudAsynctask asynctask = new CrearSolicitudAsynctask(getContext(), PlaceholderFragment.this);
+                                CrearSolicitudAsynctask asynctask = new CrearSolicitudAsynctask(getContext(), PlaceholderFragment.this);
                                 List<String> params = new ArrayList<>();
-                                params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
+                                params.add(String.valueOf(CacheService.getInstance().getIdUser()));
                                 params.add(String.valueOf(CacheService.getInstance().getParentesco()));
+                                params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
+                                TextView nombre = (TextView) rootView.findViewById(R.id.nombre_1);
+                                String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
+                                nombre1.trim();
+                                String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
+                                String apellido_1 = apellido.substring(apellido.indexOf(": ") + 1);
+                                String apellido_2 = apellido_1.substring(1, apellido_1.length());
+
+                                params.add(nombre1);
+                                params.add(apellido_2);
 
                                 ConnectionParams conectParams = new ConnectionParams();
                                 conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.SOLICITUD_PATH);
                                 conectParams.setmActionId(ServiceUtils.Actions.CREAR_SOLICITUD);
                                 conectParams.setmSearchType(ServiceUtils.SearchType.CREAR_SOLICITUD_SEARCH_TYPE);
                                 conectParams.setParams(params);
-                                asynctask.execute(conectParams);*/
+                                asynctask.execute(conectParams);
 
                             }
                         }
@@ -284,6 +312,22 @@ public class RequestActActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             Intent i = new Intent(getContext(), ReportErrorActivity.class);
+                            TextView añoActa = (TextView) rootView.findViewById(R.id.año_acta);
+                            TextView nroActa = (TextView) rootView.findViewById(R.id.nro_acta);
+                            TextView nroLibro = (TextView) rootView.findViewById(R.id.nro_libro);
+
+                            TextView nombre = (TextView) rootView.findViewById(R.id.nombre_1);
+                            String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
+                            nombre1.trim();
+                            String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
+                            String apellido_1 = apellido.substring(apellido.indexOf(": ") + 1);
+                            String apellido_2 = apellido_1.substring(1, apellido_1.length());
+
+                            i.putExtra("año_acta",añoActa.getText().toString());
+                            i.putExtra("nro_acta", nroActa.getText().toString());
+                            i.putExtra("nro_libro", nroLibro.getText().toString());
+                            i.putExtra("nombre", nombre1);
+                            i.putExtra("apellido", apellido_2);
                             startActivity(i);
                         }
                     });
@@ -309,6 +353,7 @@ public class RequestActActivity extends AppCompatActivity {
 
         @Override
         public void getImageBase64(String success) {
+            dialog.dismiss();
             if (!success.isEmpty() && success != null) {
                 final String imageBase64 = success;
 
@@ -343,7 +388,7 @@ public class RequestActActivity extends AppCompatActivity {
             conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
             conectParams.setmActionId(ServiceUtils.Actions.BUSCAR_DATOS_MOBILE);
             conectParams.setmSearchType(ServiceUtils.SearchType.OBTENER_DATOS_SEARCH_TYPE);
-
+            dialog.show();
             asynctask.execute(conectParams);
         }
 
@@ -429,12 +474,68 @@ public class RequestActActivity extends AppCompatActivity {
 
         @Override
         public void createRequest(Boolean success) {
+            if(success){
+                final AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ContextThemeWrapper ctw = new ContextThemeWrapper(getContext(), R.style.AppTheme_PopupOverlay);
+                    builder = new AlertDialog.Builder(ctw);
+                } else {
+                    builder = new AlertDialog.Builder(getContext());
+                }
+                builder.setTitle("Solicitud de acta creada con éxito")
+                        .setMessage("Su acta ha sido creada. Desea realizar el pago de los códigos provinciales?")
+                        .setPositiveButton("PAGAR", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent i = new Intent(getContext(), MPMainActivity.class);
+                                startActivity(i);
+                            }
+                        })
+                        .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                getActivity().finish();
+                            }
+                        })
+                        .setIcon(R.drawable.success_1)
+                        .show();
+            }else {
 
+            }
         }
 
         @Override
         public void getUserDataMobile(JSONObject success) {
             dialog.dismiss();
+            if(success.length() == 0){
+
+            } else {
+                try {
+                    TextView fechaView = (TextView)rootView.findViewById(R.id.año_acta);
+                    TextView nroActaView = (TextView)rootView.findViewById(R.id.nro_acta);
+                    TextView nroLibroView = (TextView)rootView.findViewById(R.id.nro_libro);
+                    TextView oficinaView = (TextView)rootView.findViewById(R.id.oficina);
+                    TextView dniView = (TextView)rootView.findViewById(R.id.dni);
+                    TextView nombreCompletoView = (TextView)rootView.findViewById(R.id.nombre_1);
+
+                    String nombreProp = success.getString("persona");
+                    String apellidoProp = success.getString("apellido");
+                    String dni = success.getString("dni");
+                    String nrolibro = success.getString("nrolibro");
+                    String nroActa = success.getString("nroacta");
+                    String ubicacion = success.getString("ubicacion");
+
+                    fechaView.setText("Fecha: "+ success.getString("fecha_nacimiento"));
+                    nombreCompletoView.setText("Nombre Completo: "+ apellidoProp + "," + nombreProp);
+                    nroActaView.setText("Nro. de Acta: " + success.getString("nroacta"));
+                    nroLibroView.setText("Nro. de Libro: " + success.getString("nrolibro"));
+                    oficinaView.setText("Oficina de Insc.: " + success.getString("ubicacion"));
+                    dniView.setText("DNI: " + success.getString("dni"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
     }

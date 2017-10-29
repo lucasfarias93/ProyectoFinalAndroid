@@ -40,7 +40,10 @@ public class ReportErrorActivity extends AppCompatActivity {
     @Bind(R.id.nombre_prop_acta)
     TextInputEditText mNombreProp;
     @Bind(R.id.apellido_prop_acta)
-    EditText mApellidoProp;
+    TextInputEditText mApellidoProp;
+    @Bind(R.id.año_acta) TextInputEditText mAñoActa;
+    @Bind(R.id.nro_acta) TextInputEditText mNroActa;
+    @Bind(R.id.nro_libro) TextInputEditText mNroLibro;
 
     @Bind(R.id.nombre_prop_acta_layout)
     TextInputLayout nombreLayout;
@@ -63,6 +66,12 @@ public class ReportErrorActivity extends AppCompatActivity {
         spinnerArray.add("Enlazar acta digital");
         spinnerArray.add("Rectificar datos erroneos");
         spinnerArray.add("Realizar digitalización de acta");
+
+        mAñoActa.setText(getIntent().getStringExtra("año_acta"));
+        mNroActa.setText(getIntent().getStringExtra("nro_acta"));
+        mNroLibro.setText(getIntent().getStringExtra("nro_libro"));
+        mNombreProp.setText((getIntent().getStringExtra("nombre")));
+        mApellidoProp.setText((getIntent().getStringExtra("apellido")));
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArray); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

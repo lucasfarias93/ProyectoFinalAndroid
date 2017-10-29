@@ -33,7 +33,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ValidarActaActivity extends AppCompatActivity implements UserIdAsynctask.Callback, VerificarValidezAsynctask.Callback {
+public class ValidarActaActivity extends AppCompatActivity implements VerificarValidezAsynctask.Callback {
 
     @Bind(R.id.verificar)
     Button mVerificar;
@@ -59,32 +59,20 @@ public class ValidarActaActivity extends AppCompatActivity implements UserIdAsyn
         mVerificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserIdAsynctask asynctask = new UserIdAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
+                VerificarValidezAsynctask asynctask = new VerificarValidezAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
+                List<String> params = new ArrayList<>();
+                params.add("5");
+                params.add("1xd32");
 
                 ConnectionParams conectParams = new ConnectionParams();
-                conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
-                conectParams.setmActionId(ServiceUtils.Actions.CIUDADANO_ID);
-                conectParams.setmSearchType(ServiceUtils.SearchType.USER_ID_SEARCH_TYPE);
+                conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.VERIFICAR_CONTROLLER);
+                conectParams.setmActionId(ServiceUtils.Actions.VALIDEZ_ACTA);
+                conectParams.setmSearchType(ServiceUtils.SearchType.VALIDEZ_ACTA_SEARCH_TYPE);
+                conectParams.setParams(params);
                 dialog.show();
                 asynctask.execute(conectParams);
             }
         });
-    }
-
-    @Override
-    public void getUserId(Object success) {
-        VerificarValidezAsynctask asynctask = new VerificarValidezAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
-        List<String> params = new ArrayList<>();
-        params.add("5");
-        params.add("1xd32");
-
-        ConnectionParams conectParams = new ConnectionParams();
-        conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.VERIFICAR_CONTROLLER);
-        conectParams.setmActionId(ServiceUtils.Actions.VALIDEZ_ACTA);
-        conectParams.setmSearchType(ServiceUtils.SearchType.VALIDEZ_ACTA_SEARCH_TYPE);
-        conectParams.setParams(params);
-        dialog.show();
-        asynctask.execute(conectParams);
     }
 
     @Override

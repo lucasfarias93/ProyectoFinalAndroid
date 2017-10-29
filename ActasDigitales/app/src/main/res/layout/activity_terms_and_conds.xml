@@ -5,19 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/terms_background"
     tools:context="com.example.lfarias.actasdigitales.Activities.TermsAndCondsActivity"
-    android:gravity="center">
+    android:gravity="center">}
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Terminos y Condiciones"
-        android:textStyle="italic|bold"
-        android:textColor="@color/colorAccent"
-        android:textSize="30sp"
-        android:padding="10dp"
-        />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:onClick="finishActivity"
+            android:src="@drawable/left_arrow"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Terminos y Condiciones"
+            android:textStyle="italic|bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp"
+            android:padding="10dp"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

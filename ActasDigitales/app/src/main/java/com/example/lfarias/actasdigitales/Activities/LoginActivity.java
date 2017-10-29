@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.LoginUserAsynctask;
+import com.example.lfarias.actasdigitales.AsyncTask.UserIdAsynctask;
 import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * A login screen that offers login via mEmail/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoginUserAsynctask.Callback {
+public class LoginActivity extends AppCompatActivity implements LoginUserAsynctask.Callback, UserIdAsynctask.Callback {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -184,6 +185,15 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
             case 2:
                 dialog.dismiss();
                 CacheService.getInstance().clear();
+                UserIdAsynctask asynctask1 = new UserIdAsynctask(LoginActivity.this, LoginActivity.this, dialog);
+
+                ConnectionParams conectParams1 = new ConnectionParams();
+                conectParams1.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+                conectParams1.setmActionId(ServiceUtils.Actions.CIUDADANO_ID);
+                conectParams1.setmSearchType(ServiceUtils.SearchType.USER_ID_SEARCH_TYPE);
+                dialog.show();
+                asynctask1.execute(conectParams1);
+
                 Intent i = new Intent(LoginActivity.this, LandingPageActivity.class);
                 startActivity(i);
                 break;
@@ -199,6 +209,14 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
     public boolean onSupportNavigateUp(){
         finish();
         return true;
+    }
+
+    @Override
+    public void getUserId(Object success) {
+        if(!success.toString().isEmpty()){
+            int userId = Integer.parseInt(success.toString().replaceAll("\"", ""));
+            CacheService.getInstance().setIdUser(userId);
+        }
     }
 }
 
