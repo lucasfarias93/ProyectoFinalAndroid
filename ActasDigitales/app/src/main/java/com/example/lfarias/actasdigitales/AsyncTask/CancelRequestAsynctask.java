@@ -1,6 +1,7 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -29,17 +30,19 @@ import javax.net.ssl.HttpsURLConnection;
  */
 
 public class CancelRequestAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
-        Context context;
-        Callback callback;
+    Context context;
+    Callback callback;
+    ProgressDialog dialog;
 
-public CancelRequestAsynctask(Context context, Callback callback) {
+    public CancelRequestAsynctask(Context context, Callback callback, ProgressDialog dialog) {
         this.callback = callback;
         this.context = context;
-        }
+    this.dialog = dialog;
+    }
 
-public interface Callback {
-    void getCancelRequestResponse(Boolean success);
-}
+    public interface Callback {
+        void getCancelRequestResponse(Boolean success);
+    }
 
     @Override
     protected List<String> doInBackground(ConnectionParams... params) {
@@ -97,9 +100,9 @@ public interface Callback {
     @Override
     protected void onPostExecute(List<String> result) {
         Integer searchType = Integer.parseInt(result.get(1));
-
+        dialog.dismiss();
         switch (searchType) {
-            case 15:
+            case 16:
                 callback.getCancelRequestResponse(Boolean.valueOf(result.get(0)));
                 break;
 

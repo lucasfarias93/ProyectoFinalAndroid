@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Handler;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,9 +41,9 @@ public class ValidarActaActivity extends AppCompatActivity implements VerificarV
     @Bind(R.id.verificar)
     Button mVerificar;
     @Bind(R.id.code)
-    EditText mCodeActa;
-    @Bind(R.id.nro_doc)
-    EditText mDni;
+    TextInputEditText mCodeActa;
+    @Bind(R.id.codigo_asociacion)
+    TextInputLayout codigoLayout;
 
     ProgressDialog dialog;
 
@@ -59,18 +62,24 @@ public class ValidarActaActivity extends AppCompatActivity implements VerificarV
         mVerificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VerificarValidezAsynctask asynctask = new VerificarValidezAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
-                List<String> params = new ArrayList<>();
-                params.add("5");
-                params.add("1xd32");
+                if(mCodeActa.getText().toString().equals("")) {
+                    codigoLayout.setError("Este campo es obligatorio");
+                    mCodeActa.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);;
+                    codigoLayout.setErrorTextAppearance(R.style.error_orange);
+                } else {
+                    VerificarValidezAsynctask asynctask = new VerificarValidezAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
+                    List<String> params = new ArrayList<>();
+                    params.add("5");
+                    params.add("1xd32");
 
-                ConnectionParams conectParams = new ConnectionParams();
-                conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.VERIFICAR_CONTROLLER);
-                conectParams.setmActionId(ServiceUtils.Actions.VALIDEZ_ACTA);
-                conectParams.setmSearchType(ServiceUtils.SearchType.VALIDEZ_ACTA_SEARCH_TYPE);
-                conectParams.setParams(params);
-                dialog.show();
-                asynctask.execute(conectParams);
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.VERIFICAR_CONTROLLER);
+                    conectParams.setmActionId(ServiceUtils.Actions.VALIDEZ_ACTA);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.VALIDEZ_ACTA_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    dialog.show();
+                    asynctask.execute(conectParams);
+                }
             }
         });
     }

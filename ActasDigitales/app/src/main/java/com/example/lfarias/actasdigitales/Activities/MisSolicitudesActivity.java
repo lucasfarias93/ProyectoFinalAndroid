@@ -1,12 +1,16 @@
 package com.example.lfarias.actasdigitales.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -29,6 +33,7 @@ import com.example.lfarias.actasdigitales.AsyncTask.MisSolicitudesAsynctask;
 import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Entities.SolicitudActa;
+import com.example.lfarias.actasdigitales.Helpers.CustomAdapter;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.MercadoPago.MainExample.MPMainActivity;
 import com.example.lfarias.actasdigitales.R;
@@ -46,7 +51,7 @@ import java.util.Map;
 public class MisSolicitudesActivity extends AppCompatActivity implements MisSolicitudesAsynctask.Callback, CancelRequestAsynctask.Callback {
 
     ListView view;
-    ListAdapter adapter;
+    CustomAdapter adapter;
     List<Map<String, String>> mapStringListItem;
     List<SolicitudActa> actas_1;
     TextView textView;
@@ -85,27 +90,6 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
         dialog.show();
         asynctask.execute(conectParams);
 
-        view.setOnItemClickListener(new ListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (SolicitudActa acta : actas_1) {
-                    TextView soliView = (TextView) view.findViewById(R.id.nombre_prop);
-                    if (acta.getNombrePropietarioActa().equals(soliView.getText().toString())) {
-                        Intent i = new Intent(MisSolicitudesActivity.this, DetalleSolicitud.class);
-                        i.putExtra("userName", acta.getNombrePropietarioActa());
-                        i.putExtra("userNroSoli", acta.getId());
-                        i.putExtra("userParentesco", acta.getNombreParentesco());
-                        i.putExtra("userCuponPago", acta.getCodigoDePago());
-                        i.putExtra("userTipoLibro", acta.getNombrelibro());
-                        i.putExtra("userFecha", acta.getFechaCambioEstado());
-                        i.putExtra("userEstado", acta.getNombreEstadoSolicitud());
-                        startActivity(i);
-                        break;
-                    }
-                }
-            }
-        });
-
         mFilter.clearFocus();
         mFilter.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         mFilter.addTextChangedListener(new TextWatcher() {
@@ -113,7 +97,7 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
-                ((SimpleAdapter) MisSolicitudesActivity.this.adapter).getFilter().filter(cs);
+                (MisSolicitudesActivity.this.adapter).getFilter().filter(cs);
             }
 
             @Override
@@ -124,33 +108,6 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
             public void afterTextChanged(Editable arg0) {
             }
         });
-    }
-
-
-    public List<Map<String, String>> getListItems(List<SolicitudActa> userList) {
-        final List<Map<String, String>> listItem =
-                new ArrayList<>(userList.size());
-
-        for (final SolicitudActa solicitud : userList) {
-            final Map<String, String> listItemMap = new HashMap<>();
-            listItemMap.put(TEXT1, solicitud.getNombrePropietarioActa());
-            listItemMap.put(TEXT2, solicitud.getNombreEstadoSolicitud());
-            listItemMap.put(TEXT3, solicitud.getNombreParentesco());
-            listItem.add(Collections.unmodifiableMap(listItemMap));
-
-        }
-
-        return Collections.unmodifiableList(listItem);
-    }
-
-    private ListAdapter createListAdapter(List<SolicitudActa> userList) {
-        final String[] fromMapKey = new String[]{TEXT1, TEXT2, TEXT3};
-        final int[] toLayoutId = new int[]{R.id.nombre_prop, R.id.estado_acta, R.id.parentesco};
-        final List<Map<String, String>> list = getListItems(userList);
-        
-        return new SimpleAdapter(MisSolicitudesActivity.this, list,
-                R.layout.item_list,
-                fromMapKey, toLayoutId);
     }
 
     @Override
@@ -179,7 +136,7 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
     @Override
     public void getSolicitudesList(List<JSONObject> success) {
         dialog.dismiss();
-        List<SolicitudActa> actas = new ArrayList<>();
+        ArrayList<SolicitudActa> actas = new ArrayList<>();
         for (JSONObject object : success) {
             SolicitudActa acta = new SolicitudActa();
             try {
@@ -208,43 +165,58 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
             actas_1 = actas;
             view.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
-            adapter = createListAdapter(actas);
+            adapter = new CustomAdapter(MisSolicitudesActivity.this, actas, MisSolicitudesActivity.this);
             view.setAdapter(adapter);
-            enableExtraButtons(view);
-        }
-    }
-    
-    public void navigateToPaymentActivity(View v){
-        Intent i = new Intent(MisSolicitudesActivity.this, MPMainActivity.class);
-        startActivity(i);
-    }
-    
-    public void cancelSelectedRequest(View v){
-        CancelRequestAsynctask asynctask = new CancelRequestAsynctask(MisSolicitudesActivity.this, MisSolicitudesActivity.this);
-        List<String> params = new ArrayList<>();
-
-        ConnectionParams conectParams = new ConnectionParams();
-        conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.LISTADO_PATH);
-        conectParams.setmActionId(ServiceUtils.Actions.CANCELAR_SOLICITUD);
-        conectParams.setmSearchType(ServiceUtils.SearchType.CANCELAR_SOLICITUD_SEARCH_TYPE);
-        conectParams.setParams(params);
-        asynctask.execute(conectParams);
-    }
-
-    public void enableExtraButtons(ListView view){
-        ListAdapter adapter = view.getAdapter();
-        for(int i = 0; i < adapter.getCount(); i++){
-            Object object = adapter.getItem(i);
-            LinearLayout v = (LinearLayout) adapter.getView(i, null, view);
-            RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.images_id);
-            ImageView view2= (ImageView) layout.findViewById(R.id.pagar);
-            ImageView view3= (ImageView) layout.findViewById(R.id.borrar);
-            layout.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void getCancelRequestResponse(Boolean success) {
-
+        if (success) {
+            dialog.dismiss();
+            final AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ContextThemeWrapper ctw = new ContextThemeWrapper(MisSolicitudesActivity.this, R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
+            } else {
+                builder = new AlertDialog.Builder(MisSolicitudesActivity.this);
+            }
+            builder.setTitle("Solicitud de acta cancelada")
+                    .setMessage("La solicitud seleccionada fue cancelada satisfactoriamente.")
+                    .setNegativeButton("Ir a MIS SOLICITUDES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            MisSolicitudesAsynctask asynctask = new MisSolicitudesAsynctask(MisSolicitudesActivity.this, MisSolicitudesActivity.this);
+                            ProgressDialog dialog1 = Utils.createLoadingIndicator(MisSolicitudesActivity.this);
+                            ConnectionParams conectParams = new ConnectionParams();
+                            conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.LISTADO_PATH);
+                            conectParams.setmActionId(ServiceUtils.Actions.LISTADO_SOLICITUDES);
+                            conectParams.setmSearchType(ServiceUtils.SearchType.BUSCAR_LISTADO_SOLICITUDES_TYPE);
+                            //dialog1.show();
+                            asynctask.execute(conectParams);
+                        }
+                    })
+                    .setIcon(R.drawable.success_1)
+                    .show();
+        } else {
+            dialog.dismiss();
+            final AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ContextThemeWrapper ctw = new ContextThemeWrapper(MisSolicitudesActivity.this, R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
+            } else {
+                builder = new AlertDialog.Builder(MisSolicitudesActivity.this);
+            }
+            builder.setTitle("Error al cancelar la solicitud")
+                    .setMessage("No se pudo cancelar la solicitud seleccionada")
+                    .setNegativeButton("Volver", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(R.drawable.error_1)
+                    .show();
+       }
+       dialog.dismiss();
     }
 }

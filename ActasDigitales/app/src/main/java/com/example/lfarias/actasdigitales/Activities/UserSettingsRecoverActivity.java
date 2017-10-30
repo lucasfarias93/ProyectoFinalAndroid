@@ -9,9 +9,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -64,7 +67,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     @Bind(R.id.link_new_code)
     TextView mTextLinkNewCode;
     @Bind(R.id.email_sent_code)
-    EditText mEmail;
+    TextInputEditText mEmail;
     @Bind(R.id.address)
     EditText mInputCode;
     @Bind(R.id.text_nueva_contraseña)
@@ -79,6 +82,8 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     TextView mPutCode;
     @Bind(R.id.button_submit_contraseña)
     Button mNewContraseñaSubmit;
+    @Bind(R.id.codigo_layout)
+    TextInputLayout codigoLayout;
 
     Context context;
     SQLiteDatabaseHelper helper;
@@ -137,9 +142,13 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
                 email = mEmail.getText().toString();
                 if(email.isEmpty()){
-                    mEmail.setError("Este campo es obligatorio para continuar");
+                    codigoLayout.setError("Este campo es obligatorio para continuar");
+                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);;
+                    codigoLayout.setErrorTextAppearance(R.style.error_orange);
                 } else if(!Utils.emailValidator(email)){
-                    mEmail.setError("El email ingresado no es correcto o posee un formato inválido. Por favor reviselo y corrigalo");
+                    codigoLayout.setError("El email ingresado no es correcto o posee un formato inválido. Por favor reviselo y corrigalo");
+                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);;
+                    codigoLayout.setErrorTextAppearance(R.style.error_orange);
                 } else {
                     user.setEmail(mEmail.getText().toString());
                     sendEmail(email);

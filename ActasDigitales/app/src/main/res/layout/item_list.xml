@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="HOLA"
+            android:textColor="@color/black"
             android:textSize="20sp"/>
 
         <RelativeLayout
@@ -31,11 +32,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="HOLA"
+                android:textColor="@color/black"
                 android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/parentesco"
                 android:paddingLeft="100dp"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="HOLA"
