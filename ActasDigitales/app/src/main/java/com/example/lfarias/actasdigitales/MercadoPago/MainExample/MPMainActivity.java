@@ -24,6 +24,7 @@ import com.example.lfarias.actasdigitales.R;
 public class MPMainActivity extends AppCompatActivity {
 
     private LinearLayout layout;
+    private String idSoli;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,8 @@ public class MPMainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        idSoli = getIntent().getStringExtra("idSolicitud").toString();
     }
 
     public void runCheckoutExample(View view) {
@@ -54,6 +57,7 @@ public class MPMainActivity extends AppCompatActivity {
     private void runStep(Activity activity) {
 
         Intent exampleIntent = new Intent(this, activity.getClass());
+        exampleIntent.putExtra("idSolicitud", idSoli);
         startActivity(exampleIntent);
     }
 

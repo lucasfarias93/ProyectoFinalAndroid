@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -96,10 +97,15 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_settings_recover);
+        setContentView(R.layout.activity_user_settings_recover);/*
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Recuperar cuenta </font>"));
+        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Recuperar cuenta </font>"));*/
+
+       /* final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+*/
         ButterKnife.bind(this);
 
         helper = new SQLiteDatabaseHelper(this);

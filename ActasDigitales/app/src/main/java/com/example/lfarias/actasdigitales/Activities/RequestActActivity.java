@@ -73,6 +73,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindDimen;
+import okhttp3.internal.Util;
 
 public class RequestActActivity extends AppCompatActivity {
 
@@ -286,22 +287,25 @@ public class RequestActActivity extends AppCompatActivity {
                                 params.add(String.valueOf(CacheService.getInstance().getParentesco()));
                                 params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
                                 TextView nombre = (TextView) rootView.findViewById(R.id.nombre_1);
-                                String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
-                                nombre1.trim();
-                                String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
-                                String apellido_1 = apellido.substring(apellido.indexOf(": ") + 1);
-                                String apellido_2 = apellido_1.substring(1, apellido_1.length());
+                                if(nombre.getText().toString().isEmpty()){
+                                    Utils.createGlobalDialog(getContext(), "No se pudo crear la solicitud", "No se pudo crear la solicitud debido a falta de datos necesarios. Por favor contacte al soporte.").show();
+                                } else {
+                                    String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
+                                    nombre1.trim();
+                                    String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
+                                    String apellido_1 = apellido.substring(apellido.indexOf(": ") + 1);
+                                    String apellido_2 = apellido_1.substring(1, apellido_1.length());
 
-                                params.add(nombre1);
-                                params.add(apellido_2);
+                                    params.add(nombre1);
+                                    params.add(apellido_2);
 
-                                ConnectionParams conectParams = new ConnectionParams();
-                                conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.SOLICITUD_PATH);
-                                conectParams.setmActionId(ServiceUtils.Actions.CREAR_SOLICITUD);
-                                conectParams.setmSearchType(ServiceUtils.SearchType.CREAR_SOLICITUD_SEARCH_TYPE);
-                                conectParams.setParams(params);
-                                asynctask.execute(conectParams);
-
+                                    ConnectionParams conectParams = new ConnectionParams();
+                                    conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.SOLICITUD_PATH);
+                                    conectParams.setmActionId(ServiceUtils.Actions.CREAR_SOLICITUD);
+                                    conectParams.setmSearchType(ServiceUtils.SearchType.CREAR_SOLICITUD_SEARCH_TYPE);
+                                    conectParams.setParams(params);
+                                    asynctask.execute(conectParams);
+                                }
                             }
                         }
                     });
@@ -317,17 +321,27 @@ public class RequestActActivity extends AppCompatActivity {
                             TextView nroLibro = (TextView) rootView.findViewById(R.id.nro_libro);
 
                             TextView nombre = (TextView) rootView.findViewById(R.id.nombre_1);
-                            String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
-                            nombre1.trim();
-                            String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
-                            String apellido_1 = apellido.substring(apellido.indexOf(": ") + 1);
-                            String apellido_2 = apellido_1.substring(1, apellido_1.length());
 
-                            i.putExtra("año_acta",añoActa.getText().toString());
-                            i.putExtra("nro_acta", nroActa.getText().toString());
-                            i.putExtra("nro_libro", nroLibro.getText().toString());
-                            i.putExtra("nombre", nombre1);
-                            i.putExtra("apellido", apellido_2);
+                            if(!añoActa.getText().toString().isEmpty()){
+                                i.putExtra("año_acta",añoActa.getText().toString());
+                            }
+                            if(!nroActa.getText().toString().isEmpty()){
+                                i.putExtra("nro_acta", nroActa.getText().toString());
+                            }
+                            if(!nroLibro.getText().toString().isEmpty()){
+                                i.putExtra("nro_libro", nroLibro.getText().toString());
+                            }
+                            if(!nombre.getText().toString().isEmpty()){
+                                String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
+                                nombre1.trim();
+                                String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
+                                String apellido_1 = apellido.substring(apellido.indexOf(": ") + 1);
+                                String apellido_2 = apellido_1.substring(1, apellido_1.length());
+
+
+                                i.putExtra("nombre", nombre1);
+                                i.putExtra("apellido", apellido_2);
+                            }
                             startActivity(i);
                         }
                     });
@@ -357,21 +371,27 @@ public class RequestActActivity extends AppCompatActivity {
             if (!success.isEmpty() && success != null) {
                 final String imageBase64 = success;
 
-                byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
-                if (decodedByte == null) {
-                    view.setImageResource(R.drawable.image_not_loaded);
-                } else {
-                    view.setImageBitmap(decodedByte);
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getContext(), DetailImageActivity.class);
-                            intent.putExtra("image", imageBase64);
-                            startActivity(intent);
-                        }
-                    });
+                try{
+                    byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
+                    if (decodedByte == null) {
+                        view.setImageResource(R.drawable.image_not_loaded);
+                    } else {
+                        view.setImageBitmap(decodedByte);
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getContext(), DetailImageActivity.class);
+                                intent.putExtra("image", imageBase64);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                } catch(IllegalArgumentException ex){
+                    ex.printStackTrace();
+                    Utils.createGlobalDialog(getContext(), "Error","Hubo un error al convertir la imagen del acta. Por favor intente nuevamente.").show();
+
                 }
             } else {
                 final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);

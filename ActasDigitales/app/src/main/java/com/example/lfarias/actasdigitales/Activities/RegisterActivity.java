@@ -1,5 +1,8 @@
 package com.example.lfarias.actasdigitales.Activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +11,9 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,6 +44,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -134,6 +141,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     ArrayAdapter<String> dataLocalidadAdapter;
     ProgressDialog dialog;
 
+    public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +157,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mDni.clearFocus();
         mTramideId.clearFocus();
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.cancel(getIntent().getIntExtra(NOTIFICATION_ID, -1));
 
         dialog = Utils.createLoadingIndicator(RegisterActivity.this);
 
@@ -200,7 +212,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 String repeatPassword = mRepeatPassword.getText().toString();
                 String email = mEmail.getText().toString();
 
-                if(user.isEmpty()){
+                if (user.isEmpty()) {
                     userLayout.setError("Este campo es obligatorio");
                     mUser.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
                     userLayout.setErrorTextAppearance(R.style.error_red);
@@ -607,11 +619,44 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(getResources().getColor(R.color.colorPrimary));
             snackbar.show();
-
+            createNotifications2();
         } else {
             dialog.dismiss();
             Utils.createGlobalDialog(RegisterActivity.this, "Error en la creación del nuevo usuario", response).show();
         }
+    }
+
+    public void createNotifications2() {
+        int notificationId = new Random().nextInt(); // just use a counter in some util class...
+        PendingIntent dismissIntent = RegisterActivity.getDismissIntent(notificationId, RegisterActivity.this);
+
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
+        contentView.setTextViewText(R.id.title, "Custom notification");
+        contentView.setTextViewText(R.id.text, "This is a custom layout");
+
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.success_1)
+                        .setColor(ContextCompat.getColor(RegisterActivity.this, R.color.colorPrimary))
+                        .setContentTitle("Creación de usuario")
+                        .setContentText("Se le ha enviado un email a su casilla de correo con..")
+                        .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Se le ha enviado un email a su casilla de correo con el nuevo usuario y contraseña con el que podra ingresar al sistema. Por favor revise su casilla de correo"))
+                        .addAction(R.drawable.clear,
+                                "Cerrar notificacion", dismissIntent);
+
+        NotificationManager notifyMgr = (NotificationManager) RegisterActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notifyMgr.notify(notificationId, builder.build());
+    }
+
+    public static PendingIntent getDismissIntent(int notificationId, Context context) {
+        Intent intent = new Intent(context, UserSettingsRecoverActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(NOTIFICATION_ID, notificationId);
+        PendingIntent dismissIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return dismissIntent;
     }
 
     @Override

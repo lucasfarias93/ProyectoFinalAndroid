@@ -48,7 +48,8 @@
         <activity
             android:name=".Activities.UserSettingsRecoverActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".Activities.RequestActActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -76,8 +77,7 @@
         <activity
             android:name=".Activities.TermsAndCondsActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.ReportErrorActivity"
             android:configChanges="orientation|keyboardHidden"

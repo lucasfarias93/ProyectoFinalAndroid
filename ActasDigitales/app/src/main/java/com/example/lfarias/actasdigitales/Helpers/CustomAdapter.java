@@ -1,5 +1,6 @@
 package com.example.lfarias.actasdigitales.Helpers;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,10 @@ import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,11 +31,12 @@ import java.util.List;
  * Created by lfarias on 10/17/17.
  */
 
-public class CustomAdapter extends ArrayAdapter<SolicitudActa> {
+public class CustomAdapter extends ArrayAdapter<SolicitudActa> implements Filterable{
 
     private Context context;
     private ArrayList<SolicitudActa> myList;
     private CancelRequestAsynctask.Callback myCallback;
+    private ArrayList<SolicitudActa> orig;
 
     private LayoutInflater mInflater;
     private boolean mNotifyOnChange = true;
@@ -96,7 +101,7 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.nombreProp.setText(myList.get(position).getNombreParentesco());
+        holder.nombreProp.setText(myList.get(position).getNombrePropietarioActa());
         holder.estadoActa.setText(myList.get(position).getNombreEstadoSolicitud());
         holder.parentesco.setText(myList.get(position).getNombreParentesco());
         holder.pagar.setImageDrawable(getContext().getDrawable(R.drawable.payment));
@@ -106,7 +111,9 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> {
             holder.pagar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ((MisSolicitudesActivity)context).finish();
                     Intent i = new Intent(getContext(), MPMainActivity.class);
+                    i.putExtra("idSolicitud", myList.get(position).getId());
                     getContext().startActivity(i);
                 }
             });
@@ -130,27 +137,46 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> {
                     asynctask.execute(conectParams);
                 }
             });
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SolicitudActa acta = getItem(position);
-                    Intent i = new Intent(getContext(), DetalleSolicitud.class);
-                    i.putExtra("userName", acta.getNombrePropietarioActa());
-                    i.putExtra("userNroSoli", acta.getId());
-                    i.putExtra("userParentesco", acta.getNombreParentesco());
-                    i.putExtra("userCuponPago", acta.getCodigoDePago());
-                    i.putExtra("userTipoLibro", acta.getNombrelibro());
-                    i.putExtra("userFecha", acta.getFechaCambioEstado());
-                    i.putExtra("userEstado", acta.getNombreEstadoSolicitud());
-                    getContext().startActivity(i);
-                }
-            });
+
         } else {
             holder.pagar.setVisibility(View.GONE);
             holder.cancelar.setVisibility(View.GONE);
         }
+
         holder.pos = position;
         return convertView;
+    }
+
+    public Filter getFilter() {
+        return new Filter() {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final ArrayList<SolicitudActa> results = new ArrayList<>();
+                if (orig == null)
+                    orig = myList;
+                if (constraint != null) {
+                    if (orig != null && orig.size() > 0) {
+                        for (final SolicitudActa g : orig) {
+                            if ((g.getNombrePropietarioActa().toLowerCase().contains(constraint.toString())) || ((g.getNombreEstadoSolicitud().toLowerCase().contains(constraint.toString()))) || ((g.getNombreParentesco().toLowerCase().contains(constraint.toString())))){
+                                results.add(g);
+                            }
+                        }
+                    }
+                    oReturn.values = results;
+                }
+                return oReturn;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint,
+                                          FilterResults results) {
+                myList = (ArrayList<SolicitudActa>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     @Override
