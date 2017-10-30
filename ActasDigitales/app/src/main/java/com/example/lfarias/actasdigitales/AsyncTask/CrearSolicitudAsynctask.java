@@ -37,7 +37,7 @@ public class CrearSolicitudAsynctask extends AsyncTask<ConnectionParams, Void, L
     }
 
     public interface Callback {
-        void createRequest(Boolean success);
+        void createRequest(String success);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class CrearSolicitudAsynctask extends AsyncTask<ConnectionParams, Void, L
             String urlDecoded = URLDecoder.decode(urlEncoded.toString(), "UTF-8");
             URL url = new URL(urlDecoded);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(7000 /* milliseconds */);
+            conn.setConnectTimeout(7000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -99,7 +99,8 @@ public class CrearSolicitudAsynctask extends AsyncTask<ConnectionParams, Void, L
 
         switch (searchType) {
             case 14:
-                callback.createRequest(Boolean.valueOf(result.get(0)));
+                String value = (result.get(0).replaceAll("\"", ""));
+                callback.createRequest(value);
                 break;
 
             default:

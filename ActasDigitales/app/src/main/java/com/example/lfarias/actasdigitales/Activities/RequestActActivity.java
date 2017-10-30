@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.Px;
@@ -119,7 +120,7 @@ public class RequestActActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback, SearchParentBookTypeAsynctask.Callback , CrearSolicitudAsynctask.Callback, BuscarDatosImagenAsynctask.Callback{
+    public static class PlaceholderFragment extends Fragment implements ImagenActaAsynctask.Callback, SearchParentBookTypeAsynctask.Callback, CrearSolicitudAsynctask.Callback, BuscarDatosImagenAsynctask.Callback {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -255,7 +256,7 @@ public class RequestActActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             dialog = Utils.createLoadingIndicator(getContext());
-                            if("Visualizar".equals(mButtonVisualize.getText().toString())){
+                            if ("Visualizar".equals(mButtonVisualize.getText().toString())) {
                                 ImagenActaAsynctask asynctask = new ImagenActaAsynctask(getContext(), PlaceholderFragment.this);
                                 List<String> params = new ArrayList<>();
                                 params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
@@ -280,14 +281,14 @@ public class RequestActActivity extends AppCompatActivity {
                                 layout_3.setVisibility(View.VISIBLE);
 
                                 mButtonVisualize.setText("Confirmar");
-                            } else if("Confirmar".equals(mButtonVisualize.getText().toString())){
+                            } else if ("Confirmar".equals(mButtonVisualize.getText().toString())) {
                                 CrearSolicitudAsynctask asynctask = new CrearSolicitudAsynctask(getContext(), PlaceholderFragment.this);
                                 List<String> params = new ArrayList<>();
                                 params.add(String.valueOf(CacheService.getInstance().getIdUser()));
                                 params.add(String.valueOf(CacheService.getInstance().getParentesco()));
                                 params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
                                 TextView nombre = (TextView) rootView.findViewById(R.id.nombre_1);
-                                if(nombre.getText().toString().isEmpty()){
+                                if (nombre.getText().toString().isEmpty()) {
                                     Utils.createGlobalDialog(getContext(), "No se pudo crear la solicitud", "No se pudo crear la solicitud debido a falta de datos necesarios. Por favor contacte al soporte.").show();
                                 } else {
                                     String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
@@ -322,16 +323,16 @@ public class RequestActActivity extends AppCompatActivity {
 
                             TextView nombre = (TextView) rootView.findViewById(R.id.nombre_1);
 
-                            if(!añoActa.getText().toString().isEmpty()){
-                                i.putExtra("año_acta",añoActa.getText().toString());
+                            if (!añoActa.getText().toString().isEmpty()) {
+                                i.putExtra("año_acta", añoActa.getText().toString());
                             }
-                            if(!nroActa.getText().toString().isEmpty()){
+                            if (!nroActa.getText().toString().isEmpty()) {
                                 i.putExtra("nro_acta", nroActa.getText().toString());
                             }
-                            if(!nroLibro.getText().toString().isEmpty()){
+                            if (!nroLibro.getText().toString().isEmpty()) {
                                 i.putExtra("nro_libro", nroLibro.getText().toString());
                             }
-                            if(!nombre.getText().toString().isEmpty()){
+                            if (!nombre.getText().toString().isEmpty()) {
                                 String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
                                 nombre1.trim();
                                 String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
@@ -371,7 +372,7 @@ public class RequestActActivity extends AppCompatActivity {
             if (!success.isEmpty() && success != null) {
                 final String imageBase64 = success;
 
-                try{
+                try {
                     byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
@@ -379,6 +380,7 @@ public class RequestActActivity extends AppCompatActivity {
                         view.setImageResource(R.drawable.image_not_loaded);
                     } else {
                         view.setImageBitmap(decodedByte);
+                        callUserData();
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -388,20 +390,42 @@ public class RequestActActivity extends AppCompatActivity {
                             }
                         });
                     }
-                } catch(IllegalArgumentException ex){
+                } catch (IllegalArgumentException ex) {
                     ex.printStackTrace();
-                    Utils.createGlobalDialog(getContext(), "Error","Hubo un error al convertir la imagen del acta. Por favor intente nuevamente.").show();
+                    Utils.createGlobalDialog(getContext(), "Error", "Hubo un error al convertir la imagen del acta. Por favor intente nuevamente.").show();
 
                 }
-            } else {
+            } else if("false".equals(success)){
+                TextView view1 = (TextView)rootView.findViewById(R.id.nombre_1);
+                view1.setText("NO SE ENCONTRARON DATOS ASOCIADOS AL ACTA ELEGIDA");
+                view1.setTypeface(Typeface.DEFAULT_BOLD);
+                view1.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+                view1.setVisibility(View.VISIBLE);
+
+                final AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ContextThemeWrapper ctw = new ContextThemeWrapper(getContext(), R.style.AppTheme_PopupOverlay);
+                    builder = new AlertDialog.Builder(ctw);
+                } else {
+                    builder = new AlertDialog.Builder(getContext());
+                }
+                builder.setTitle("Error al obtener la imagen")
+                        .setMessage("Ocurrio un error al obtener la imagen de su acta. Por favor intente nuevamente mas tarde o contacte al soporte.")
+                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(R.drawable.error_1)
+                        .show();
                 final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
                 view.setImageResource(R.drawable.image_not_loaded);
             }
 
-            callUserData();
+
         }
 
-        public void callUserData(){
+        public void callUserData() {
             BuscarDatosImagenAsynctask asynctask = new BuscarDatosImagenAsynctask(getContext(), PlaceholderFragment.this);
 
             ConnectionParams conectParams = new ConnectionParams();
@@ -430,11 +454,11 @@ public class RequestActActivity extends AppCompatActivity {
                 button3.setVisibility(View.GONE);
                 RadioButton button4 = (RadioButton) radioGroup.findViewById(R.id.rdbTwo);
                 button4.setVisibility(View.GONE);
-                for(int index = 0;index < success.length(); index++) {
+                for (int index = 0; index < success.length(); index++) {
                     JSONObject jsonObject = success.getJSONObject(index);
 
                     String nombre = jsonObject.get("nombreparentesco").toString();
-                    switch(nombre){
+                    switch (nombre) {
                         case "Propia":
                             radioGroup.setVisibility(View.VISIBLE);
                             button.setVisibility(View.VISIBLE);
@@ -478,7 +502,7 @@ public class RequestActActivity extends AppCompatActivity {
         }
 
 
-        public void callSearchTypeAsynctask(Context context, SearchParentBookTypeAsynctask.Callback callback){
+        public void callSearchTypeAsynctask(Context context, SearchParentBookTypeAsynctask.Callback callback) {
             SearchParentBookTypeAsynctask provincesDataRetrieveAsynctask = new SearchParentBookTypeAsynctask(context, callback);
             List<String> params = new ArrayList<>();
             params.add(String.valueOf(CacheService.getInstance().getTipoLibro()));
@@ -493,50 +517,49 @@ public class RequestActActivity extends AppCompatActivity {
         }
 
         @Override
-        public void createRequest(Boolean success) {
-            if(success){
-                final AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(getContext(), R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(getContext());
-                }
-                builder.setTitle("Solicitud de acta creada con éxito")
-                        .setMessage("Su acta ha sido creada. Desea realizar el pago de los códigos provinciales?")
-                        .setPositiveButton("PAGAR", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                Intent i = new Intent(getContext(), MPMainActivity.class);
-                                startActivity(i);
-                            }
-                        })
-                        .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                getActivity().finish();
-                            }
-                        })
-                        .setIcon(R.drawable.success_1)
-                        .show();
-            }else {
+        public void createRequest(final String success) {
 
+            final AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ContextThemeWrapper ctw = new ContextThemeWrapper(getContext(), R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
+            } else {
+                builder = new AlertDialog.Builder(getContext());
             }
+            builder.setTitle("Solicitud de acta creada con éxito")
+                    .setMessage("Su acta ha sido creada. Desea realizar el pago de los códigos provinciales?")
+                    .setPositiveButton("PAGAR", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent i = new Intent(getContext(), MPMainActivity.class);
+                            i.putExtra("idSolicitud", success);
+                            startActivity(i);
+                        }
+                    })
+                    .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            getActivity().finish();
+                        }
+                    })
+                    .setIcon(R.drawable.success_1)
+                    .show();
+
         }
 
         @Override
         public void getUserDataMobile(JSONObject success) {
             dialog.dismiss();
-            if(success.length() == 0){
+            if (success.length() == 0) {
 
             } else {
                 try {
-                    TextView fechaView = (TextView)rootView.findViewById(R.id.año_acta);
-                    TextView nroActaView = (TextView)rootView.findViewById(R.id.nro_acta);
-                    TextView nroLibroView = (TextView)rootView.findViewById(R.id.nro_libro);
-                    TextView oficinaView = (TextView)rootView.findViewById(R.id.oficina);
-                    TextView dniView = (TextView)rootView.findViewById(R.id.dni);
-                    TextView nombreCompletoView = (TextView)rootView.findViewById(R.id.nombre_1);
+                    TextView fechaView = (TextView) rootView.findViewById(R.id.año_acta);
+                    TextView nroActaView = (TextView) rootView.findViewById(R.id.nro_acta);
+                    TextView nroLibroView = (TextView) rootView.findViewById(R.id.nro_libro);
+                    TextView oficinaView = (TextView) rootView.findViewById(R.id.oficina);
+                    TextView dniView = (TextView) rootView.findViewById(R.id.dni);
+                    TextView nombreCompletoView = (TextView) rootView.findViewById(R.id.nombre_1);
 
                     String nombreProp = success.getString("persona");
                     String apellidoProp = success.getString("apellido");
@@ -545,8 +568,8 @@ public class RequestActActivity extends AppCompatActivity {
                     String nroActa = success.getString("nroacta");
                     String ubicacion = success.getString("ubicacion");
 
-                    fechaView.setText("Fecha: "+ success.getString("fecha_nacimiento"));
-                    nombreCompletoView.setText("Nombre Completo: "+ apellidoProp + "," + nombreProp);
+                    fechaView.setText("Fecha: " + success.getString("fecha_nacimiento"));
+                    nombreCompletoView.setText("Nombre Completo: " + apellidoProp + "," + nombreProp);
                     nroActaView.setText("Nro. de Acta: " + success.getString("nroacta"));
                     nroLibroView.setText("Nro. de Libro: " + success.getString("nrolibro"));
                     oficinaView.setText("Oficina de Insc.: " + success.getString("ubicacion"));

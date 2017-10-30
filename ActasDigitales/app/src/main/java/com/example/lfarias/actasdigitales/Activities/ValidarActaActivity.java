@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
@@ -25,6 +26,7 @@ import com.example.lfarias.actasdigitales.AsyncTask.VerificarValidezAsynctask;
 import com.example.lfarias.actasdigitales.Cache.CacheService;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
+import com.example.lfarias.actasdigitales.MercadoPago.MainExample.MPMainActivity;
 import com.example.lfarias.actasdigitales.R;
 import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
@@ -57,6 +59,9 @@ public class ValidarActaActivity extends AppCompatActivity implements VerificarV
         mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Verificar Acta</font>"));
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         dialog = Utils.createLoadingIndicator(this);
 
         mVerificar.setOnClickListener(new View.OnClickListener() {
@@ -69,8 +74,8 @@ public class ValidarActaActivity extends AppCompatActivity implements VerificarV
                 } else {
                     VerificarValidezAsynctask asynctask = new VerificarValidezAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
                     List<String> params = new ArrayList<>();
-                    params.add("5");
-                    params.add("1xd32");
+                    params.add(String.valueOf(CacheService.getInstance().getIdUser()));
+                    params.add(mCodeActa.getText().toString());
 
                     ConnectionParams conectParams = new ConnectionParams();
                     conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.VERIFICAR_CONTROLLER);

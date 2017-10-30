@@ -36,6 +36,7 @@ public class ExampleUtils {
 
     // * Preferences
     public static final String DUMMY_PREFERENCE_ID = "243966003-d64b4270-10c8-43b2-9600-3009cdfe4fa9";
+    public static final String DUMMY_PREFERENCE_ID_1 = "279404435-82392bf5-6d97-4f7d-a621-1471c1627bf2";
 
     // * Merchant public key
     public static final String DUMMY_MERCHANT_PUBLIC_KEY = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";

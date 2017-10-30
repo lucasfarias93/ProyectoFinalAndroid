@@ -58,8 +58,8 @@ public class LoginUserAsynctask extends AsyncTask<ConnectionParams, Void, List<S
 
             System.setProperty("http.keepAlive", "true");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(7000 /* milliseconds */);
+            conn.setConnectTimeout(7000 /* milliseconds */);
             conn.setRequestMethod("POST");
             conn.setUseCaches(false);
             conn.setRequestProperty("Connection", "Keep-Alive");

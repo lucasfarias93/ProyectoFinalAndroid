@@ -95,6 +95,8 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> implements Filter
                     holder.parentesco = (TextView) convertView.findViewById(R.id.parentesco);
                     holder.pagar = (ImageView) convertView.findViewById(R.id.pagar);
                     holder.cancelar = (ImageView) convertView.findViewById(R.id.borrar);
+                    holder.success = (ImageView) convertView.findViewById(R.id.success);
+                    holder.delete = (ImageView) convertView.findViewById(R.id.delete);
                     break;
             }
             convertView.setTag(holder);
@@ -106,6 +108,11 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> implements Filter
         holder.parentesco.setText(myList.get(position).getNombreParentesco());
         holder.pagar.setImageDrawable(getContext().getDrawable(R.drawable.payment));
         holder.cancelar.setImageDrawable(getContext().getDrawable(R.drawable.trash));
+        holder.delete.setImageDrawable(getContext().getDrawable(R.drawable.delete));
+        holder.success.setImageDrawable(getContext().getDrawable(R.drawable.success_1));
+
+        holder.delete.setVisibility(View.INVISIBLE);
+        holder.success.setVisibility(View.INVISIBLE);
         if("Confirmada".equals(holder.estadoActa.getText().toString())){
             holder.pagar.setVisibility(View.VISIBLE);
             holder.pagar.setOnClickListener(new View.OnClickListener() {
@@ -135,12 +142,24 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> implements Filter
                     conectParams.setParams(params);
                     dialog.show();
                     asynctask.execute(conectParams);
+                    holder.pagar.setVisibility(View.INVISIBLE);
+                    holder.cancelar.setVisibility(View.INVISIBLE);
+
+                    holder.delete.setVisibility(View.VISIBLE);
+                    holder.success.setVisibility(View.VISIBLE);
+
                 }
             });
 
-        } else {
-            holder.pagar.setVisibility(View.GONE);
-            holder.cancelar.setVisibility(View.GONE);
+        } else if("Cancelada".equals(holder.estadoActa.getText().toString())){
+            holder.pagar.setVisibility(View.INVISIBLE);
+            holder.cancelar.setVisibility(View.INVISIBLE);
+            holder.delete.setVisibility(View.VISIBLE);
+        } else if("Pagada".equals(holder.estadoActa.getText().toString())){
+            holder.pagar.setVisibility(View.INVISIBLE);
+            holder.cancelar.setVisibility(View.INVISIBLE);
+            holder.delete.setVisibility(View.INVISIBLE);
+            holder.success.setVisibility(View.VISIBLE);
         }
 
         holder.pos = position;
@@ -198,6 +217,8 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> implements Filter
         TextView parentesco;
         ImageView pagar;
         ImageView cancelar;
+        ImageView delete;
+        ImageView success;
         int pos; //to store the position of the item within the list
     }
 }

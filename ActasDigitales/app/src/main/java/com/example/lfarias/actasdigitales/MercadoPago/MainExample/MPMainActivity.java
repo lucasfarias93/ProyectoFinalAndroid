@@ -45,8 +45,8 @@ public class MPMainActivity extends AppCompatActivity {
                 finish();
             }
         });
+        idSoli = getIntent().getStringExtra("idSolicitud");
 
-        idSoli = getIntent().getStringExtra("idSolicitud").toString();
     }
 
     public void runCheckoutExample(View view) {

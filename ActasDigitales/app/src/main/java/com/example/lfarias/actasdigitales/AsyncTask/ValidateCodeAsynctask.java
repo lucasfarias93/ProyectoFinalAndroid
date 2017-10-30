@@ -52,8 +52,8 @@ public class ValidateCodeAsynctask extends AsyncTask<ConnectionParams, Void, Lis
             String urlDecoded = URLDecoder.decode(urlEncoded.toString(), "UTF-8");
             URL url = new URL(urlDecoded);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(7000 /* milliseconds */);
+            conn.setConnectTimeout(7000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);

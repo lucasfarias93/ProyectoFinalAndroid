@@ -1,6 +1,8 @@
 package com.example.lfarias.actasdigitales.Activities;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,14 +36,18 @@ public class DetalleSolicitud extends AppCompatActivity {
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
+        /*final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);*/
+
         Intent i = getIntent();
-        mNumero.setText(" o) Numero de solicitud: " + i.getStringExtra("userNroSoli"));
-        mNombre.setText(" o) Nombre del Propietario: " + i.getStringExtra("userName"));
-        mEstado.setText(" o) Estado de la solicitud: " + i.getStringExtra("userEstado"));
-        mCupon.setText(" o) Cupon de pago asociado: " + i.getStringExtra("userCuponPago"));
-        mTipoLibro.setText(" o) Tipo de Libro: " + i.getStringExtra("userTipoLibro"));
-        mFecha.setText(" o) Fecha de creación de solicitud: " + i.getStringExtra("userFecha"));
-        mParentesco.setText(" o) Parentesco: " + i.getStringExtra("userParentesco"));
+        mNumero.setText(getResources().getString(R.string.numero_soli) + " " + i.getStringExtra("userNroSoli"));
+        mNombre.setText(getResources().getString(R.string.nombre) + " " + i.getStringExtra("userName"));
+        mEstado.setText(getResources().getString(R.string.estado) + " " + i.getStringExtra("userEstado"));
+        mCupon.setText(getResources().getString(R.string.cupon) + " " + i.getStringExtra("userCuponPago"));
+        mTipoLibro.setText(getResources().getString(R.string.tipo_libro) + " " + i.getStringExtra("userTipoLibro"));
+        mFecha.setText(getResources().getString(R.string.fecha) + " " + i.getStringExtra("userFecha"));
+        mParentesco.setText(getResources().getString(R.string.parentesco) + " " + i.getStringExtra("userParentesco"));
     }
 
     @Override

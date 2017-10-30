@@ -52,8 +52,8 @@ public class MisSolicitudesAsynctask extends AsyncTask<ConnectionParams, Void, L
             String urlDecoded = URLDecoder.decode(urlEncoded.toString(), "UTF-8");
             URL url = new URL(urlDecoded);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(7000);
+            conn.setConnectTimeout(7000);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);

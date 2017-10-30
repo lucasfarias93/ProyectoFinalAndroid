@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
         >
 
         <ImageView
@@ -91,6 +90,7 @@
                 android:textSize="15sp" />
 
         </LinearLayout>
+
 
         <Button
             android:id="@+id/visualizar"

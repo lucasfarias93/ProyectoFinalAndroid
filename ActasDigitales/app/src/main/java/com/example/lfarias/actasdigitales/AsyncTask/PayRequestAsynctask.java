@@ -49,8 +49,8 @@ public class PayRequestAsynctask extends AsyncTask<ConnectionParams, Void, List<
             String urlDecoded = URLDecoder.decode(urlEncoded.toString(), "UTF-8");
             URL url = new URL(urlDecoded);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(7000 /* milliseconds */);
+            conn.setConnectTimeout(7000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -103,21 +103,8 @@ public class PayRequestAsynctask extends AsyncTask<ConnectionParams, Void, List<
                 break;
 
             default:
-                final AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(context);
-                }
-                builder.setTitle("Error al firmar el acta")
-                        .setMessage("Ocurrio un error al firmar el acta asociada a este pago. Por favor intente nuevamente mas tarde o contacte al soporte.")
-                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setIcon(R.drawable.error_1)
-                        .show();
+                callback.generate_pdf(false);
+                break;
         }
     }
 

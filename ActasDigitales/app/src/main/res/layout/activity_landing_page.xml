@@ -17,6 +17,7 @@
         android:text="¿QUE DESEA HACER?"
         android:textAlignment="center"
         android:textSize="25sp"
+        android:textColor="@color/colorAccent"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -29,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             android:paddingTop="35dp"
             >
 
@@ -37,21 +39,22 @@
                 android:layout_height="100dp"
                 android:src="@drawable/actas_2" />
 
-            <TextView
+            <Button
                 android:id="@+id/solicitar"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:text="CREAR SOLICITUD"
+                android:layout_height="match_parent"
                 android:textSize="20sp"
-                android:paddingLeft="15dp"/>
+                android:paddingLeft="15dp"
+                android:text="CREAR SOLICITUD"
+                android:background="@color/mpsdk_transparent"/>
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             android:paddingTop="25dp"
             >
 
@@ -60,15 +63,14 @@
                 android:layout_height="100dp"
                 android:src="@drawable/actas_1" />
 
-            <TextView
+            <Button
                 android:id="@+id/mis_solicitudes"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:text="MIS SOLICITUDES"
+                android:layout_height="match_parent"
                 android:textSize="20sp"
-                android:paddingLeft="15dp"/>
+                android:paddingLeft="15dp"
+                android:text="MIS SOLICITUDES"
+                android:background="@color/mpsdk_transparent"/>
 
         </LinearLayout>
 
@@ -76,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             android:paddingTop="25dp"
             >
 
@@ -84,16 +87,14 @@
                 android:layout_height="100dp"
                 android:src="@drawable/actas_3" />
 
-            <TextView
+            <Button
                 android:id="@+id/vigencia_acta"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:text="VALIDAR VIGENCIA ACTA"
+                android:layout_height="match_parent"
                 android:textSize="20sp"
-                android:textAlignment="center"
-                android:paddingLeft="15dp"/>
+                android:paddingLeft="15dp"
+                android:text="VALIDAR VIGENCIA ACTA"
+                android:background="@color/mpsdk_transparent"/>
         </LinearLayout>
 
     </LinearLayout>

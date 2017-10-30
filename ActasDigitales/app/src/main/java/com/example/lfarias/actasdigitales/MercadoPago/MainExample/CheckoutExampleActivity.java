@@ -82,7 +82,9 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
         mActionBar.setDisplayHomeAsUpEnabled(true);*/
 
         mRegularLayout = findViewById(R.id.regularLayout);
-        requestNumberId = getIntent().getStringExtra("idSolicitud");
+        if(getIntent().getStringExtra("idSolicitud") != null){
+            requestNumberId = getIntent().getStringExtra("idSolicitud");
+        }
 
     }
 
@@ -160,7 +162,27 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
 
     @Override
     public void generate_pdf(Boolean success) {
-
+        if(success){
+            Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
+            startActivity(i);
+            finish();
+        } else {
+            final AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ContextThemeWrapper ctw = new ContextThemeWrapper(CheckoutExampleActivity.this, R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
+            } else {
+                builder = new AlertDialog.Builder(CheckoutExampleActivity.this);
+            }
+            builder.setTitle("Error al firmar el acta")
+                    .setMessage("Ocurrio un error al firmar el acta asociada a este pago. Por favor intente nuevamente mas tarde o contacte al soporte.")
+                    .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setIcon(R.drawable.error_1)
+                    .show();
+        }
     }
 
     public void createSnackBar(final String status) {
@@ -219,9 +241,6 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
 
                             asynctask.execute(conectParams);
 
-                            Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
-                            startActivity(i);
-                            finish();
                         }
                     })
                     .setPositiveButton("INICIO", new DialogInterface.OnClickListener() {
@@ -242,9 +261,6 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                             conectParams.setParams(params);
 
                             asynctask.execute(conectParams);
-                            Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
-                            startActivity(i);
-                            finish();
                         }
                     })
                     .setIcon(R.drawable.success_1)

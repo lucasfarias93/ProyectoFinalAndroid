@@ -49,8 +49,8 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
             String urlDecoded = URLDecoder.decode(urlEncoded.toString(), "UTF-8");
             URL url = new URL(urlDecoded);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(7000);
+            conn.setConnectTimeout(7000);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -103,24 +103,9 @@ public class ImagenActaAsynctask extends AsyncTask<ConnectionParams, Void, List<
                 break;
 
             default:
-                final AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
-                    builder = new AlertDialog.Builder(ctw);
-                } else {
-                    builder = new AlertDialog.Builder(context);
-                }
-                builder.setTitle("Error al obtener la imagen")
-                        .setMessage("Ocurrio un error al obtener la imagen de su acta. Por favor intente nuevamente mas tarde o contacte al soporte.")
-                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                callback.getImageBase64("");
-                            }
-                        })
-                        .setIcon(R.drawable.error_1)
-                        .show();
+                callback.getImageBase64("false");
+                break;
         }
     }
-
 
 }
