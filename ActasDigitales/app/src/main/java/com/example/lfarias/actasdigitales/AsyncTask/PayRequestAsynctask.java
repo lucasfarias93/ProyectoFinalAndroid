@@ -32,15 +32,17 @@ public class PayRequestAsynctask extends AsyncTask<ConnectionParams, Void, List<
     Callback callback;
     ProgressDialog dialog;
     Activity activity1;
+    String status;
 
-    public PayRequestAsynctask(Context context, Callback callback, Activity activity) {
+    public PayRequestAsynctask(Context context, Callback callback, Activity activity, String text) {
         this.callback = callback;
         this.context = context;
         activity1 = activity;
+        status = text;
     }
 
     public interface Callback {
-        void generate_pdf(Boolean success, Activity activity);
+        void generate_pdf(Boolean success, Activity activity, String status);
     }
 
     @Override
@@ -103,14 +105,14 @@ public class PayRequestAsynctask extends AsyncTask<ConnectionParams, Void, List<
         switch (searchType) {
             case 17:
                 if(result.get(0).startsWith("<") ){
-                    callback.generate_pdf(true, activity1);
+                    callback.generate_pdf(true, activity1, status);
                 } else if(Boolean.valueOf(result.get(0))){
-                    callback.generate_pdf(true, activity1);
+                    callback.generate_pdf(true, activity1, status);
                 }
                 break;
 
             default:
-                callback.generate_pdf(false, activity1);
+                callback.generate_pdf(false, activity1, status);
                 break;
         }
     }

@@ -77,6 +77,7 @@ public class LandingPageActivity extends AppCompatActivity {
                 CacheService.getInstance().clear();
                 Intent i = new Intent(LandingPageActivity.this, LoginActivity.class);
                 startActivity(i);
+
                 break;
 
             case android.R.id.home:

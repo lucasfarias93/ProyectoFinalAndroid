@@ -199,6 +199,13 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
     }
 
     @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, LandingPageActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
     public void getCancelRequestResponse(Boolean success) {
         if (success) {
             dialog.dismiss();

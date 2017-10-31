@@ -134,6 +134,4 @@ public class MisSolicitudesAsynctask extends AsyncTask<ConnectionParams, Void, L
                         .show();
         }
     }
-
-
 }

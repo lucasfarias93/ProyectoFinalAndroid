@@ -75,6 +75,7 @@ public class MPMainActivity extends AppCompatActivity {
                 CacheService.getInstance().clearUser1MockData();
                 Intent i = new Intent(MPMainActivity.this, LoginActivity.class);
                 startActivity(i);
+
                 break;
 
             case android.R.id.home:

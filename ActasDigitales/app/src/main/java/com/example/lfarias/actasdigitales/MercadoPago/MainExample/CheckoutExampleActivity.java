@@ -130,8 +130,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                 paymentStatus = payment.getStatus();
                 if("approved".equals(paymentStatus)){
                     createNotificationAproved();
-                }
-                if("pending".equals(paymentStatus)){
+                } else if("pending".equals(paymentStatus)){
                     createNotificationPending();
                 }
 
@@ -249,19 +248,33 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
     }
 
     @Override
-    public void generate_pdf(Boolean success, Activity activity) {
+    public void generate_pdf(Boolean success, Activity activity, String status) {
         dialog1.dismiss();
         if (success) {
-            createNotificationSuccess("Acta digital firmada");
-            if (activity instanceof LandingPageActivity) {
-                Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
-                startActivity(i);
-                CheckoutExampleActivity.this.finish();
-            } else if (activity instanceof MisSolicitudesActivity) {
-                Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
-                startActivity(i);
-                CheckoutExampleActivity.this.finish();
+            if("Pending".equals(status)){
+                createNotificationPending1("Pago en proceso");
+                if (activity instanceof LandingPageActivity) {
+                    Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
+                    startActivity(i);
+                    CheckoutExampleActivity.this.finish();
+                } else if (activity instanceof MisSolicitudesActivity) {
+                    Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
+                    startActivity(i);
+                    CheckoutExampleActivity.this.finish();
+                }
+            } else {
+                createNotificationSuccess("Acta digital firmada");
+                if (activity instanceof LandingPageActivity) {
+                    Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
+                    startActivity(i);
+                    CheckoutExampleActivity.this.finish();
+                } else if (activity instanceof MisSolicitudesActivity) {
+                    Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
+                    startActivity(i);
+                    CheckoutExampleActivity.this.finish();
+                }
             }
+
         } else {
             final AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -297,7 +310,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                     .setNegativeButton("MIS SOLICITUDES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new MisSolicitudesActivity());
+                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new MisSolicitudesActivity(), "Pending" );
                             List<String> params = new ArrayList<>();
                             params.add(status);
                             long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
@@ -317,7 +330,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                     .setPositiveButton("INICIO", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new LandingPageActivity());
+                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new LandingPageActivity(), "Pending");
                             List<String> params = new ArrayList<>();
                             params.add(status);
                             long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
@@ -348,7 +361,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                     .setNegativeButton("MIS SOLICITUDES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new MisSolicitudesActivity());
+                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new MisSolicitudesActivity(), "Approved");
                             List<String> params = new ArrayList<>();
                             params.add(status);
                             long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
@@ -369,7 +382,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
 
-                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new LandingPageActivity());
+                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new LandingPageActivity(), "Approved");
                             List<String> params = new ArrayList<>();
                             params.add(status);
                             long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
@@ -433,6 +446,27 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                         .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText("Le hemos enviado el acta en formato digital firmada a su casilla de correos. Gracias por usar Actas Digitales!"));
+
+        NotificationManager notifyMgr = (NotificationManager) CheckoutExampleActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notifyMgr.notify(notificationId, builder.build());
+    }
+
+    public void createNotificationPending1(String status) {
+        int notificationId = new Random().nextInt(); // just use a counter in some util class...
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
+        contentView.setTextViewText(R.id.title, "Custom notification");
+        contentView.setTextViewText(R.id.text, "This is a custom layout");
+
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.success_1)
+                        .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
+                        .setContentTitle("Actas Digitales")
+                        .setContentText(status)
+                        .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Su pago esta siendo procesado. Apenas se confirme, le enviaremos su acta firmada digitalmente"));
 
         NotificationManager notifyMgr = (NotificationManager) CheckoutExampleActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
