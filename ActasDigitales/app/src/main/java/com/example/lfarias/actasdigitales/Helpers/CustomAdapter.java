@@ -160,6 +160,11 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> implements Filter
             holder.cancelar.setVisibility(View.INVISIBLE);
             holder.delete.setVisibility(View.INVISIBLE);
             holder.success.setVisibility(View.VISIBLE);
+        } else if("Pendiente de pago".equals(holder.estadoActa.getText().toString())){
+            holder.pagar.setVisibility(View.INVISIBLE);
+            holder.cancelar.setVisibility(View.INVISIBLE);
+            holder.delete.setVisibility(View.INVISIBLE);
+            holder.success.setVisibility(View.INVISIBLE);
         }
 
         holder.pos = position;

@@ -178,6 +178,8 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                     .setMessage("Ocurrio un error al firmar el acta asociada a este pago. Por favor intente nuevamente mas tarde o contacte al soporte.")
                     .setNegativeButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
                         }
                     })
                     .setIcon(R.drawable.error_1)

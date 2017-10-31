@@ -373,7 +373,9 @@ public class RequestActActivity extends AppCompatActivity {
                 final String imageBase64 = success;
 
                 try {
-                    byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+                    String substring1 = success.substring(success.indexOf(",") + 1);
+                    String substring2 = substring1.substring(0, substring1.indexOf("="));
+                    byte[] decodedString = Base64.decode(substring2 + "=", Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
                     if (decodedByte == null) {
