@@ -2,6 +2,7 @@ package com.example.lfarias.actasdigitales.MercadoPago.MainExample;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,6 +68,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
     private String mCheckoutPreferenceId;
     private ImageView imageView2;
     private String requestNumberId;
+    ProgressDialog dialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,8 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
         if(getIntent().getStringExtra("idSolicitud") != null){
             requestNumberId = getIntent().getStringExtra("idSolicitud");
         }
+
+        dialog1 = Utils.createLoadingIndicator(this);
 
     }
 
@@ -161,11 +165,18 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
     }
 
     @Override
-    public void generate_pdf(Boolean success) {
+    public void generate_pdf(Boolean success, Activity activity) {
+        dialog1.dismiss();
         if(success){
-            Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
-            startActivity(i);
-            finish();
+            if(activity instanceof LandingPageActivity){
+                Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
+                startActivity(i);
+                CheckoutExampleActivity.this.finish();
+            } else if(activity instanceof MisSolicitudesActivity){
+                Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
+                startActivity(i);
+                CheckoutExampleActivity.this.finish();
+            }
         } else {
             final AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -201,17 +212,40 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                     .setNegativeButton("MIS SOLICITUDES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
-                            startActivity(i);
-                            finish();
+                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new MisSolicitudesActivity());
+                            List<String> params = new ArrayList<>();
+                            params.add(status);
+                            long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
+                            params.add(String.valueOf(number));
+                            params.add(String.valueOf(requestNumberId));
+
+                            ConnectionParams conectParams = new ConnectionParams();
+                            conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+                            conectParams.setmActionId(ServiceUtils.Actions.PAGAR_SOLICITUD);
+                            conectParams.setmSearchType(ServiceUtils.SearchType.PAGAR_SOLICITUD_SEARCH_TYPE);
+                            conectParams.setParams(params);
+                            dialog1.show();
+                            asynctask.execute(conectParams);
+
                         }
                     })
                     .setPositiveButton("INICIO", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
-                            startActivity(i);
-                            finish();
+                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new LandingPageActivity());
+                            List<String> params = new ArrayList<>();
+                            params.add(status);
+                            long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
+                            params.add(String.valueOf(number));
+                            params.add(String.valueOf(requestNumberId));
+
+                            ConnectionParams conectParams = new ConnectionParams();
+                            conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.COMMON_INDEX_METHOD);
+                            conectParams.setmActionId(ServiceUtils.Actions.PAGAR_SOLICITUD);
+                            conectParams.setmSearchType(ServiceUtils.SearchType.PAGAR_SOLICITUD_SEARCH_TYPE);
+                            conectParams.setParams(params);
+                            dialog1.show();
+                            asynctask.execute(conectParams);
                         }
                     })
                     .setIcon(R.drawable.success_1)
@@ -228,7 +262,8 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                     .setMessage("El pago fue confirmado. Proximamente recibira en su mail su acta firmada.")
                     .setNegativeButton("MIS SOLICITUDES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this);
+                            dialog.dismiss();
+                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new MisSolicitudesActivity());
                             List<String> params = new ArrayList<>();
                             params.add(status);
                             long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
@@ -240,7 +275,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                             conectParams.setmActionId(ServiceUtils.Actions.PAGAR_SOLICITUD);
                             conectParams.setmSearchType(ServiceUtils.SearchType.PAGAR_SOLICITUD_SEARCH_TYPE);
                             conectParams.setParams(params);
-
+                            dialog1.show();
                             asynctask.execute(conectParams);
 
                         }
@@ -249,7 +284,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
 
-                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this);
+                            PayRequestAsynctask asynctask = new PayRequestAsynctask(CheckoutExampleActivity.this, CheckoutExampleActivity.this, new LandingPageActivity());
                             List<String> params = new ArrayList<>();
                             params.add(status);
                             long number = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
@@ -261,7 +296,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                             conectParams.setmActionId(ServiceUtils.Actions.PAGAR_SOLICITUD);
                             conectParams.setmSearchType(ServiceUtils.SearchType.PAGAR_SOLICITUD_SEARCH_TYPE);
                             conectParams.setParams(params);
-
+                            dialog1.show();
                             asynctask.execute(conectParams);
                         }
                     })

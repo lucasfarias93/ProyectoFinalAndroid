@@ -20,7 +20,7 @@
         android:gravity="center"
         android:text="@string/recover_data"
         android:textColor="@color/colorAccent"
-        android:textSize="22sp"
+        android:textSize="30sp"
         android:padding="5dp"
         android:textStyle="bold" />
 
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:imeOptions="actionUnspecified"
-                android:inputType="number"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true" />
 

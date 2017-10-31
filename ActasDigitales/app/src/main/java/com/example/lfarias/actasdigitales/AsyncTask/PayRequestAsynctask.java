@@ -1,5 +1,6 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,14 +31,16 @@ public class PayRequestAsynctask extends AsyncTask<ConnectionParams, Void, List<
     Context context;
     Callback callback;
     ProgressDialog dialog;
+    Activity activity1;
 
-    public PayRequestAsynctask(Context context, Callback callback) {
+    public PayRequestAsynctask(Context context, Callback callback, Activity activity) {
         this.callback = callback;
         this.context = context;
+        activity1 = activity;
     }
 
     public interface Callback {
-        void generate_pdf(Boolean success);
+        void generate_pdf(Boolean success, Activity activity);
     }
 
     @Override
@@ -99,11 +102,13 @@ public class PayRequestAsynctask extends AsyncTask<ConnectionParams, Void, List<
 
         switch (searchType) {
             case 17:
-                callback.generate_pdf(Boolean.valueOf(result.get(0)));
+                if(result.get(0).startsWith("<")){
+                    callback.generate_pdf(true, activity1);
+                }
                 break;
 
             default:
-                callback.generate_pdf(false);
+                callback.generate_pdf(false, activity1);
                 break;
         }
     }
