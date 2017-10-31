@@ -128,46 +128,87 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
             if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
                 Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
                 paymentStatus = payment.getStatus();
+                if("approved".equals(paymentStatus)){
+                    createNotificationAproved();
+                }
+                if("pending".equals(paymentStatus)){
+                    createNotificationPending();
+                }
+
             } else if (resultCode == RESULT_CANCELED) {
                 if (data != null && data.getStringExtra("mercadoPagoError") != null) {
                     MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
                     Toast.makeText(mActivity, "Error: " + mercadoPagoError.getMessage(), Toast.LENGTH_SHORT).show();
                     paymentStatus = "rejected";
+                    createNotificationRejected();
                 } else {
-                    Toast.makeText(mActivity, "Cancel", Toast.LENGTH_SHORT).show();
                     paymentStatus = "rejected";
                 }
             }
         }
-        createNotification(paymentStatus);
         createSnackBar(paymentStatus);
     }
 
-    public void createNotification(String status) {
+    public void createNotificationAproved() {
             int notificationId = new Random().nextInt(); // just use a counter in some util class...
 
             RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
             contentView.setTextViewText(R.id.title, "Custom notification");
             contentView.setTextViewText(R.id.text, "This is a custom layout");
-            String estado = null;
-            if("approved".equals(status)){
-                estado = "Pago Aprobado";
-            }
-            if("pending".equals(status)){
-                estado = "Pago Pendiente de Aprobación";
-            }
-            if("rejected".equals(status)){
-                estado = "Pago Rechazado";
-            }
+
             NotificationCompat.Builder builder =
                     (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.success_1)
                             .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
                             .setContentTitle("Actas Digitales")
-                            .setContentText(estado)
+                            .setContentText("Pago aprobado")
                             .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
                             .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText("Se ha completado el pago de los códigos provinciales. En breve le enviaremos el acta firmada a su casilla de correo"));
+
+        NotificationManager notifyMgr = (NotificationManager) CheckoutExampleActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notifyMgr.notify(notificationId, builder.build());
+    }
+
+    public void createNotificationPending() {
+        int notificationId = new Random().nextInt(); // just use a counter in some util class...
+
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
+        contentView.setTextViewText(R.id.title, "Custom notification");
+        contentView.setTextViewText(R.id.text, "This is a custom layout");
+
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.success_1)
+                        .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
+                        .setContentTitle("Actas Digitales")
+                        .setContentText("Pago Pendiente de Aprobación")
+                        .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("El pago se ha realizado y se demorará de 1 a 3 dias hábiles para su acreditación. Luego le enviaremos el acta firmada ditigalmente a su casilla de correo"));
+
+        NotificationManager notifyMgr = (NotificationManager) CheckoutExampleActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notifyMgr.notify(notificationId, builder.build());
+    }
+
+    public void createNotificationRejected() {
+        int notificationId = new Random().nextInt(); // just use a counter in some util class...
+
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
+        contentView.setTextViewText(R.id.title, "Custom notification");
+        contentView.setTextViewText(R.id.text, "This is a custom layout");
+
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.success_1)
+                        .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
+                        .setContentTitle("Actas Digitales")
+                        .setContentText("Pago rechazado")
+                        .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Pago rechazado. Debe completar un pago satisfactoriamente para recibir un acta firmada digitalmente"));
 
         NotificationManager notifyMgr = (NotificationManager) CheckoutExampleActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
