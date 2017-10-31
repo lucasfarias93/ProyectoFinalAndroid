@@ -2,6 +2,9 @@ package com.example.lfarias.actasdigitales.MercadoPago.MainExample;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +52,7 @@ import com.mercadopago.util.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import okhttp3.internal.Util;
 
@@ -70,6 +76,8 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
     private String requestNumberId;
     ProgressDialog dialog1;
 
+    public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,12 +87,15 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
         mCheckoutPreferenceId = ExampleUtils.DUMMY_PREFERENCE_ID;
         mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
 
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.cancel(getIntent().getIntExtra(NOTIFICATION_ID, -1));
+
         /*ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Pagar con MercadoPago");
         mActionBar.setDisplayHomeAsUpEnabled(true);*/
 
         mRegularLayout = findViewById(R.id.regularLayout);
-        if(getIntent().getStringExtra("idSolicitud") != null){
+        if (getIntent().getStringExtra("idSolicitud") != null) {
             requestNumberId = getIntent().getStringExtra("idSolicitud");
         }
 
@@ -128,7 +139,39 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                 }
             }
         }
+        createNotification(paymentStatus);
         createSnackBar(paymentStatus);
+    }
+
+    public void createNotification(String status) {
+            int notificationId = new Random().nextInt(); // just use a counter in some util class...
+
+            RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
+            contentView.setTextViewText(R.id.title, "Custom notification");
+            contentView.setTextViewText(R.id.text, "This is a custom layout");
+            String estado = null;
+            if("approved".equals(status)){
+                estado = "Pago Aprobado";
+            }
+            if("pending".equals(status)){
+                estado = "Pago Pendiente de Aprobación";
+            }
+            if("rejected".equals(status)){
+                estado = "Pago Rechazado";
+            }
+            NotificationCompat.Builder builder =
+                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.success_1)
+                            .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
+                            .setContentTitle("Actas Digitales")
+                            .setContentText(estado)
+                            .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Se ha completado el pago de los códigos provinciales. En breve le enviaremos el acta firmada a su casilla de correo"));
+
+        NotificationManager notifyMgr = (NotificationManager) CheckoutExampleActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notifyMgr.notify(notificationId, builder.build());
     }
 
     @Override
@@ -167,12 +210,12 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
     @Override
     public void generate_pdf(Boolean success, Activity activity) {
         dialog1.dismiss();
-        if(success){
-            if(activity instanceof LandingPageActivity){
+        if (success) {
+            if (activity instanceof LandingPageActivity) {
                 Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
                 startActivity(i);
                 CheckoutExampleActivity.this.finish();
-            } else if(activity instanceof MisSolicitudesActivity){
+            } else if (activity instanceof MisSolicitudesActivity) {
                 Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
                 startActivity(i);
                 CheckoutExampleActivity.this.finish();
@@ -199,7 +242,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
     }
 
     public void createSnackBar(final String status) {
-        if("pending".equals(status)){
+        if ("pending".equals(status)) {
             final AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ContextThemeWrapper ctw = new ContextThemeWrapper(CheckoutExampleActivity.this, R.style.AppTheme_PopupOverlay);
@@ -250,7 +293,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                     })
                     .setIcon(R.drawable.success_1)
                     .show();
-        } else if("approved".equals(status)){
+        } else if ("approved".equals(status)) {
             final AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ContextThemeWrapper ctw = new ContextThemeWrapper(CheckoutExampleActivity.this, R.style.AppTheme_PopupOverlay);
@@ -277,6 +320,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                             conectParams.setParams(params);
                             dialog1.show();
                             asynctask.execute(conectParams);
+                            createNotificationSuccess("Acta digital firmada");
 
                         }
                     })
@@ -298,6 +342,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                             conectParams.setParams(params);
                             dialog1.show();
                             asynctask.execute(conectParams);
+                            createNotificationSuccess("Acta digital firmada");
                         }
                     })
                     .setIcon(R.drawable.success_1)
@@ -331,39 +376,25 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                     .setIcon(R.drawable.error_1)
                     .show();
         }
+    }
+    public void createNotificationSuccess(String status) {
+        int notificationId = new Random().nextInt(); // just use a counter in some util class...
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
+        contentView.setTextViewText(R.id.title, "Custom notification");
+        contentView.setTextViewText(R.id.text, "This is a custom layout");
 
-        /*InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.success_1)
+                        .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
+                        .setContentTitle("Actas Digitales")
+                        .setContentText(status)
+                        .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Le hemos enviado el acta en formato digital firmada a su casilla de correos. Gracias por usar Actas Digitales!"));
 
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+        NotificationManager notifyMgr = (NotificationManager) CheckoutExampleActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Snackbar snackbar = Snackbar
-                .make(getWindow().getDecorView().findViewById(R.id.register_layout), "El pago ha sido realizado correctamente. En breve le mandaremos el acta solicitada", Snackbar.LENGTH_LONG)
-                .setAction("IR AL INICIO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        CheckoutExampleActivity.this.finish();
-                        Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
-                        startActivity(i);
-                    }
-                })
-                .setAction("MIS SOLICITUDES", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        CheckoutExampleActivity.this.finish();
-                        Intent i = new Intent(CheckoutExampleActivity.this, MisSolicitudesActivity.class);
-                        startActivity(i);
-                    }
-                });
-        // Changing message text color
-        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
-
-        // Changing action button text color
-        View sbView = snackbar.getView();
-        sbView.setBackgroundColor(getResources().getColor(R.color.white));
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(getResources().getColor(R.color.colorPrimary));
-        snackbar.show();*/
+        notifyMgr.notify(notificationId, builder.build());
     }
 }
