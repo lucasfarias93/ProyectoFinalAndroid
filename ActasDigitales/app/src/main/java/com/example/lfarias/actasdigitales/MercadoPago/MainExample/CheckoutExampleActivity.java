@@ -252,6 +252,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
     public void generate_pdf(Boolean success, Activity activity) {
         dialog1.dismiss();
         if (success) {
+            createNotificationSuccess("Acta digital firmada");
             if (activity instanceof LandingPageActivity) {
                 Intent i = new Intent(CheckoutExampleActivity.this, LandingPageActivity.class);
                 startActivity(i);
@@ -361,7 +362,6 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                             conectParams.setParams(params);
                             dialog1.show();
                             asynctask.execute(conectParams);
-                            createNotificationSuccess("Acta digital firmada");
 
                         }
                     })
@@ -383,7 +383,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                             conectParams.setParams(params);
                             dialog1.show();
                             asynctask.execute(conectParams);
-                            createNotificationSuccess("Acta digital firmada");
+
                         }
                     })
                     .setIcon(R.drawable.success_1)

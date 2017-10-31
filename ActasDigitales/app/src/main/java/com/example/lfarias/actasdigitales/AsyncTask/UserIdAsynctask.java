@@ -114,7 +114,7 @@ public class UserIdAsynctask extends AsyncTask<ConnectionParams, Void, List<Stri
                     builder = new AlertDialog.Builder(context);
                 }
                 builder.setTitle("Error")
-                        .setMessage("Ocurrio un error al registrar un nuevo usuario. Por favor intente nuevamente mas tarde o contacte al soporte.")
+                        .setMessage("Ocurrio un error al obtener el is de usuario. Por favor intente nuevamente mas tarde o contacte al soporte.")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                             }

@@ -41,6 +41,7 @@ public class ServiceUtils {
         public static final String BUSCAR_DATOS_MOBILE = "buscar_datos_mobile";
         public static final String CANCELAR_SOLICITUD = "cancelar_mobile";
         public static final String PAGAR_SOLICITUD = "generar_pdf_mobile";
+        public static final String REPORT_ERROR = "crear_reclamo_mobile";
 
     }
 
@@ -63,6 +64,7 @@ public class ServiceUtils {
         public static final String RECUPERAR_CONTRASEÑA_CAMBIO_CONTROLLER = "recuperar";
         public static final String REGISTER_USER = "crear_mobile";
         public static final String VERIFICAR_CONTROLLER = "verificar";
+        public static final String REPORT_ERROR_PATH = "reportarerror";
     }
 
     public static class SearchType {
@@ -89,6 +91,7 @@ public class ServiceUtils {
         public static final Integer OBTENER_DATOS_SEARCH_TYPE = 15;
         public static final Integer CANCELAR_SOLICITUD_SEARCH_TYPE = 16;
         public static final Integer PAGAR_SOLICITUD_SEARCH_TYPE = 17;
+        public static final Integer REPORTAR_ERROR_SEARCH_TYPE = 18;
     }
 
     public static class RequestData{

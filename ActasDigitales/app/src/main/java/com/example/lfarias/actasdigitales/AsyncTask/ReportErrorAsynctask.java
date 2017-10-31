@@ -1,6 +1,7 @@
 package com.example.lfarias.actasdigitales.AsyncTask;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -10,10 +11,6 @@ import android.support.v7.view.ContextThemeWrapper;
 import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,21 +23,22 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by acer on 27/10/2017.
+ * Created by lfarias on 10/31/17.
  */
 
-public class BuscarDatosImagenAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
-        Context context;
-        Callback callback;
+public class ReportErrorAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
+    Context context;
+    Callback callback;
+    ProgressDialog dialog;
 
-public BuscarDatosImagenAsynctask(Context context, Callback callback) {
+    public ReportErrorAsynctask(Context context, Callback callback) {
         this.callback = callback;
         this.context = context;
-        }
+    }
 
-public interface Callback {
-    void getUserDataMobile(JSONObject success);
-}
+    public interface Callback {
+        void successReportError(Boolean success);
+    }
 
     @Override
     protected List<String> doInBackground(ConnectionParams... params) {
@@ -100,40 +98,29 @@ public interface Callback {
         Integer searchType = Integer.parseInt(result.get(1));
 
         switch (searchType) {
-            case 15:
-                try {
-                    String resultado = result.get(0).replaceAll("\"","");
-                    if("No hay datos".equals(resultado)){
-                        JSONObject object = new JSONObject();
-                        callback.getUserDataMobile(object);
-                    } else {
-                        JSONObject object = new JSONObject(result.get(0));
-                        callback.getUserDataMobile(object);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            case 18:
+                if(result.get(0).contains("true"))
+                callback.successReportError(true);
+
                 break;
 
             default:
-                final AlertDialog.Builder builder;
+                AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ContextThemeWrapper ctw = new ContextThemeWrapper(context, R.style.AppTheme_PopupOverlay);
                     builder = new AlertDialog.Builder(ctw);
                 } else {
                     builder = new AlertDialog.Builder(context);
                 }
-                builder.setTitle("Error al obtener los datos del propietario de acta")
-                        .setMessage("Ocurrio un error al cobtener los datos del propietario del acta. Por favor intente nuevamente mas tarde o contacte al soporte.")
-                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                builder.setTitle("Error")
+                        .setMessage("Ocurrio un error al enviar el reporte al Archivo general. Intente nuevamente más tarde.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
-                        .setIcon(R.drawable.error_1)
+                        .setIcon(R.drawable.information)
                         .show();
         }
     }
-
-
 }

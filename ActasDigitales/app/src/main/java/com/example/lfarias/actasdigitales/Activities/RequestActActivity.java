@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.Px;
+import android.support.constraint.solver.Cache;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -154,7 +155,7 @@ public class RequestActActivity extends AppCompatActivity {
 
             switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
-
+                    ProgressDialog dialog2 = Utils.createLoadingIndicator(getContext());
                     rootView = inflater.inflate(R.layout.fragment_page_1, container, false);
                     final RadioGroup radioGroup = (RadioGroup) rootView.findViewById(R.id.rdgGrupo);
                     radioGroup.setVisibility(View.GONE);
@@ -240,16 +241,20 @@ public class RequestActActivity extends AppCompatActivity {
                     break;
 
                 case 2:
+                    ProgressDialog dialog3 = Utils.createLoadingIndicator(getContext());
                     final CacheService instance = CacheService.getInstance();
                     rootView = inflater.inflate(R.layout.fragment_page_2, container, false);
                     ImageView imagen = (ImageView) rootView.findViewById(R.id.imagen_acta1);
                     LinearLayout layout_1 = (LinearLayout) rootView.findViewById(R.id.layout_1);
                     LinearLayout layout_2 = (LinearLayout) rootView.findViewById(R.id.layout_2);
                     LinearLayout layout_3 = (LinearLayout) rootView.findViewById(R.id.layout_3);
+                    LinearLayout layout_4 = (LinearLayout) rootView.findViewById(R.id.layout_4);
                     imagen.setVisibility(View.GONE);
                     layout_1.setVisibility(View.GONE);
                     layout_2.setVisibility(View.GONE);
                     layout_3.setVisibility(View.GONE);
+                    layout_4.setVisibility(View.GONE);
+
                     final Button mButtonVisualize = (Button) rootView.findViewById(R.id.visualizar);
 
                     mButtonVisualize.setOnClickListener(new View.OnClickListener() {
@@ -274,11 +279,13 @@ public class RequestActActivity extends AppCompatActivity {
                                 LinearLayout layout_1 = (LinearLayout) rootView.findViewById(R.id.layout_1);
                                 LinearLayout layout_2 = (LinearLayout) rootView.findViewById(R.id.layout_2);
                                 LinearLayout layout_3 = (LinearLayout) rootView.findViewById(R.id.layout_3);
+                                LinearLayout layout_4 = (LinearLayout) rootView.findViewById(R.id.layout_4);
 
                                 imagen.setVisibility(View.VISIBLE);
                                 layout_1.setVisibility(View.VISIBLE);
                                 layout_2.setVisibility(View.VISIBLE);
                                 layout_3.setVisibility(View.VISIBLE);
+                                layout_4.setVisibility(View.VISIBLE);
 
                                 mButtonVisualize.setText("Confirmar");
                             } else if ("Confirmar".equals(mButtonVisualize.getText().toString())) {
@@ -316,34 +323,40 @@ public class RequestActActivity extends AppCompatActivity {
                     mButtonReportError.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(getContext(), ReportErrorActivity.class);
+                            TextView nombre = (TextView) rootView.findViewById(R.id.nombre_1);
                             TextView añoActa = (TextView) rootView.findViewById(R.id.año_acta);
                             TextView nroActa = (TextView) rootView.findViewById(R.id.nro_acta);
                             TextView nroLibro = (TextView) rootView.findViewById(R.id.nro_libro);
 
-                            TextView nombre = (TextView) rootView.findViewById(R.id.nombre_1);
+                            if(nombre.getText().toString().contains("NO SE ENCONTRARON")){
+                                Intent i = new Intent(getContext(), ReportErrorActivity.class);
+                                startActivity(i);
+                            } else {
+                                Intent i = new Intent(getContext(), ReportErrorActivity.class);
 
-                            if (!añoActa.getText().toString().isEmpty()) {
-                                i.putExtra("año_acta", añoActa.getText().toString());
-                            }
-                            if (!nroActa.getText().toString().isEmpty()) {
-                                i.putExtra("nro_acta", nroActa.getText().toString());
-                            }
-                            if (!nroLibro.getText().toString().isEmpty()) {
-                                i.putExtra("nro_libro", nroLibro.getText().toString());
-                            }
-                            if (!nombre.getText().toString().isEmpty()) {
-                                String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
-                                nombre1.trim();
-                                String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
-                                String apellido_1 = apellido.substring(apellido.indexOf(": ") + 1);
-                                String apellido_2 = apellido_1.substring(1, apellido_1.length());
+                                if (!añoActa.getText().toString().isEmpty()) {
+                                    i.putExtra("año_acta", añoActa.getText().toString());
+                                }
+                                if (!nroActa.getText().toString().isEmpty()) {
+                                    i.putExtra("nro_acta", nroActa.getText().toString());
+                                }
+                                if (!nroLibro.getText().toString().isEmpty()) {
+                                    i.putExtra("nro_libro", nroLibro.getText().toString());
+                                }
+                                if (!nombre.getText().toString().isEmpty()) {
+                                    String nombre1 = nombre.getText().toString().substring(nombre.getText().toString().indexOf(",") + 1);
+                                    nombre1.trim();
+                                    String apellido = nombre.getText().toString().substring(0, nombre.getText().toString().indexOf(","));
+                                    String apellido_1 = apellido.substring(apellido.indexOf(": ") + 1);
+                                    String apellido_2 = apellido_1.substring(1, apellido_1.length());
 
 
-                                i.putExtra("nombre", nombre1);
-                                i.putExtra("apellido", apellido_2);
+                                    i.putExtra("nombre", nombre1);
+                                    i.putExtra("apellido", apellido_2);
+                                }
+                                startActivity(i);
                             }
-                            startActivity(i);
+
                         }
                     });
 
@@ -374,12 +387,13 @@ public class RequestActActivity extends AppCompatActivity {
 
                 try {
                     String substring1 = success.substring(success.indexOf(",") + 1);
-                    String substring2 = substring1.substring(0, substring1.indexOf("="));
-                    byte[] decodedString = Base64.decode(substring2 + "=", Base64.DEFAULT);
+                    String substring2 = substring1.substring(0, substring1.indexOf(","));
+                    byte[] decodedString = Base64.decode(substring2, Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     final ImageView view = (ImageView) rootView.findViewById(R.id.imagen_acta1);
                     if (decodedByte == null) {
                         view.setImageResource(R.drawable.image_not_loaded);
+                        callUserData();
                     } else {
                         view.setImageBitmap(decodedByte);
                         callUserData();
@@ -395,11 +409,24 @@ public class RequestActActivity extends AppCompatActivity {
                 } catch (IllegalArgumentException ex) {
                     ex.printStackTrace();
                     Utils.createGlobalDialog(getContext(), "Error", "Hubo un error al convertir la imagen del acta. Por favor intente nuevamente.").show();
+                    LinearLayout layout_1 = (LinearLayout) rootView.findViewById(R.id.layout_1);
+                    layout_1.setVisibility(View.GONE);
+                    LinearLayout layout_2 = (LinearLayout) rootView.findViewById(R.id.layout_1);
+                    layout_2.setVisibility(View.GONE);
+                    TextView view1 = (TextView)rootView.findViewById(R.id.nombre_2);
+                    view1.setText("NO SE ENCONTRARON DATOS\nASOCIADOS AL ACTA ELEGIDA");
+                    view1.setTypeface(Typeface.DEFAULT_BOLD);
+                    view1.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+                    view1.setVisibility(View.VISIBLE);
 
                 }
             } else if("false".equals(success)){
-                TextView view1 = (TextView)rootView.findViewById(R.id.nombre_1);
-                view1.setText("NO SE ENCONTRARON DATOS ASOCIADOS AL ACTA ELEGIDA");
+                LinearLayout layout_1 = (LinearLayout) rootView.findViewById(R.id.layout_1);
+                layout_1.setVisibility(View.GONE);
+                LinearLayout layout_2 = (LinearLayout) rootView.findViewById(R.id.layout_1);
+                layout_2.setVisibility(View.GONE);
+                TextView view1 = (TextView)rootView.findViewById(R.id.nombre_2);
+                view1.setText("NO SE ENCONTRARON DATOS\nASOCIADOS AL ACTA ELEGIDA");
                 view1.setTypeface(Typeface.DEFAULT_BOLD);
                 view1.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
                 view1.setVisibility(View.VISIBLE);
@@ -553,7 +580,15 @@ public class RequestActActivity extends AppCompatActivity {
         public void getUserDataMobile(JSONObject success) {
             dialog.dismiss();
             if (success.length() == 0) {
-
+                LinearLayout layout_1 = (LinearLayout) rootView.findViewById(R.id.layout_1);
+                layout_1.setVisibility(View.GONE);
+                LinearLayout layout_2 = (LinearLayout) rootView.findViewById(R.id.layout_2);
+                layout_2.setVisibility(View.GONE);
+                TextView view1 = (TextView)rootView.findViewById(R.id.nombre_2);
+                view1.setText("NO SE ENCONTRARON DATOS\nASOCIADOS AL ACTA ELEGIDA");
+                view1.setTypeface(Typeface.DEFAULT_BOLD);
+                view1.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+                view1.setVisibility(View.VISIBLE);
             } else {
                 try {
                     TextView fechaView = (TextView) rootView.findViewById(R.id.año_acta);
@@ -563,12 +598,20 @@ public class RequestActActivity extends AppCompatActivity {
                     TextView dniView = (TextView) rootView.findViewById(R.id.dni);
                     TextView nombreCompletoView = (TextView) rootView.findViewById(R.id.nombre_1);
 
+                    LinearLayout layout_4 = (LinearLayout) rootView.findViewById(R.id.layout_4);
+                    layout_4.setVisibility(View.GONE);
+
                     String nombreProp = success.getString("persona");
                     String apellidoProp = success.getString("apellido");
                     String dni = success.getString("dni");
                     String nrolibro = success.getString("nrolibro");
                     String nroActa = success.getString("nroacta");
                     String ubicacion = success.getString("ubicacion");
+
+                    CacheService.getInstance().setNroActa(nroActa);
+                    CacheService.getInstance().setNroLibro(nrolibro);
+                    CacheService.getInstance().setNombre(nombreProp);
+                    CacheService.getInstance().setApellido(apellidoProp);
 
                     fechaView.setText("Fecha: " + success.getString("fecha_nacimiento"));
                     nombreCompletoView.setText("Nombre Completo: " + apellidoProp + "," + nombreProp);

@@ -28,14 +28,14 @@
                 android:text="Ingrese los datos para el reporte del error al Archivo General del Registro"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
-                android:textSize="25sp" />
+                android:textSize="35sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:text="@string/instructions_error"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:textStyle="italic" />
 
             <LinearLayout
@@ -55,6 +55,7 @@
                 <Spinner
                     android:id="@+id/spinner_report"
                     android:layout_width="250dp"
+                    android:layout_marginBottom="15dp"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
@@ -119,8 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:hint="Nro. de Libro"
-                    android:inputType="number"
-                    android:textSize="20sp" />
+                    android:inputType="number" />
 
             </android.support.design.widget.TextInputLayout>
 

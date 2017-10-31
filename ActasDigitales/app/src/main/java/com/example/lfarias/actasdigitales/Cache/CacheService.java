@@ -20,6 +20,12 @@ public class CacheService {
     static int tipoLibro;
     static int idUser;
 
+    static String nroActa;
+    static String añoActa;
+    static String nroLibro;
+    static String nombre;
+    static String apellido;
+
     List<SolicitudActa> solicitudesUser1 = new ArrayList<>();
     List<SolicitudActa> solicitudesUserHost = new ArrayList<>();
 
@@ -85,5 +91,45 @@ public class CacheService {
 
     public static void setIdUser(int idUser) {
         CacheService.idUser = idUser;
+    }
+
+    public static String getNroLibro() {
+        return nroLibro;
+    }
+
+    public static void setNroLibro(String nroLibro) {
+        CacheService.nroLibro = nroLibro;
+    }
+
+    public static String getAñoActa() {
+        return añoActa;
+    }
+
+    public static void setAñoActa(String añoActa) {
+        CacheService.añoActa = añoActa;
+    }
+
+    public static String getNroActa() {
+        return nroActa;
+    }
+
+    public static void setNroActa(String nroActa) {
+        CacheService.nroActa = nroActa;
+    }
+
+    public static String getApellido() {
+        return apellido;
+    }
+
+    public static void setApellido(String apellido) {
+        CacheService.apellido = apellido;
+    }
+
+    public static String getNombre() {
+        return nombre;
+    }
+
+    public static void setNombre(String nombre) {
+        CacheService.nombre = nombre;
     }
 }

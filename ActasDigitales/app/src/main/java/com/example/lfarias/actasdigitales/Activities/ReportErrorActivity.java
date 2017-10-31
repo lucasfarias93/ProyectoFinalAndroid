@@ -2,12 +2,15 @@ package com.example.lfarias.actasdigitales.Activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
+import android.support.constraint.solver.Cache;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
@@ -16,15 +19,23 @@ import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.Html;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lfarias.actasdigitales.AsyncTask.ReportErrorAsynctask;
+import com.example.lfarias.actasdigitales.AsyncTask.SearchParentBookTypeAsynctask;
+import com.example.lfarias.actasdigitales.Cache.CacheService;
+import com.example.lfarias.actasdigitales.Entities.ConnectionParams;
 import com.example.lfarias.actasdigitales.Helpers.Utils;
 import com.example.lfarias.actasdigitales.R;
+import com.example.lfarias.actasdigitales.Services.ServiceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +43,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ReportErrorActivity extends AppCompatActivity {
+public class ReportErrorActivity extends AppCompatActivity implements ReportErrorAsynctask.Callback{
 
     @Bind(R.id.spinner_report)
     Spinner mSpinnerReport;
@@ -42,6 +53,7 @@ public class ReportErrorActivity extends AppCompatActivity {
     TextInputEditText mNombreProp;
     @Bind(R.id.apellido_prop_acta)
     TextInputEditText mApellidoProp;
+    @Bind(R.id.observaciones) TextInputEditText mObservaciones;
     @Bind(R.id.año_acta) TextInputEditText mAñoActa;
     @Bind(R.id.nro_acta) TextInputEditText mNroActa;
     @Bind(R.id.nro_libro) TextInputEditText mNroLibro;
@@ -50,7 +62,7 @@ public class ReportErrorActivity extends AppCompatActivity {
     TextInputLayout nombreLayout;
     @Bind(R.id.apellido_prop_acta_layout)
     TextInputLayout apellitoLayout;
-
+    ProgressDialog dialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +77,13 @@ public class ReportErrorActivity extends AppCompatActivity {
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
         upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        mAñoActa.clearFocus();
+        mNroActa.clearFocus();
+        mNroLibro.clearFocus();
+        mNombreProp.clearFocus();
+        mApellidoProp.clearFocus();
 
         List<String> spinnerArray = new ArrayList<>();
         spinnerArray.add("Seleccione tipo de Error");
@@ -122,18 +141,33 @@ public class ReportErrorActivity extends AppCompatActivity {
                     mApellidoProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
                     apellitoLayout.setErrorTextAppearance(R.style.error_orange);
                 } else {
-                    final ProgressDialog dialog = Utils.createLoadingIndicator(ReportErrorActivity.this);
+                    dialog1 = Utils.createLoadingIndicator(ReportErrorActivity.this);
 
-                    final Handler handler = new Handler();
-                    dialog.setMessage("Aguarde mientras procesamos la información...");
-                    dialog.show();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Do something after 5s = 5000ms
-                            submitError(dialog);
-                        }
-                    }, 2000);
+                    ReportErrorAsynctask provincesDataRetrieveAsynctask = new ReportErrorAsynctask(ReportErrorActivity.this, ReportErrorActivity.this);
+                    List<String> params = new ArrayList<>();
+                    params.add(CacheService.getInstance().getApellido());
+                    params.add(CacheService.getInstance().getNombre());
+                    params.add(CacheService.getInstance().getNroActa());
+                    params.add(mObservaciones.getText().toString());
+                    if(mSpinnerReport.getSelectedItem().toString().equals("Rectificar datos erroneos")){
+                        params.add("8");
+                    }
+                    if(mSpinnerReport.getSelectedItem().toString().equals("Enlazar acta digital")){
+                        params.add("7");
+                    }
+                    if(mSpinnerReport.getSelectedItem().toString().equals("Realizar digitalización de acta")){
+                        params.add("6");
+                    }
+                    params.add(String.valueOf(CacheService.getInstance().getIdUser()));
+                    params.add(CacheService.getInstance().getNroLibro());
+
+                    ConnectionParams conectParams = new ConnectionParams();
+                    conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.REPORT_ERROR_PATH);
+                    conectParams.setmActionId(ServiceUtils.Actions.REPORT_ERROR);
+                    conectParams.setmSearchType(ServiceUtils.SearchType.REPORTAR_ERROR_SEARCH_TYPE);
+                    conectParams.setParams(params);
+                    dialog1.show();
+                    provincesDataRetrieveAsynctask.execute(conectParams);
 
                 }
             }
@@ -141,31 +175,61 @@ public class ReportErrorActivity extends AppCompatActivity {
     }
 
 
-    public void submitError(ProgressDialog dialog) {
-        dialog.dismiss();
-        final AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ContextThemeWrapper ctw = new ContextThemeWrapper(ReportErrorActivity.this, R.style.AppTheme_PopupOverlay);
-            builder = new AlertDialog.Builder(ctw);
-        } else {
-            builder = new AlertDialog.Builder(ReportErrorActivity.this);
-        }
-        builder.setTitle("Error Reportado")
-                .setMessage("El reporte fue enviado al Archivo General del Registro Civil con éxito.\n Tenga en cuenta que su resolución puede demorar de 2-5 dias hábiles.")
-                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
+    public void submitError() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+
+        Snackbar snackbar = Snackbar
+                .make(getWindow().getDecorView().findViewById(R.id.activity_report_error), "Reporte enviado correctamente", Snackbar.LENGTH_LONG)
+                .setAction("IR AL INICIO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
                         Intent i = new Intent(ReportErrorActivity.this, LandingPageActivity.class);
                         startActivity(i);
                     }
-                })
-                .setIcon(R.drawable.success_1)
-                .show();
+                });
+        // Changing message text color
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(getResources().getColor(R.color.white));
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.colorPrimary));
+        snackbar.show();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    @Override
+    public void successReportError(Boolean success) {
+        dialog1.dismiss();
+        if(success){
+            submitError();
+        } else {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ContextThemeWrapper ctw = new ContextThemeWrapper(ReportErrorActivity.this, R.style.AppTheme_PopupOverlay);
+                builder = new AlertDialog.Builder(ctw);
+            } else {
+                builder = new AlertDialog.Builder(ReportErrorActivity.this);
+            }
+            builder.setTitle("Error")
+                    .setMessage("Ocurrio un error al enviar el reporte al Archivo general. Intente nuevamente más tarde.")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(R.drawable.information)
+                    .show();
+        }
     }
 }
