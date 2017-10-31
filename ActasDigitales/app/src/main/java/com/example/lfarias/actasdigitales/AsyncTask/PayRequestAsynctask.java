@@ -102,7 +102,9 @@ public class PayRequestAsynctask extends AsyncTask<ConnectionParams, Void, List<
 
         switch (searchType) {
             case 17:
-                if(result.get(0).startsWith("<")){
+                if(result.get(0).startsWith("<") ){
+                    callback.generate_pdf(true, activity1);
+                } else if(Boolean.valueOf(result.get(0))){
                     callback.generate_pdf(true, activity1);
                 }
                 break;

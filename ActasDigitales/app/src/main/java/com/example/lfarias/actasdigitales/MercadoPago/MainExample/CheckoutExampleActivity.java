@@ -202,7 +202,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
 
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.success_1)
+                        .setSmallIcon(R.drawable.error_1)
                         .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
                         .setContentTitle("Actas Digitales")
                         .setContentText("Pago rechazado")
