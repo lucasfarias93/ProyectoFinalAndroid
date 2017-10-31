@@ -397,14 +397,14 @@ public class RequestActActivity extends AppCompatActivity {
                     } else {
                         view.setImageBitmap(decodedByte);
                         callUserData();
-                        view.setOnClickListener(new View.OnClickListener() {
+                        /*view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getContext(), DetailImageActivity.class);
                                 intent.putExtra("image", imageBase64);
                                 startActivity(intent);
                             }
-                        });
+                        });*/
                     }
                 } catch (IllegalArgumentException ex) {
                     ex.printStackTrace();
