@@ -29,11 +29,12 @@ import javax.net.ssl.HttpsURLConnection;
 public class ReportErrorAsynctask extends AsyncTask<ConnectionParams, Void, List<String>> {
     Context context;
     Callback callback;
-    ProgressDialog dialog;
+    ProgressDialog dialog2;
 
-    public ReportErrorAsynctask(Context context, Callback callback) {
+    public ReportErrorAsynctask(Context context, Callback callback, ProgressDialog dialog1) {
         this.callback = callback;
         this.context = context;
+        dialog2 = dialog1;
     }
 
     public interface Callback {
@@ -117,6 +118,7 @@ public class ReportErrorAsynctask extends AsyncTask<ConnectionParams, Void, List
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+                                dialog2.dismiss();
                             }
                         })
                         .setIcon(R.drawable.information)

@@ -143,12 +143,20 @@ public class ReportErrorActivity extends AppCompatActivity implements ReportErro
                 } else {
                     dialog1 = Utils.createLoadingIndicator(ReportErrorActivity.this);
 
-                    ReportErrorAsynctask provincesDataRetrieveAsynctask = new ReportErrorAsynctask(ReportErrorActivity.this, ReportErrorActivity.this);
+                    ReportErrorAsynctask provincesDataRetrieveAsynctask = new ReportErrorAsynctask(ReportErrorActivity.this, ReportErrorActivity.this, dialog1);
                     List<String> params = new ArrayList<>();
                     params.add(CacheService.getInstance().getApellido());
                     params.add(CacheService.getInstance().getNombre());
-                    params.add(CacheService.getInstance().getNroActa());
-                    params.add(mObservaciones.getText().toString());
+                    if(CacheService.getInstance().getNroActa() != null){
+                        params.add(CacheService.getInstance().getNroActa());
+                    } else {
+                        params.add("0");
+                    }
+                    if(!mObservaciones.getText().toString().isEmpty()){
+                        params.add(mObservaciones.getText().toString());
+                    } else {
+                        params.add(null);
+                    }
                     if(mSpinnerReport.getSelectedItem().toString().equals("Rectificar datos erroneos")){
                         params.add("8");
                     }
@@ -159,7 +167,11 @@ public class ReportErrorActivity extends AppCompatActivity implements ReportErro
                         params.add("6");
                     }
                     params.add(String.valueOf(CacheService.getInstance().getIdUser()));
-                    params.add(CacheService.getInstance().getNroLibro());
+                    if(CacheService.getInstance().getNroLibro() != null){
+                        params.add(CacheService.getInstance().getNroLibro());
+                    } else {
+                        params.add("0");
+                    }
 
                     ConnectionParams conectParams = new ConnectionParams();
                     conectParams.setmControllerId(ServiceUtils.Controllers.CIUDADANO_CONTROLLER + "/" + ServiceUtils.Controllers.REPORT_ERROR_PATH);
