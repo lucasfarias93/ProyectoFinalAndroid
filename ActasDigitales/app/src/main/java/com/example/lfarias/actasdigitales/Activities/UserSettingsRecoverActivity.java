@@ -76,15 +76,18 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     @Bind(R.id.nueva_password_layout)
     LinearLayout mPasswordLayout;
     @Bind(R.id.nueva_contraseña)
-    EditText mNuevaContraseña;
+    TextInputEditText mNuevaContraseña;
     @Bind(R.id.repetir_nueva_contraseña)
-    EditText mRepetirContraseña;
+    TextInputEditText mRepetirContraseña;
     @Bind(R.id.textView3)
     TextView mPutCode;
     @Bind(R.id.button_submit_contraseña)
     Button mNewContraseñaSubmit;
     @Bind(R.id.codigo_layout)
     TextInputLayout codigoLayout;
+
+    @Bind(R.id.contraseña1) TextInputLayout contraseña1Layout;
+    @Bind(R.id.contraseña2) TextInputLayout contraseña2Layout;
 
     Context context;
     SQLiteDatabaseHelper helper;
@@ -149,12 +152,12 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 email = mEmail.getText().toString();
                 if(email.isEmpty()){
                     codigoLayout.setError("Este campo es obligatorio para continuar");
-                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);;
-                    codigoLayout.setErrorTextAppearance(R.style.error_orange);
+                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    codigoLayout.setErrorTextAppearance(R.style.error_red);
                 } else if(!Utils.emailValidator(email)){
                     codigoLayout.setError("El email ingresado no es correcto o posee un formato inválido. Por favor reviselo y corrigalo");
-                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);;
-                    codigoLayout.setErrorTextAppearance(R.style.error_orange);
+                    mEmail.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    codigoLayout.setErrorTextAppearance(R.style.error_red);
                 } else {
                     user.setEmail(mEmail.getText().toString());
                     sendEmail(email);
@@ -199,14 +202,22 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                 String repetirContraseña = mRepetirContraseña.getText().toString();
 
                 if(contraseña.isEmpty()){
-                    mNuevaContraseña.setError("Este campo es obligatorio");
+                    contraseña1Layout.setError("Este campo es obligatorio");
+                    mNuevaContraseña.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    contraseña1Layout.setErrorTextAppearance(R.style.error_red);
                     if(repetirContraseña.isEmpty()){
-                        mRepetirContraseña.setError("Este campo es obligatorio");
+                        contraseña2Layout.setError("Este campo es obligatorio");
+                        mRepetirContraseña.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                        contraseña2Layout.setErrorTextAppearance(R.style.error_red);
                     }
                 } else if(repetirContraseña.isEmpty()){
-                    mRepetirContraseña.setError("Este campo es obligatorio");
+                    contraseña2Layout.setError("Este campo es obligatorio");
+                    mRepetirContraseña.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    contraseña2Layout.setErrorTextAppearance(R.style.error_red);
                 } else if(!contraseña.equals(repetirContraseña)){
-                    mNuevaContraseña.setError("Las nuevas contraseñas deben conicidir");
+                    contraseña1Layout.setError("Las contraseñas deben coincidir");
+                    mNuevaContraseña.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    contraseña1Layout.setErrorTextAppearance(R.style.error_red);
                 } else {
                     password = mNuevaContraseña.getText().toString();
                     //TODO: hace falta loguearse para obtener el id de usuario.. Porque necesito el id de usuario (logueandome)
@@ -239,7 +250,6 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
     public void createNotifications2() {
         int notificationId = new Random().nextInt(); // just use a counter in some util class...
-        PendingIntent dismissIntent = UserSettingsRecoverActivity.getDismissIntent(notificationId, context);
 
         RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custon_notification);
         contentView.setTextViewText(R.id.title, "Custom notification");
@@ -253,9 +263,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
                         .setContentText("Se le ha enviado un email a su casilla de correo con...")
                         .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText("Se le ha enviado un email a su casilla de correo con el código de recuperación de contraseña. Por favor revise su casilla de correo"))
-                        .addAction(R.drawable.clear,
-                                "Cerrar notificacion", dismissIntent);
+                                .bigText("Se le ha enviado un email a su casilla de correo con el código de recuperación de contraseña. Por favor revise su casilla de correo"));
 
         NotificationManager notifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -266,6 +274,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
         Intent intent = new Intent(context, UserSettingsRecoverActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(NOTIFICATION_ID, notificationId);
+        intent.putExtra("getPreviousState", 1);
         PendingIntent dismissIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         return dismissIntent;
     }

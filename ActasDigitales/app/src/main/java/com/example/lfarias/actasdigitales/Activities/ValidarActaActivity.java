@@ -69,8 +69,8 @@ public class ValidarActaActivity extends AppCompatActivity implements VerificarV
             public void onClick(View v) {
                 if(mCodeActa.getText().toString().equals("")) {
                     codigoLayout.setError("Este campo es obligatorio");
-                    mCodeActa.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);;
-                    codigoLayout.setErrorTextAppearance(R.style.error_orange);
+                    mCodeActa.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);;
+                    codigoLayout.setErrorTextAppearance(R.style.error_red);
                 } else {
                     VerificarValidezAsynctask asynctask = new VerificarValidezAsynctask(ValidarActaActivity.this, ValidarActaActivity.this, dialog);
                     List<String> params = new ArrayList<>();

@@ -181,10 +181,14 @@
             android:text="Su usuario es: usuario_prueba"/>-->
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/contraseña1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/mytext"
+            app:errorTextAppearance="@style/mytext"
+            app:theme="@style/mytext">
 
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/nueva_contraseña"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -198,10 +202,14 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/contraseña2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/mytext"
+            app:errorTextAppearance="@style/mytext"
+            app:theme="@style/mytext">
 
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/repetir_nueva_contraseña"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

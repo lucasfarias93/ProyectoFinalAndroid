@@ -132,6 +132,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     TextInputLayout repeatLayout;
     @Bind(R.id.email_layout)
     TextInputLayout emailLayout;
+    @Bind(R.id.number_phone) TextInputLayout phoneLayout;
 
     List<Provincia> provincias;
     List<Departamento> departamentos;
@@ -214,7 +215,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
                 if (user.isEmpty()) {
                     userLayout.setError("Este campo es obligatorio");
-                    mUser.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
+                    mUser.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
                     userLayout.setErrorTextAppearance(R.style.error_red);
                 }
 
@@ -303,6 +304,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 }
                 if (!mCheckbox.isChecked()) {
                     mCheckbox.setError("Debe aceptar los terminos y condiciones para poder registrarse");
+                }
+                if ("Tipo de telefono".equals(mSpinner.getSelectedItem())  || mPhoneNumber.getText().toString().isEmpty()){
+                    phoneLayout.setError("Debe seleccionar un tipo y numero de telefono");
+                    mPhoneNumber.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    phoneLayout.setErrorTextAppearance(R.style.error_red);
                 }
             }
         });
@@ -619,14 +625,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(getResources().getColor(R.color.colorPrimary));
             snackbar.show();
-            createNotifications2();
+            createNotifications();
         } else {
             dialog.dismiss();
             Utils.createGlobalDialog(RegisterActivity.this, "Error en la creación del nuevo usuario", response).show();
         }
     }
 
-    public void createNotifications2() {
+    public void createNotifications() {
         int notificationId = new Random().nextInt(); // just use a counter in some util class...
         PendingIntent dismissIntent = RegisterActivity.getDismissIntent(notificationId, RegisterActivity.this);
 
@@ -652,7 +658,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public static PendingIntent getDismissIntent(int notificationId, Context context) {
-        Intent intent = new Intent(context, UserSettingsRecoverActivity.class);
+        Intent intent = new Intent(context, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(NOTIFICATION_ID, notificationId);
         PendingIntent dismissIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);

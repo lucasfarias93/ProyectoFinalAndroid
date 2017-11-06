@@ -22,18 +22,26 @@ import butterknife.ButterKnife;
 
 public class LandingPageActivity extends AppCompatActivity {
 
-    TextView mSolicitarActa;
-    TextView mMisSolicitudes;
-    TextView mVerificarVigencia;
+    LinearLayout mSolicitarActa;
+    LinearLayout mMisSolicitudes;
+    LinearLayout mVerificarVigencia;
+
+    TextView mSolicitud;
+    TextView mMisSoli;
+    TextView mVerificar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
 
-        mSolicitarActa      = (TextView) findViewById(R.id.solicitar);
-        mMisSolicitudes     = (TextView) findViewById(R.id.mis_solicitudes);
-        mVerificarVigencia  = (TextView) findViewById(R.id.vigencia_acta);
+        mSolicitarActa      = (LinearLayout) findViewById(R.id.solicitar1);
+        mMisSolicitudes     = (LinearLayout) findViewById(R.id.mis_solicitudes1);
+        mVerificarVigencia  = (LinearLayout) findViewById(R.id.vigencia_acta1);
+
+        mSolicitud = (TextView) findViewById(R.id.solicitar);
+        mMisSoli   = (TextView) findViewById(R.id.mis_solicitudes);
+        mVerificar = (TextView) findViewById(R.id.vigencia_acta);
 
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Panel principal</font>"));
@@ -55,6 +63,30 @@ public class LandingPageActivity extends AppCompatActivity {
         });
 
         mMisSolicitudes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LandingPageActivity.this, MisSolicitudesActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mSolicitud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LandingPageActivity.this, RequestActActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mVerificar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LandingPageActivity.this, ValidarActaActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mMisSoli.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(LandingPageActivity.this, MisSolicitudesActivity.class);

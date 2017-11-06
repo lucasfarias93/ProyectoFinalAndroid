@@ -24,15 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <LinearLayout
+            android:id="@+id/solicitar1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:paddingTop="35dp"
-            >
+            android:layout_weight="0.24">
 
             <ImageView
                 android:layout_width="100dp"
@@ -51,6 +53,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/mis_solicitudes1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -75,6 +78,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/vigencia_acta1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

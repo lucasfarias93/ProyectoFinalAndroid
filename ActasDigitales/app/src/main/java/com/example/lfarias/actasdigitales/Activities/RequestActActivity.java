@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
@@ -418,6 +419,10 @@ public class RequestActActivity extends AppCompatActivity {
                     view1.setTypeface(Typeface.DEFAULT_BOLD);
                     view1.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
                     view1.setVisibility(View.VISIBLE);
+                    Button button = (Button) rootView.findViewById(R.id.visualizar);
+                    button.setClickable(false);
+                    button.setEnabled(false);
+                    button.setTextColor(Color.GRAY);
 
                 }
             } else if("false".equals(success)){
@@ -430,6 +435,10 @@ public class RequestActActivity extends AppCompatActivity {
                 view1.setTypeface(Typeface.DEFAULT_BOLD);
                 view1.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
                 view1.setVisibility(View.VISIBLE);
+                Button button = (Button) rootView.findViewById(R.id.visualizar);
+                button.setClickable(false);
+                button.setEnabled(false);
+                button.setTextColor(Color.GRAY);
 
                 final AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -589,6 +598,10 @@ public class RequestActActivity extends AppCompatActivity {
                 view1.setTypeface(Typeface.DEFAULT_BOLD);
                 view1.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
                 view1.setVisibility(View.VISIBLE);
+                Button button = (Button) rootView.findViewById(R.id.visualizar);
+                button.setClickable(false);
+                button.setEnabled(false);
+                button.setTextColor(Color.GRAY);
             } else {
                 try {
                     TextView fechaView = (TextView) rootView.findViewById(R.id.año_acta);
