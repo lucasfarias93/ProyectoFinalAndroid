@@ -76,18 +76,18 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
             public void onClick(View view) {
                 if(mUserView == null || mUserView.getText().toString().isEmpty()) {
                     mUserLayout.setError("Este campo es obligatorio");
-                    mUserView.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
-                    mUserLayout.setErrorTextAppearance(R.style.error_orange);
+                    mUserView.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                  mUserLayout.setErrorTextAppearance(R.style.error_red);
 
                     if (mPasswordView == null || mPasswordView.getText().toString().isEmpty()) {
                         mPasswordLayout.setError("Este campo es obligatorio");
-                        mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
-                      mPasswordLayout.setErrorTextAppearance(R.style.error_orange);
+                        mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                      mPasswordLayout.setErrorTextAppearance(R.style.error_red);
                     }
                 } else if (mPasswordView == null || mPasswordView.getText().toString().isEmpty()) {
-                    mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
+                    mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
                     mPasswordLayout.setError("Este campo es obligatorio");
-                    mPasswordLayout.setErrorTextAppearance(R.style.error_orange);
+                    mPasswordLayout.setErrorTextAppearance(R.style.error_red);
                 } else {
                     LoginUserAsynctask asynctask = new LoginUserAsynctask(LoginActivity.this, LoginActivity.this, dialog);
                     List<String> params = new ArrayList<>();
