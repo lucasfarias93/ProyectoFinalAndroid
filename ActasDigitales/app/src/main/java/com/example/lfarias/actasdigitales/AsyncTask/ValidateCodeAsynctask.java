@@ -120,7 +120,7 @@ public class ValidateCodeAsynctask extends AsyncTask<ConnectionParams, Void, Lis
                                 callback.validateCode(false);
                             }
                         })
-                        .setIcon(R.drawable.information)
+                        .setIcon(R.drawable.error_1)
                         .show();
         }
     }
