@@ -375,7 +375,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
             // Changing action button text color
             View sbView = snackbar.getView();
-            sbView.setBackgroundColor(getResources().getColor(R.color.white));
+            sbView.setBackgroundColor(ContextCompat.getColor(UserSettingsRecoverActivity.this, R.color.black));
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(getResources().getColor(R.color.colorPrimary));
             snackbar.show();
@@ -397,7 +397,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
 
             // Changing action button text color
             View sbView = snackbar.getView();
-            sbView.setBackgroundColor(getResources().getColor(R.color.white));
+            sbView.setBackgroundColor(ContextCompat.getColor(UserSettingsRecoverActivity.this, R.color.black));
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(getResources().getColor(R.color.colorPrimary));
             snackbar.show();

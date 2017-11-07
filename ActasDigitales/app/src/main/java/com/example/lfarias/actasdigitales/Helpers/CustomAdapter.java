@@ -109,7 +109,7 @@ public class CustomAdapter extends ArrayAdapter<SolicitudActa> implements Filter
         holder.pagar.setImageDrawable(getContext().getDrawable(R.drawable.payment));
         holder.cancelar.setImageDrawable(getContext().getDrawable(R.drawable.trash));
         holder.delete.setImageDrawable(getContext().getDrawable(R.drawable.delete));
-        holder.success.setImageDrawable(getContext().getDrawable(R.drawable.success_1));
+        holder.success.setImageDrawable(getContext().getDrawable(R.drawable.success));
 
         holder.delete.setVisibility(View.INVISIBLE);
         holder.success.setVisibility(View.INVISIBLE);

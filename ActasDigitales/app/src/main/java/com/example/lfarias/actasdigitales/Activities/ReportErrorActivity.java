@@ -13,6 +13,7 @@ import android.support.constraint.solver.Cache;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -208,7 +209,7 @@ public class ReportErrorActivity extends AppCompatActivity implements ReportErro
 
         // Changing action button text color
         View sbView = snackbar.getView();
-        sbView.setBackgroundColor(getResources().getColor(R.color.white));
+        sbView.setBackgroundColor(ContextCompat.getColor(ReportErrorActivity.this, R.color.black));
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
@@ -240,7 +241,7 @@ public class ReportErrorActivity extends AppCompatActivity implements ReportErro
                             dialog.dismiss();
                         }
                     })
-                    .setIcon(R.drawable.information)
+                    .setIcon(R.drawable.error_1)
                     .show();
         }
     }

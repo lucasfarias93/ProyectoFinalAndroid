@@ -231,7 +231,7 @@ public class MisSolicitudesActivity extends AppCompatActivity implements MisSoli
                             asynctask.execute(conectParams);
                         }
                     })
-                    .setIcon(R.drawable.success_1)
+                    .setIcon(R.drawable.success)
                     .show();
         } else {
             dialog.dismiss();

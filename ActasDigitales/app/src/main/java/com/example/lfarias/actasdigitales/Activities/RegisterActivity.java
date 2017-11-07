@@ -621,7 +621,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
             // Changing action button text color
             View sbView = snackbar.getView();
-            sbView.setBackgroundColor(getResources().getColor(R.color.white));
+            sbView.setBackgroundColor(ContextCompat.getColor(RegisterActivity.this, R.color.black));
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(getResources().getColor(R.color.colorPrimary));
             snackbar.show();
@@ -642,7 +642,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.success_1)
+                        .setSmallIcon(R.drawable.success)
                         .setColor(ContextCompat.getColor(RegisterActivity.this, R.color.colorPrimary))
                         .setContentTitle("Creación de usuario")
                         .setContentText("Se le ha enviado un email a su casilla de correo con..")

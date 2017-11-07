@@ -580,7 +580,7 @@ public class RequestActActivity extends AppCompatActivity {
                             getActivity().finish();
                         }
                     })
-                    .setIcon(R.drawable.success_1)
+                    .setIcon(R.drawable.success)
                     .show();
 
         }

@@ -157,7 +157,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
 
             NotificationCompat.Builder builder =
                     (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.success_1)
+                            .setSmallIcon(R.drawable.success)
                             .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
                             .setContentTitle("Actas Digitales")
                             .setContentText("Pago aprobado")
@@ -179,7 +179,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
 
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.success_1)
+                        .setSmallIcon(R.drawable.success)
                         .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
                         .setContentTitle("Actas Digitales")
                         .setContentText("Pago Pendiente de Aprobación")
@@ -346,7 +346,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
                             asynctask.execute(conectParams);
                         }
                     })
-                    .setIcon(R.drawable.success_1)
+                    .setIcon(R.drawable.success)
                     .show();
         } else if ("approved".equals(status)) {
             final AlertDialog.Builder builder;
@@ -399,7 +399,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
 
                         }
                     })
-                    .setIcon(R.drawable.success_1)
+                    .setIcon(R.drawable.success)
                     .show();
         } else {
             final AlertDialog.Builder builder;
@@ -439,7 +439,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
 
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.success_1)
+                        .setSmallIcon(R.drawable.success)
                         .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
                         .setContentTitle("Actas Digitales")
                         .setContentText(status)
@@ -460,7 +460,7 @@ public class CheckoutExampleActivity extends AppCompatActivity implements PayReq
 
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.success_1)
+                        .setSmallIcon(R.drawable.success)
                         .setColor(ContextCompat.getColor(CheckoutExampleActivity.this, R.color.colorPrimary))
                         .setContentTitle("Actas Digitales")
                         .setContentText(status)

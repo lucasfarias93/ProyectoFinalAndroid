@@ -110,7 +110,7 @@ public class ValidarActaActivity extends AppCompatActivity implements VerificarV
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     })
-                    .setIcon(R.drawable.success_1)
+                    .setIcon(R.drawable.success)
                     .show();
         }
     }
