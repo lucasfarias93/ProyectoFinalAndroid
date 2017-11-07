@@ -206,17 +206,23 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
+    public void onBackPressed() {
+
     }
 
     @Override
-    public void getUserId(Object success) {
-        if(!success.toString().isEmpty()){
-            int userId = Integer.parseInt(success.toString().replaceAll("\"", ""));
-            CacheService.getInstance().setIdUser(userId);
+    public void getUserId(Object success, Boolean isAdmin) {
+        if(isAdmin){
+            Intent i = new Intent(LoginActivity.this, LoginActivity.class);
+            startActivity(i);
+            Utils.createGlobalDialog(LoginActivity.this, "Error en el inicio de sesion", "Usted no tiene permisos para acceder a la aplicaciòn con los datos ingresados").show();
+        } else {
+            if(!success.toString().isEmpty()){
+                int userId = Integer.parseInt(success.toString().replaceAll("\"", ""));
+                CacheService.getInstance().setIdUser(userId);
+            }
         }
+
     }
 }
 

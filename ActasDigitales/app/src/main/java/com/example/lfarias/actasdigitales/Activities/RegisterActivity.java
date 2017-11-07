@@ -208,6 +208,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
             @Override
             public void onClick(View v) {
+                userLayout.setError(null);
+                passwordLayout.setError(null);
+                emailLayout.setError(null);
+                phoneLayout.setError(null);
+
+
                 String user = mUser.getText().toString();
                 String password = mPassword.getText().toString();
                 String repeatPassword = mRepeatPassword.getText().toString();

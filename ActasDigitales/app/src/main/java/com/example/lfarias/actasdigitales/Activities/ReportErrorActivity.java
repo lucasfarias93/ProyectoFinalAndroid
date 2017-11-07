@@ -130,17 +130,17 @@ public class ReportErrorActivity extends AppCompatActivity implements ReportErro
                     Toast.makeText(ReportErrorActivity.this, "Debe seleccionar un tipo de error", Toast.LENGTH_SHORT).show();
                 } else if (mNombreProp.getText().toString().equals("")) {
                     nombreLayout.setError("Este campo es obligatorio");
-                    mNombreProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
-                    nombreLayout.setErrorTextAppearance(R.style.error_orange);
+                    mNombreProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    nombreLayout.setErrorTextAppearance(R.style.error_red);
                     if (mApellidoProp.getText().toString().equals("")) {
                         apellitoLayout.setError("Este campo es obligatorio");
-                        mApellidoProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
-                        apellitoLayout.setErrorTextAppearance(R.style.error_orange);
+                        mApellidoProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                        apellitoLayout.setErrorTextAppearance(R.style.error_red);
                     }
                 } else if (mApellidoProp.getText().toString().equals("")) {
                     apellitoLayout.setError("Este campo es obligatorio");
-                    mApellidoProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error), PorterDuff.Mode.SRC_ATOP);
-                    apellitoLayout.setErrorTextAppearance(R.style.error_orange);
+                    mApellidoProp.getBackground().setColorFilter(getResources().getColor(R.color.color_error2), PorterDuff.Mode.SRC_ATOP);
+                    apellitoLayout.setErrorTextAppearance(R.style.error_red);
                 } else {
                     dialog1 = Utils.createLoadingIndicator(ReportErrorActivity.this);
 

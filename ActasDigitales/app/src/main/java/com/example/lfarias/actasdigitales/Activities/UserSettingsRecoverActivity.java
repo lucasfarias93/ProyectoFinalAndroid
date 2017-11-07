@@ -406,7 +406,7 @@ public class UserSettingsRecoverActivity extends AppCompatActivity implements Se
     }
 
     @Override
-    public void getUserId(Object success) {
+    public void getUserId(Object success, Boolean isAdmin) {
 
         if(!success.equals("false")) {
 

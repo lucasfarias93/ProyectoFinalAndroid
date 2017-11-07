@@ -39,7 +39,7 @@ public class UserIdAsynctask extends AsyncTask<ConnectionParams, Void, List<Stri
     }
 
     public interface Callback {
-        void getUserId(Object success);
+        void getUserId(Object success, Boolean isAdmin);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class UserIdAsynctask extends AsyncTask<ConnectionParams, Void, List<Stri
 
         switch (searchType) {
             case 8:
-                callback.getUserId(result.get(0));
+                callback.getUserId(result.get(0), verifyAdmin(result.get(0)));
 
                 break;
 
@@ -119,8 +119,16 @@ public class UserIdAsynctask extends AsyncTask<ConnectionParams, Void, List<Stri
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         })
-                        .setIcon(R.drawable.information)
+                        .setIcon(R.drawable.error_1)
                         .show();
+        }
+    }
+
+    public boolean verifyAdmin(String string){
+        if(string.startsWith("<")){
+            return true;
+        } else {
+            return false;
         }
     }
 }

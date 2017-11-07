@@ -26,8 +26,8 @@
     </string>
 
     <string name="instructions_step">Para iniciar con el registro de una nueva cuenta, ingrese su dni y el numero de Id de Tramite que figura en su documento para verificar su identidad.
-        \n\nNo tenga en cuenta los 0s (ceros) que preceden el primer numero distinto de 0.
-        \n\nSi el nomobre que se autocompleta no corresponde con el suyo, por favor reporte un error con el boton al final del registro</string>
+        \n\nEn el numero de Id de Tramite, no tenga en cuenta los 0s (ceros) que preceden el primer numero distinto de 0.
+        </string>
     <string name="instructions_step2"></string>
     <string name="instrucciones_tramite_dni">Las siguientes imagenes le indican de donde obtener el número de trámite solicitado de su DNI:</string>
     <string name="register"><u>Registrate aqui</u></string>
@@ -329,7 +329,7 @@
     <string name="mpsdk_text_unlock_card_end">antes de confirmar el pago.</string>
     <string name="mpsdk_title_unlock_card">Desbloqueo de Tarjeta</string>
     <string name="valide_su_acta"><u>Valide su acta</u></string>
-    <string name="validez_acta">Para verificar la validéz de su acta, ingerse el número de Documetno y el código asociado al acta al pie de la misma.</string>
+    <string name="validez_acta">Para verificar la validéz de su acta, ingerse el código asociado al acta al pie de la misma.</string>
     <string name="vigencia_acta">VIGENCIA ACTA</string>
     <string name="numero_de_doc">Numero de Doc.</string>
     <string name="c_digo_de_acosiaci_n_de_acta">Código de acosiación de acta</string>
