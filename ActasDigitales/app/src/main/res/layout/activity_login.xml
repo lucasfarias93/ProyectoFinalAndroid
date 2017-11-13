@@ -26,39 +26,47 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/password_2"
         android:orientation="horizontal"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/rounded_box_bottom"
         android:gravity="center">
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/contactos"/>
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/contact"/>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/user_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
+            android:paddingTop="5dp"
             android:paddingBottom="10dp"
-            android:textColorHint="@color/white"
-            app:hintTextAppearance="@style/mytext"
-            app:errorTextAppearance="@style/mytext"
-            app:theme="@style/mytext">
+            android:textColorHint="@color/black"
+            app:hintTextAppearance="@style/mytextblack"
+            app:errorTextAppearance="@style/mytextblack"
+            app:theme="@style/mytextblack">
 
-            <android.support.design.widget.TextInputEditText
+            <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_user"
+                android:textColorHint="@color/mpsdk_warm_grey"
                 android:inputType="text"
                 android:maxLines="1"
-                android:textColor="@color/white"
+                android:background="@color/mpsdk_transparent"
+                android:textColor="@color/black"
                 android:padding="10dp"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -67,32 +75,39 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/register"
         android:orientation="horizontal"
+        android:background="@drawable/rounder_box_top"
         android:gravity="center">
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/password"/>
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/lock_open"/>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/pass_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/white"
-            android:paddingBottom="20dp"
+            android:textColorHint="@color/black"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:paddingLeft="10dp"
-            app:hintTextAppearance="@style/mytext"
-            app:errorTextAppearance="@style/mytext"
-            app:theme="@style/mytext">
+            app:hintTextAppearance="@style/mytextblack"
+            app:errorTextAppearance="@style/mytextblack"
+            app:theme="@style/mytextblack">
 
-            <android.support.design.widget.TextInputEditText
+            <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
                 android:imeActionId="@+id/login"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
+                android:textColorHint="@color/mpsdk_warm_grey"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
+                android:background="@color/mpsdk_transparent"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:singleLine="true" />

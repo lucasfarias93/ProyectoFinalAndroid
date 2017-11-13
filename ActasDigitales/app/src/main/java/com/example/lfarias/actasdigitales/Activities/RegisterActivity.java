@@ -440,8 +440,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         String apellido = "";
         mDni.setEnabled(false);
         mDni.setClickable(false);
+        dniLayout1.setErrorTextAppearance(R.style.QText);
+        dniLayout1.setHintTextAppearance(R.style.QText);
         mTramideId.setEnabled(false);
         mTramideId.setClickable(false);
+        tramiteLayout.setErrorTextAppearance(R.style.QText);
+        tramiteLayout.setHintTextAppearance(R.style.QText);
         mName.setEnabled(false);
         mName.setClickable(false);
         mLast_name.setEnabled(false);

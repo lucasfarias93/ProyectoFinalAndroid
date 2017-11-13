@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.lfarias.actasdigitales.AsyncTask.LoginUserAsynctask;
@@ -39,8 +40,8 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
     private static final int REQUEST_READ_CONTACTS = 0;
 
     // UI references.
-    private TextInputEditText mUserView;
-    private TextInputEditText mPasswordView;
+    private EditText mUserView;
+    private EditText mPasswordView;
     private View mLoginFormView;
     private TextView mRegister, mForgotPassword;
     ProgressDialog dialog;
@@ -62,8 +63,8 @@ public class LoginActivity extends AppCompatActivity implements LoginUserAsyncta
         dialog = Utils.createLoadingIndicator(LoginActivity.this);
 
         // Set up the login form.
-        mUserView = (TextInputEditText) findViewById(R.id.email);
-        mPasswordView = (TextInputEditText) findViewById(R.id.password);
+        mUserView = (EditText) findViewById(R.id.email);
+        mPasswordView = (EditText) findViewById(R.id.password);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mUserView.clearFocus();
