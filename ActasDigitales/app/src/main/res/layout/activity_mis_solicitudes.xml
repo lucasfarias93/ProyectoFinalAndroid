@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="LISTADO DE SOLICITUDES"
-            android:textColor="@color/colorAccent"
             android:textSize="25sp"
             android:textStyle="italic|bold" />
 

@@ -12,8 +12,10 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
+import android.text.Html;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -154,6 +156,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mActionBar.setDisplayHomeAsUpEnabled(true);*/
         ButterKnife.bind(this);
 
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Actas Digitales</font>"));
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mDni.clearFocus();

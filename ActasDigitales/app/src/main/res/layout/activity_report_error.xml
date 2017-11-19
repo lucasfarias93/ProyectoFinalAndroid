@@ -27,8 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="Ingrese los datos para el reporte del error al Archivo General del Registro"
                 android:textAlignment="center"
-                android:textColor="@color/colorAccent"
-                android:textSize="35sp" />
+                android:textSize="30sp" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -17,7 +17,6 @@
         android:text="¿QUE DESEA HACER?"
         android:textAlignment="center"
         android:textSize="25sp"
-        android:textColor="@color/colorAccent"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -39,7 +38,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/actas_2" />
+                android:src="@drawable/new_file" />
 
             <Button
                 android:id="@+id/solicitar"
@@ -64,7 +63,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/actas_1" />
+                android:src="@drawable/folder" />
 
             <Button
                 android:id="@+id/mis_solicitudes"
@@ -89,7 +88,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/actas_3" />
+                android:src="@drawable/time" />
 
             <Button
                 android:id="@+id/vigencia_acta"
